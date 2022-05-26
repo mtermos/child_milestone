@@ -1,12 +1,14 @@
+import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
+import 'package:child_milestone/logic/blocs/auth/auth_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:child_milestone/data/api/api_keys.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/logic/blocs/internet/internet_bloc.dart';
 import 'package:child_milestone/logic/blocs/town/town_bloc.dart';
 import 'package:child_milestone/logic/cubits/price_estimation/price_estimation_cubit.dart';
 import 'package:child_milestone/presentation/router/app_router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   runApp(Application(
@@ -34,6 +36,9 @@ class Application extends StatelessWidget {
           BlocProvider<InternetBloc>(
             create: (internetBlocContext) =>
                 InternetBloc(connectivity: connectivity),
+          ),
+          BlocProvider<AuthBloc>(
+            create: (BuildContext context) => AuthBloc(),
           ),
         ],
         child: MaterialApp(

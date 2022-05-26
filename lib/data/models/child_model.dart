@@ -9,15 +9,18 @@ String childModelToJson(ChildModel data) => json.encode(data.toJson());
 class ChildModel {
   String name;
   DateTime date_of_birth;
+  String image;
 
   ChildModel({
     required this.name,
     required this.date_of_birth,
+    required this.image,
   });
 
   factory ChildModel.fromJson(Map<String, dynamic> json) => ChildModel(
         name: json["name"] ?? "",
-        date_of_birth: json["price_per_meter"] ?? DateTime.now(),
+        date_of_birth: json["date_of_birth"] ?? DateTime.now(),
+        image: json["image"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
@@ -26,15 +29,18 @@ class ChildModel {
       };
 
   @override
-  String toString() => 'ChildModel(name: $name, date_of_birth: $date_of_birth)';
+  String toString() =>
+      'ChildModel(name: $name, date_of_birth: $date_of_birth, image: $image)';
 
   ChildModel copyWith({
     String? name,
+    String? image,
     DateTime? date_of_birth,
   }) {
     return ChildModel(
       name: name ?? this.name,
       date_of_birth: date_of_birth ?? this.date_of_birth,
+      image: image ?? this.image,
     );
   }
 
@@ -42,12 +48,14 @@ class ChildModel {
     return <String, dynamic>{
       'name': name,
       'date_of_birth': date_of_birth,
+      'image': image,
     };
   }
 
   factory ChildModel.fromMap(Map<String, dynamic> map) {
     return ChildModel(
       name: map['name'] as String,
+      image: map['image'] as String,
       date_of_birth: map['date_of_birth'] as DateTime,
     );
   }
@@ -58,9 +66,10 @@ class ChildModel {
 
     return other is ChildModel &&
         other.name == name &&
-        other.date_of_birth == date_of_birth;
+        other.date_of_birth == date_of_birth &&
+        other.image == image;
   }
 
   @override
-  int get hashCode => name.hashCode ^ date_of_birth.hashCode;
+  int get hashCode => name.hashCode ^ date_of_birth.hashCode ^ image.hashCode;
 }

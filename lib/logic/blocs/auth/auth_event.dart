@@ -1,6 +1,12 @@
 abstract class AuthEvent {}
 
-class LoginEvent extends AuthEvent {}
+class LoginEvent extends AuthEvent {
+  final String username;
+  final String password;
+  Function onSuccess;
+
+  LoginEvent(this.username, this.password, this.onSuccess);
+}
 
 class ForceLoginEvent extends AuthEvent {}
 

@@ -35,7 +35,10 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
+  flutter_screenutil: ^5.5.3+2
   flutter_svg: ^1.0.3
+  get_it: ^7.2.0
+  shared_preferences: ^2.0.15
   test: null
 
 dev_dependencies:
@@ -80,7 +83,9 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/images/
+    - assets/images/children/
     - assets/icons/
+    - assets/icons/home_page/
     - assets/fonts/
     # fonts:
     # - family: Gilroy

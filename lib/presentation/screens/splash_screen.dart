@@ -1,9 +1,10 @@
 import 'dart:async';
 
+import 'package:child_milestone/constants/strings.dart';
 import 'package:flutter/material.dart';
-import 'package:child_milestone/presentation/screens/welcome_screen.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -17,16 +18,8 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    const delay = Duration(seconds: 2);
-    Future.delayed(delay, () => onTimerFinished());
-  }
-
-  void onTimerFinished() {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(
-      builder: (BuildContext context) {
-        return WelcomeScreen();
-      },
-    ));
+    const delay = Duration(seconds: 1);
+    Future.delayed(delay, () => checkUserIsLogged());
   }
 
   @override
@@ -37,6 +30,24 @@ class _SplashScreenState extends State<SplashScreen> {
         child: splashScreenIcon(),
       ),
     );
+  }
+
+  void checkUserIsLogged() async {
+    final prefs = await SharedPreferences.getInstance();
+    if ((prefs.getBool(SHARED_LOGGED) != null) &&
+        prefs.getBool(SHARED_LOGGED)!) {
+      Navigator.pushNamed(context, '/home');
+
+      // ApiRepository.get().login(LoginRequest(username: prefs.getString(SHARED_USER), password: prefs.getString(SHARED_PASSWORD))).then((response) {
+      //   if (response != null) {
+      //     Navigator.of(context).pushReplacementNamed(HomePage.routeName);
+      //   }
+      // }).catchError((error) {
+      //   Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
+      // });
+    } else {
+      Navigator.pushNamed(context, '/welcome');
+    }
   }
 }
 

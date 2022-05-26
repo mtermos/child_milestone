@@ -1,70 +1,91 @@
 import 'package:bloc/bloc.dart';
-// import 'package:flutter_bloc_login_example/shared/api_auth.dart';
-// import 'package:flutter_bloc_login_example/shared/locator.dart';
+import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/logic/shared/api_auth.dart';
+import 'package:child_milestone/logic/shared/locator.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth_state.dart';
 import 'auth_event.dart';
 
-class BlocAuth extends Bloc<AuthEvent, AuthState> {
-  BlocAuth(AuthState initialState) : super(initialState);
+class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  AuthBloc() : super(UnlogedState()) {
+    on<LoginEvent>(_login);
+  }
 
   @override
   get initialState => UnlogedState();
 
   bool _isLoged = false;
 
-  @override
-  Stream<AuthState> mapEventToState(AuthEvent event) async* {
-    try {
-      if (event is LoginEvent) {
-        yield LoadingLoginState();
-        print('LoadingLoginState');
+  void _login(LoginEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingLoginState());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(SHARED_LOGGED, true);
+    await prefs.setString(SHARED_USER, event.username);
+    await prefs.setString(SHARED_PASSWORD, event.password);
+    await Future.delayed(Duration(seconds: 1));
+    event.onSuccess();
+    // await Locator.instance.get<ApiAuth>().login();
 
-        // await Locator.instance.get<ApiAuth>().login();
-
-        yield LogedState();
-      } else if (event is LogoutEvent) {
-        yield LoadingLogoutState();
-        print('LoadingLogoutState');
-
-        // await Locator.instance.get<ApiAuth>().logout();
-
-        yield UnlogedState();
-      } else if (event is ForceLoginEvent) {
-        yield ForcingLoginState();
-
-        // verify if is loged
-        await Future.delayed(Duration(seconds: 1));
-
-        yield _isLoged ? LogedState() : UnlogedState();
-
-        yield LoginErrorState();
-      } else if (event is SignUpEvent) {
-        yield LoadingSignUpState();
-        print('LoadingSignUpState');
-
-        // await Locator.instance.get<ApiAuth>().signUp();
-
-        yield LoadedSignUpState();
-      } else if (event is ForgotPasswordEvent) {
-        yield LoadingForgotPasswordState();
-        print('LoadingForgotPasswordState');
-
-        // await Locator.instance.get<ApiAuth>().changePassword();
-
-        yield LoadedForgotPasswordState();
-      } else if (event is ResendCodeEvent) {
-        yield LoadingResendCodeState();
-        print('LoadingResendCodeState');
-
-        // await Locator.instance.get<ApiAuth>().resendCode(email: event.email);
-
-        yield LoadedResendCodeState();
-      } else {
-        yield UnlogedState();
-      }
-    } catch (e) {
-      yield LoginErrorState();
-    }
+    emit(LogedState());
   }
+
+  // @override
+  // Stream<AuthState> mapEventToState(AuthEvent event) async* {
+  //   try {
+  //     if (event is LoginEvent) {
+  //       yield LoadingLoginState();
+  //       print('LoadingLoginState');
+  //       SharedPreferences prefs = await SharedPreferences.getInstance();
+  //       await prefs.setBool(SHARED_LOGGED, true);
+  //       await prefs.setString(SHARED_USER, "email@test.com");
+  //       await prefs.setString(SHARED_PASSWORD, "password");
+
+  //       await Locator.instance.get<ApiAuth>().login();
+
+  //       yield LogedState();
+  //     } else if (event is LogoutEvent) {
+  //       yield LoadingLogoutState();
+  //       print('LoadingLogoutState');
+
+  //       // await Locator.instance.get<ApiAuth>().logout();
+
+  //       yield UnlogedState();
+  //     } else if (event is ForceLoginEvent) {
+  //       yield ForcingLoginState();
+
+  //       // verify if is loged
+  //       await Future.delayed(Duration(seconds: 1));
+
+  //       yield _isLoged ? LogedState() : UnlogedState();
+
+  //       yield LoginErrorState();
+  //     } else if (event is SignUpEvent) {
+  //       yield LoadingSignUpState();
+  //       print('LoadingSignUpState');
+
+  //       // await Locator.instance.get<ApiAuth>().signUp();
+
+  //       yield LoadedSignUpState();
+  //     } else if (event is ForgotPasswordEvent) {
+  //       yield LoadingForgotPasswordState();
+  //       print('LoadingForgotPasswordState');
+
+  //       // await Locator.instance.get<ApiAuth>().changePassword();
+
+  //       yield LoadedForgotPasswordState();
+  //     } else if (event is ResendCodeEvent) {
+  //       yield LoadingResendCodeState();
+  //       print('LoadingResendCodeState');
+
+  //       // await Locator.instance.get<ApiAuth>().resendCode(email: event.email);
+
+  //       yield LoadedResendCodeState();
+  //     } else {
+  //       yield UnlogedState();
+  //     }
+  //   } catch (e) {
+  //     yield LoginErrorState();
+  //   }
+  // }
 }
