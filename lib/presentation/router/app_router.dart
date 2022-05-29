@@ -1,3 +1,4 @@
+import 'package:child_milestone/presentation/screens/add_child/add_child_main.dart';
 import 'package:child_milestone/presentation/screens/login/login_main.dart';
 import 'package:child_milestone/presentation/screens/home/home_main.dart';
 import 'package:child_milestone/presentation/screens/welcome_screen.dart';
@@ -25,6 +26,10 @@ class AppRouter {
       case '/home':
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
+        );
+      case '/add_child':
+        return MaterialPageRoute(
+          builder: (_) => AddChildScreen(),
         );
       default:
         return null;

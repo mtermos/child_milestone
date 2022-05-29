@@ -1,4 +1,7 @@
+import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 
 class TopBarView extends StatefulWidget {
@@ -14,8 +17,12 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
   static const String side_nav_icon =
       "assets/icons/home_page/side_nav_icon.svg";
 
+  List<ChildModel>? childrenList;
+
   @override
   void initState() {
+    // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
+    BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
     super.initState();
   }
 
@@ -41,9 +48,16 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                       ),
                       Expanded(
                         flex: 4,
-                        child: Text(
-                          "Ahmad <",
-                          textAlign: TextAlign.center,
+                        child: BlocBuilder<ChildBloc, ChildState>(
+                          builder: (context, state) {
+                            if (state is AllChildrenLoadedState) {
+                              print(state.children);
+                            }
+                            return Text(
+                              "Ahmad <",
+                              textAlign: TextAlign.center,
+                            );
+                          },
                         ),
                       ),
                       Expanded(

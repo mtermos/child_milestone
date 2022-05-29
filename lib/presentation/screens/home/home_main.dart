@@ -1,4 +1,6 @@
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
+import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/presentation/screens/home/bottom_bar_view.dart';
 import 'package:child_milestone/presentation/screens/home/tabIcon_data.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/home_tab.dart';
@@ -67,7 +69,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   Widget bottomBar() {
     return BottomBarView(
       tabIconsList: tabIconsList,
-      addClick: () {},
+      addClick: () {
+        Navigator.pushNamed(context, '/add_child');
+      },
       changeIndex: (int index) {
         if (index == 0) {
           animationController?.reverse().then<dynamic>((data) {
