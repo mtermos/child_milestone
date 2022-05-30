@@ -10,6 +10,7 @@ import 'auth_event.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(UnlogedState()) {
     on<LoginEvent>(_login);
+    on<LogoutEvent>(_logout);
   }
 
   @override
@@ -28,6 +29,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     // await Locator.instance.get<ApiAuth>().login();
 
     emit(LogedState());
+  }
+
+  void _logout(LogoutEvent event, Emitter<AuthState> emit) async {
+    emit(LoadingLogoutState());
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(SHARED_LOGGED, false);
+    await prefs.setString(SHARED_USER, "");
+    await prefs.setString(SHARED_PASSWORD, "");
+    await Future.delayed(Duration(milliseconds: 500));
+    event.onSuccess();
+    // await Locator.instance.get<ApiAuth>().login();
+
+    emit(UnlogedState());
   }
 
   // @override

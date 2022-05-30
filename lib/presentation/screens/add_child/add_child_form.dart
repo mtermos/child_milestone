@@ -30,10 +30,8 @@ class _AddChildFormState extends State<AddChildForm> {
   DateTime _selected_date = DateTime.now();
 
   CircleAvatar? profile_picture_file;
-  // CircleAvatar(
-  //                           radius: size.width * 0.15,
-  //                           backgroundImage: Image.asset(child_pic).image,
-  //                         )
+  XFile? chosen_image;
+
   List gender = ["Male", "Female"];
 
   String selected_gender = "";
@@ -83,6 +81,7 @@ class _AddChildFormState extends State<AddChildForm> {
                   await picker.pickImage(source: ImageSource.gallery);
               if (image != null) {
                 setState(() {
+                  chosen_image = image;
                   profile_picture_file = CircleAvatar(
                     radius: size.width * 0.2,
                     backgroundImage: Image.file(File(image.path)).image,
@@ -182,7 +181,7 @@ class _AddChildFormState extends State<AddChildForm> {
                 const snackBar = SnackBar(
                   content: Text('Enter all the fields!'),
                 );
-                if (profile_picture_file == null ||
+                if (chosen_image == null ||
                     nameController.text == "" ||
                     durationController.text == "" ||
                     idController.text == "" ||
@@ -193,14 +192,14 @@ class _AddChildFormState extends State<AddChildForm> {
                 ChildModel newChild = ChildModel(
                     name: nameController.text,
                     date_of_birth: _selected_date,
-                    image_path:
-                        profile_picture_file!.backgroundImage.toString(),
+                    image_path: chosen_image!.path,
                     child_id: idController.text,
                     gender: selected_gender,
                     pregnancy_duration: double.parse(durationController.text));
                 BlocProvider.of<ChildBloc>(context)
                     .add(AddChildEvent(child: newChild));
-                Navigator.pop(context);
+                Navigator.popAndPushNamed(context, "/home");
+                // Navigator.pop(context);
                 // Navigator.pushNamed(context, '/home');
               },
             ),

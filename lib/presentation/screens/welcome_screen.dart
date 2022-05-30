@@ -15,6 +15,9 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    final textScale = MediaQuery.of(context).size.height * 0.001;
+
     return Scaffold(
       // backgroundColor: AppColors.primaryColor,
       backgroundColor: Colors.white,
@@ -41,11 +44,11 @@ class WelcomeScreen extends StatelessWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   const Spacer(),
-                  icon(),
+                  icon(size),
                   const SizedBox(
                     height: 20,
                   ),
-                  welcomeTextWidget(),
+                  welcomeTextWidget(textScale),
                   const SizedBox(
                     height: 10,
                   ),
@@ -66,28 +69,33 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget icon() {
-    String iconPath = "assets/icons/vaccine-for-children.svg";
-    return SvgPicture.asset(
+  Widget icon(Size size) {
+    String iconPath = "assets/icons/steps_icon.png";
+    return Image.asset(
       iconPath,
-      color: const Color.fromRGBO(78, 76, 76, 1),
-      width: 100,
+      width: size.width * 0.3,
     );
+    // String iconPath = "assets/icons/vaccine-for-children.svg";
+    // return SvgPicture.asset(
+    //   iconPath,
+    //   color: const Color.fromRGBO(78, 76, 76, 1),
+    //   width: 100,
+    // );
   }
 
-  Widget welcomeTextWidget() {
+  Widget welcomeTextWidget(double textScale) {
     return Column(
-      children: const [
+      children: [
         AppText(
           text: "Welcome",
-          fontSize: 48,
+          fontSize: textScale * 48,
           fontWeight: FontWeight.w600,
           // color: Colors.white,
           color: Color.fromRGBO(78, 76, 76, 1),
         ),
         AppText(
           text: "to child milestone",
-          fontSize: 36,
+          fontSize: textScale * 28,
           fontWeight: FontWeight.w600,
           color: Color.fromRGBO(78, 76, 76, 1),
         ),

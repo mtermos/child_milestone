@@ -1,5 +1,7 @@
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -18,6 +20,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
       "assets/icons/home_page/side_nav_icon.svg";
 
   List<ChildModel>? childrenList;
+  ChildModel? selected_user;
 
   @override
   void initState() {
@@ -51,11 +54,37 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         child: BlocBuilder<ChildBloc, ChildState>(
                           builder: (context, state) {
                             if (state is AllChildrenLoadedState) {
-                              print(state.children);
+                              childrenList = state.children;
+                            } else {
+                              childrenList = [];
                             }
-                            return Text(
-                              "Ahmad <",
-                              textAlign: TextAlign.center,
+                            return Center(
+                              child: DropdownButton<ChildModel>(
+                                value: selected_user,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                                alignment: AlignmentDirectional.center,
+                                hint: Text("select a child"),
+                                items: childrenList!
+                                    .map<DropdownMenuItem<ChildModel>>(
+                                        (ChildModel value) {
+                                  return DropdownMenuItem<ChildModel>(
+                                    value: value,
+                                    alignment: AlignmentDirectional.center,
+                                    child: Text(value.name),
+                                  );
+                                }).toList(),
+                                onChanged: (ChildModel? newValue) {
+                                  if (newValue != null) {
+                                    setState(() {
+                                      selected_user = newValue;
+                                    });
+                                    BlocProvider.of<CurrentChildCubit>(context)
+                                        .change_current_child(newValue);
+                                    print(newValue);
+                                  }
+                                },
+                              ),
                             );
                           },
                         ),

@@ -10,7 +10,10 @@ class LoginEvent extends AuthEvent {
 
 class ForceLoginEvent extends AuthEvent {}
 
-class LogoutEvent extends AuthEvent {}
+class LogoutEvent extends AuthEvent {
+  Function onSuccess;
+  LogoutEvent(this.onSuccess);
+}
 
 class SignUpEvent extends AuthEvent {}
 

@@ -1,16 +1,15 @@
 import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
-import 'package:child_milestone/presentation/screens/login/login_background.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
@@ -30,6 +29,8 @@ class HomeTab extends StatefulWidget {
 }
 
 class _HomeTabState extends State<HomeTab> {
+  ChildModel? current_child;
+  int age = 0;
   @override
   void initState() {
     super.initState();
@@ -43,81 +44,176 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     const String profile_pic_bg = "assets/images/profile_pic_bg.svg";
+    const String summary = "assets/images/summary.png";
+    const String tips = "assets/images/tips.png";
     const String child_pic = "assets/images/children/child1.png";
+    const String double_arrow_icon = "assets/icons/home_page/double_arrows.png";
     Size size = MediaQuery.of(context).size;
+    final textScale = MediaQuery.of(context).size.height * 0.001;
 
     return Scaffold(
-      body: Column(
-        children: [
-          Container(
-            height: size.height * 0.3,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: <Widget>[
-                Positioned(
-                  top: size.height * 0.02,
-                  child: Center(
-                    child: SvgPicture.asset(
-                      profile_pic_bg,
-                      width: size.width * 0.9,
-                      alignment: Alignment.topCenter,
+      body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
+        builder: (context, state) {
+          if (state is CurrentChildChangedState) {
+            current_child = state.new_current_child;
+            age = (DateTime.now()
+                        .difference(current_child!.date_of_birth)
+                        .inDays /
+                    30)
+                .toInt();
+          }
+          return Column(
+            children: [
+              Container(
+                height: size.height * 0.3,
+                child: Stack(
+                  alignment: Alignment.topCenter,
+                  children: <Widget>[
+                    Positioned(
+                      top: size.height * 0.02,
+                      child: Center(
+                        child: SvgPicture.asset(
+                          profile_pic_bg,
+                          width: size.width * 0.9,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                Positioned(
-                  top: size.height * 0.045,
-                  child: Column(
-                    children: [
-                      Stack(
-                        alignment: Alignment.center,
+                    Positioned(
+                      top: size.height * 0.045,
+                      child: Column(
                         children: [
-                          CircleAvatar(
-                            backgroundColor: Colors.white,
-                            radius: size.width * 0.16,
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: size.width * 0.16,
+                              ),
+                              CircleAvatar(
+                                  radius: size.width * 0.15,
+                                  backgroundImage: Image.asset(
+                                          current_child != null
+                                              ? current_child!.image_path
+                                              : child_pic)
+                                      .image
+                                  // child_pic).image,
+                                  ),
+                            ],
                           ),
-                          CircleAvatar(
-                            radius: size.width * 0.15,
-                            backgroundImage: Image.asset(child_pic).image,
+                          SizedBox(height: size.height * 0.01),
+                          AppText(
+                            text: current_child != null
+                                ? current_child!.name
+                                : "asd",
+                            color: Colors.white,
+                            fontSize: size.height * 0.03,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SizedBox(height: size.height * 0.01),
+                          AppText(
+                            text: age.toString() + " months old!",
+                            color: Colors.white,
+                            fontSize: size.height * 0.015,
                           ),
                         ],
                       ),
-                      SizedBox(height: size.height * 0.01),
-                      AppText(
-                        text: "Ahmad",
-                        color: Colors.white,
-                        fontSize: size.height * 0.03,
-                        fontWeight: FontWeight.bold,
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              InkWell(
+                child: Container(
+                  width: size.width * 0.85,
+                  padding: EdgeInsets.symmetric(
+                      horizontal: size.width * 0.08,
+                      vertical: size.height * 0.03),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColors.primaryColor,
+                      width: textScale * 2,
+                    ),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          AppText(
+                            text: "Milestone checklist",
+                            fontSize: textScale * 20,
+                          ),
+                          SizedBox(width: size.width * 0.02),
+                          Image.asset(
+                            double_arrow_icon,
+                            width: size.width * 0.05,
+                          ),
+                        ],
                       ),
-                      SizedBox(height: size.height * 0.01),
-                      AppText(
-                        text: "3 months old!",
-                        color: Colors.white,
-                        fontSize: size.height * 0.015,
+                      SizedBox(height: size.height * 0.025),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: LinearPercentIndicator(
+                              animation: true,
+                              lineHeight: textScale * 15,
+                              animationDuration: 2500,
+                              percent: 0.2,
+                              progressColor: Colors.red,
+                            ),
+                          ),
+                          SizedBox(width: size.width * 0.015),
+                          Text("2/10"),
+                        ],
                       ),
                     ],
                   ),
                 ),
-              ],
-            ),
-          ),
-          Spacer(),
-          Container(
-            width: size.width * 0.5,
-            child: AppButton(
-              label: "Logout",
-              onPressed: () {
-                _logout();
-              },
-            ),
-          )
-        ],
+              ),
+              Spacer(),
+              Row(
+                children: [
+                  SizedBox(width: size.width * 0.075),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(summary),
+                  ),
+                  Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(tips),
+                    onTap: () {
+                      _logout();
+                    },
+                  ),
+                  SizedBox(width: size.width * 0.075),
+                ],
+              ),
+              // Container(
+              //   width: size.width * 0.5,
+              //   child: AppButton(
+              //     label: "Logout",
+              //     onPressed: () {
+              //       _logout();
+              //     },
+              //   ),
+              // )
+              SizedBox(height: size.height * 0.025),
+            ],
+          );
+        },
       ),
     );
   }
 
   _logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(SHARED_LOGGED, false);
-    Navigator.pushNamed(context, '/');
+    BlocProvider.of<AuthBloc>(context).add(LogoutEvent(
+      () {
+        Navigator.pushNamed(context, '/');
+      },
+    ));
   }
 }

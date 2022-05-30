@@ -24,10 +24,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: Center(
-        child: splashScreenIcon(),
+        child: splashScreenIcon(size),
       ),
     );
   }
@@ -51,10 +52,16 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 }
 
-Widget splashScreenIcon() {
-  String iconPath = "assets/icons/vaccine-for-children.svg";
-  return SvgPicture.asset(
+Widget splashScreenIcon(Size size) {
+  // String iconPath = "assets/icons/vaccine-for-children.svg";
+  // return SvgPicture.asset(
+  //   iconPath,
+  //   width: 250,
+  // );
+
+  String iconPath = "assets/icons/steps_icon.png";
+  return Image.asset(
     iconPath,
-    width: 250,
+    width: size.width * 0.3,
   );
 }
