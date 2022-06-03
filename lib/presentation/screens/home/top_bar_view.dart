@@ -1,3 +1,5 @@
+import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
@@ -5,6 +7,7 @@ import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class TopBarView extends StatefulWidget {
   const TopBarView({Key? key}) : super(key: key);
@@ -20,17 +23,23 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
       "assets/icons/home_page/side_nav_icon.svg";
 
   List<ChildModel>? childrenList;
-  ChildModel? selected_user;
+  ChildModel? selected_child;
 
   @override
   void initState() {
-    // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // final dbProvider = DatabaseProvider.dbProvider;
+    // dbProvider.deleteDatabase();
+    // dbProvider.createDatabase();
+    // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
+    // add_temp_child();
+    BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
+    check_child(context);
+
     Size size = MediaQuery.of(context).size;
     return Stack(
       alignment: AlignmentDirectional.topCenter,
@@ -60,7 +69,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                             }
                             return Center(
                               child: DropdownButton<ChildModel>(
-                                value: selected_user,
+                                value: selected_child,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(10)),
                                 alignment: AlignmentDirectional.center,
@@ -75,13 +84,13 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                   );
                                 }).toList(),
                                 onChanged: (ChildModel? newValue) {
+                                  print(childrenList);
                                   if (newValue != null) {
                                     setState(() {
-                                      selected_user = newValue;
+                                      selected_child = newValue;
                                     });
                                     BlocProvider.of<CurrentChildCubit>(context)
                                         .change_current_child(newValue);
-                                    print(newValue);
                                   }
                                 },
                               ),
@@ -102,5 +111,26 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
         ),
       ],
     );
+  }
+
+  check_child(context) async {
+    ChildModel? child =
+        await BlocProvider.of<CurrentChildCubit>(context).get_current_child();
+    if (child != null) {
+      setState(() {
+        selected_child = child;
+      });
+    }
+  }
+
+  add_temp_child() {
+    ChildModel newChild = ChildModel(
+        name: "Tester",
+        date_of_birth: DateTime.now().subtract(Duration(days: 30)),
+        image_path: "assets/images/children/child2.png",
+        child_id: "123",
+        gender: "male",
+        pregnancy_duration: 10);
+    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(child: newChild));
   }
 }

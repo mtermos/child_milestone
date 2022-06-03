@@ -18,6 +18,8 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     on<AddChildEvent>(add_child);
     on<GetAllChildrenEvent>(get_all_children);
     on<DeleteAllChildrenEvent>(delete_all_children);
+
+    on<GetChildEvent>(get_child);
   }
 
   void add_child(AddChildEvent event, Emitter<ChildState> emit) async {
@@ -30,14 +32,26 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       GetAllChildrenEvent event, Emitter<ChildState> emit) async {
     emit(AllChildrenLoadingState());
     // await childRepository.deleteAllChilds();
-    List<ChildModel> children = await childRepository.getAllChildren();
-    emit(AllChildrenLoadedState(children));
+    List<ChildModel>? children = await childRepository.getAllChildren();
+    if (children != null)
+      emit(AllChildrenLoadedState(children));
+    else
+      emit(AllChildrenLoadingErrorState());
   }
 
   void delete_all_children(
       DeleteAllChildrenEvent event, Emitter<ChildState> emit) async {
     emit(DeleteingAllChildrenState());
-    await childRepository.deleteAllChilds();
+    await childRepository.deleteAllChildren();
     emit(DeletedAllChildrenState());
+  }
+
+  void get_child(GetChildEvent event, Emitter<ChildState> emit) async {
+    emit(ChildLoadingState());
+    ChildModel? child = await childRepository.getChildByID(event.child_id);
+    if (child != null)
+      emit(ChildLoadedState(child));
+    else
+      emit(ChildLoadingErrorState());
   }
 }

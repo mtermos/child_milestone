@@ -3,6 +3,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
@@ -10,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
@@ -46,10 +49,10 @@ class _HomeTabState extends State<HomeTab> {
     const String profile_pic_bg = "assets/images/profile_pic_bg.svg";
     const String summary = "assets/images/summary.png";
     const String tips = "assets/images/tips.png";
-    const String child_pic = "assets/images/children/child1.png";
     const String double_arrow_icon = "assets/icons/home_page/double_arrows.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
+    NotificationService _notificationService = NotificationService();
 
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
@@ -90,15 +93,18 @@ class _HomeTabState extends State<HomeTab> {
                                 backgroundColor: Colors.white,
                                 radius: size.width * 0.16,
                               ),
-                              CircleAvatar(
-                                  radius: size.width * 0.15,
-                                  backgroundImage: Image.asset(
-                                          current_child != null
-                                              ? current_child!.image_path
-                                              : child_pic)
-                                      .image
-                                  // child_pic).image,
-                                  ),
+                              current_child != null
+                                  ? CircleAvatar(
+                                      radius: size.width * 0.15,
+                                      backgroundImage:
+                                          Image.asset(current_child!.image_path)
+                                              .image
+                                      // child_pic).image,
+                                      )
+                                  : CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: size.width * 0.16,
+                                    ),
                             ],
                           ),
                           SizedBox(height: size.height * 0.01),
@@ -180,6 +186,15 @@ class _HomeTabState extends State<HomeTab> {
                   InkWell(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(summary),
+                    onTap: () async {
+                      await _notificationService.scheduleNotifications(
+                        id: 1,
+                        title: "title",
+                        body: "body",
+                        scheduledDate: tz.TZDateTime.now(tz.local)
+                            .add(const Duration(seconds: 5)),
+                      );
+                    },
                   ),
                   Spacer(),
                   InkWell(

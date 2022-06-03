@@ -1,8 +1,12 @@
 import 'dart:async';
 
 import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,6 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkUserIsLogged() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(SELECTED_CHILD_ID, "");
     if ((prefs.getBool(SHARED_LOGGED) != null) &&
         prefs.getBool(SHARED_LOGGED)!) {
       Navigator.pushNamed(context, '/home');

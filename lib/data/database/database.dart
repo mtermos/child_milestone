@@ -3,10 +3,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
-import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-final childsTABLE = 'Childs';
+final childrenTABLE = 'Children';
+final notificationsTABLE = 'Notifications';
 
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
@@ -24,7 +24,7 @@ class DatabaseProvider {
     WidgetsFlutterBinding.ensureInitialized();
 
     var database = await openDatabase(path,
-        version: 2, onCreate: initDB, onUpgrade: onUpgrade);
+        version: 3, onCreate: initDB, onUpgrade: onUpgrade);
     return database;
   }
 
@@ -33,8 +33,13 @@ class DatabaseProvider {
     if (newVersion > oldVersion) {}
   }
 
+  void deleteDatabase() async {
+    String path = join(await getDatabasesPath(), 'child_vaccine_tracker.db');
+    databaseFactory.deleteDatabase(path);
+  }
+
   void initDB(Database database, int version) async {
-    await database.execute("CREATE TABLE $childsTABLE ("
+    await database.execute("CREATE TABLE $childrenTABLE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "name TEXT, "
         "gender TEXT, "
@@ -42,6 +47,14 @@ class DatabaseProvider {
         "image_path TEXT, "
         "date_of_birth INTEGER, "
         "pregnancy_duration REAL "
+        ")");
+
+    await database.execute("CREATE TABLE $notificationsTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "title TEXT, "
+        "body TEXT, "
+        "opened INTEGER, "
+        "issued_time INTEGER "
         ")");
   }
 }

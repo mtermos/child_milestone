@@ -1,9 +1,11 @@
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/screens/home/bottom_bar_view.dart';
 import 'package:child_milestone/presentation/screens/home/tabIcon_data.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/home_tab.dart';
+import 'package:child_milestone/presentation/screens/home/tabs/naotification_tab.dart';
 import 'package:child_milestone/presentation/screens/home/top_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -82,13 +84,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               tabBody = HomeTab();
             });
           });
-        } else if (index == 1 || index == 3) {
+        } else if (index == 1) {
           animationController?.reverse().then<dynamic>((data) {
             if (!mounted) {
               return;
             }
             setState(() {
-              tabBody = Center(child: Text("22"));
+              tabBody = NotificationTab();
             });
           });
         }

@@ -4,8 +4,13 @@ import 'package:child_milestone/data/models/child_model.dart';
 class ChildRepository {
   final childDao = ChildDao();
 
-  Future getAllChildren({List<String>? columns, String? query}) =>
-      childDao.getChilds(columns: columns, query: query);
+  Future getAllChildren() async {
+    List<Map<String, dynamic>> result = await childDao.getAllChildren();
+
+    return result.isNotEmpty
+        ? result.map((item) => ChildModel.fromMap(item)).toList()
+        : null;
+  }
 
   Future insertChild(ChildModel child) => childDao.createChild(child);
 
@@ -13,10 +18,18 @@ class ChildRepository {
 
   Future deleteChildById(int id) => childDao.deleteChild(id);
 
-  Future deleteAllChilds() => childDao.deleteAllChilds();
+  Future deleteAllChildren() => childDao.deleteAllChildren();
 
-  get_childs_list() async {
-    List<ChildModel> childs = [
+  Future<ChildModel?> getChildByID(String child_id) async {
+    Map<String, dynamic>? result = await childDao.getChildByID(child_id);
+    if (result != null) {
+      ChildModel child = ChildModel.fromMap(result);
+      return child;
+    }
+  }
+
+  get_children_list() async {
+    List<ChildModel> children = [
       ChildModel(
         name: "Ahmad",
         date_of_birth: DateTime(2022, 1, 1),
@@ -34,6 +47,6 @@ class ChildRepository {
         pregnancy_duration: 36,
       ),
     ];
-    return childs;
+    return children;
   }
 }

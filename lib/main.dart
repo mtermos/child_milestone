@@ -2,6 +2,7 @@ import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_state.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,9 @@ import 'package:child_milestone/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
+
+  WidgetsFlutterBinding.ensureInitialized();
+  await NotificationService().init(); // 
   runApp(Application(
     appRouter: AppRouter(),
     connectivity: Connectivity(),
@@ -46,7 +50,7 @@ class Application extends StatelessWidget {
             ),
           ),
           BlocProvider<CurrentChildCubit>(
-            create: (context) => CurrentChildCubit(),
+            create: (context) => CurrentChildCubit(childRepository: RepositoryProvider.of(context),),
           ),
         ],
         child: MaterialApp(

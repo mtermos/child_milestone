@@ -14,16 +14,20 @@ class AddedChildState extends ChildState {}
 
 class ChildLoadingState extends ChildState {}
 
-class ChildLoadedState extends ChildState {
-  final List<ChildModel> children;
+class ChildLoadingErrorState extends ChildState {}
 
-  ChildLoadedState(this.children);
+class ChildLoadedState extends ChildState {
+  final ChildModel child;
+
+  ChildLoadedState(this.child);
 
   @override
-  List<Object?> get props => [children];
+  List<Object?> get props => [child];
 }
 
 class AllChildrenLoadingState extends ChildState {}
+
+class AllChildrenLoadingErrorState extends ChildState {}
 
 class AllChildrenLoadedState extends ChildState {
   final List<ChildModel> children;

@@ -37,6 +37,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     await prefs.setBool(SHARED_LOGGED, false);
     await prefs.setString(SHARED_USER, "");
     await prefs.setString(SHARED_PASSWORD, "");
+    await prefs.setString(SELECTED_CHILD_ID, "");
     await Future.delayed(Duration(milliseconds: 500));
     event.onSuccess();
     // await Locator.instance.get<ApiAuth>().login();

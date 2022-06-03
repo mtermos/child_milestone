@@ -12,6 +12,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 
 class AddChildForm extends StatefulWidget {
   AddChildForm({Key? key}) : super(key: key);
@@ -117,7 +119,7 @@ class _AddChildFormState extends State<AddChildForm> {
                     context: context,
                     firstDate: DateTime(1900),
                     initialDate: currentValue ?? DateTime.now(),
-                    lastDate: DateTime(2100));
+                    lastDate: DateTime.now());
               },
               onChanged: (date) {
                 if (date != null) {
@@ -177,7 +179,7 @@ class _AddChildFormState extends State<AddChildForm> {
             child: AppButton(
               label: "+  Add",
               roundness: 12,
-              onPressed: () {
+              onPressed: () async {
                 const snackBar = SnackBar(
                   content: Text('Enter all the fields!'),
                 );
@@ -189,10 +191,17 @@ class _AddChildFormState extends State<AddChildForm> {
                   ScaffoldMessenger.of(context).showSnackBar(snackBar);
                   return;
                 }
+
+                final appDir = await getApplicationDocumentsDirectory();
+                final List<String> strings = chosen_image!.path.split(".");
+                final fileName =
+                    basename(strings[strings.length - 2] + "." + strings.last);
+                String image_path = '${appDir.path}/$fileName';
+                await chosen_image!.saveTo(image_path);
                 ChildModel newChild = ChildModel(
                     name: nameController.text,
                     date_of_birth: _selected_date,
-                    image_path: chosen_image!.path,
+                    image_path: image_path,
                     child_id: idController.text,
                     gender: selected_gender,
                     pregnancy_duration: double.parse(durationController.text));

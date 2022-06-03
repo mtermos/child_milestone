@@ -9,38 +9,32 @@ class ChildDao {
   //Adds new Child records
   Future<int> createChild(ChildModel child) async {
     final db = await dbProvider.database;
-    var result = db.insert(childsTABLE, child.toMap());
+    var result = db.insert(childrenTABLE, child.toMap());
     return result;
   }
 
-  //Get All Child items
-  //Searches if query string was passed
-  Future<List<ChildModel>> getChilds(
-      {List<String>? columns, String? query}) async {
+  Future<List<Map<String, dynamic>>> getAllChildren() async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> result = await db.query(childrenTABLE);
+    return result;
+  }
+
+  Future<Map<String, dynamic>?> getChildByID(String child_id) async {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = new List.empty();
-    if (query != null) {
-      if (query.isNotEmpty)
-        result = await db.query(childsTABLE,
-            columns: columns,
-            where: 'description LIKE ?',
-            whereArgs: ["%$query%"]);
-    } else {
-      result = await db.query(childsTABLE, columns: columns);
-    }
+    result =
+        await db.query(childrenTABLE, where: 'child_id = ?', whereArgs: [child_id]);
 
-    List<ChildModel> childs = result.isNotEmpty
-        ? result.map((item) => ChildModel.fromMap(item)).toList()
-        : [];
-    return childs;
+    if (result.isNotEmpty)
+      return result[0];
   }
 
   //Update Child record
   Future<int> updateChild(ChildModel child) async {
     final db = await dbProvider.database;
 
-    var result = await db.update(childsTABLE, child.toMap(),
+    var result = await db.update(childrenTABLE, child.toMap(),
         where: "child_id = ?", whereArgs: [child.child_id]);
 
     return result;
@@ -49,16 +43,16 @@ class ChildDao {
   //Delete Child records
   Future<int> deleteChild(int id) async {
     final db = await dbProvider.database;
-    var result = await db.delete(childsTABLE, where: 'id = ?', whereArgs: [id]);
+    var result = await db.delete(childrenTABLE, where: 'id = ?', whereArgs: [id]);
 
     return result;
   }
 
   //We are not going to use this in the demo
-  Future deleteAllChilds() async {
+  Future deleteAllChildren() async {
     final db = await dbProvider.database;
     var result = await db.delete(
-      childsTABLE,
+      childrenTABLE,
     );
 
     return result;
