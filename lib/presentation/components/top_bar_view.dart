@@ -1,16 +1,22 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class TopBarView extends StatefulWidget {
-  const TopBarView({Key? key}) : super(key: key);
+  bool? back_route;
+  TopBarView({
+    Key? key,
+    bool? this.back_route = false,
+  }) : super(key: key);
 
   @override
   _TopBarViewState createState() => _TopBarViewState();
@@ -21,26 +27,28 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
       "assets/icons/home_page/settings_icon.svg";
   static const String side_nav_icon =
       "assets/icons/home_page/side_nav_icon.svg";
+  static const String chevron_duo_left = "assets/icons/chevron_duo_left.svg";
 
   List<ChildModel>? childrenList;
   ChildModel? selected_child;
 
   @override
   void initState() {
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     // final dbProvider = DatabaseProvider.dbProvider;
     // dbProvider.deleteDatabase();
     // dbProvider.createDatabase();
     // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
     // add_temp_child();
     BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
-    check_child(context);
+    check_child();
+    super.initState();
+  }
 
+  @override
+  Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final textScale = MediaQuery.of(context).size.height * 0.001;
+
     return Stack(
       alignment: AlignmentDirectional.topCenter,
       children: <Widget>[
@@ -49,14 +57,34 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
           child: Column(
             children: <Widget>[
               SizedBox(
-                height: 62,
+                height: size.height * 0.06,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 8, right: 8, top: 4),
+                  padding: EdgeInsets.only(
+                    left: size.width * 0.04,
+                    right: size.width * 0.04,
+                  ),
                   child: Row(
                     children: <Widget>[
                       Expanded(
-                        flex: 1,
-                        child: SvgPicture.asset(side_nav_icon),
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(side_nav_icon),
+                            SizedBox(
+                              width: size.width * 0.02,
+                            ),
+                            widget.back_route!
+                                ? InkWell(
+                                    child: SvgPicture.asset(
+                                      chevron_duo_left,
+                                    ),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                  )
+                                : Container(),
+                          ],
+                        ),
                       ),
                       Expanded(
                         flex: 4,
@@ -102,8 +130,11 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         ),
                       ),
                       Expanded(
-                        flex: 1,
-                        child: SvgPicture.asset(settings_icon),
+                        flex: 2,
+                        child: Container(
+                          child: SvgPicture.asset(settings_icon),
+                          alignment: AlignmentDirectional.centerEnd,
+                        ),
                       ),
                     ],
                   ),
@@ -116,7 +147,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     );
   }
 
-  check_child(context) async {
+  check_child() async {
     ChildModel? child =
         await BlocProvider.of<CurrentChildCubit>(context).get_current_child();
     if (child != null) {

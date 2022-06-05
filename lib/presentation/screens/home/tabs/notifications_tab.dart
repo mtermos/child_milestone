@@ -1,7 +1,7 @@
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
-import 'package:child_milestone/presentation/components/column_with_seprator.dart';
+import 'package:child_milestone/presentation/common_widgets/column_with_seprator.dart';
 import 'package:child_milestone/presentation/widgets/notification_item_widget.dart';
 import 'package:flutter/material.dart';
 

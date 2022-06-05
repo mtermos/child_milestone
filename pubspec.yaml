@@ -94,6 +94,7 @@ flutter:
     - assets/images/children/
     - assets/icons/
     - assets/icons/home_page/
+    - assets/icons/milestone_page/
     - assets/fonts/
     # fonts:
     # - family: Gilroy

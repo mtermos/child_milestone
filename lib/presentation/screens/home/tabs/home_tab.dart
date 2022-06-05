@@ -178,6 +178,9 @@ class _HomeTabState extends State<HomeTab> {
                     ],
                   ),
                 ),
+                onTap: () {
+                  Navigator.pushNamed(context, '/milestone');
+                },
               ),
               Spacer(),
               Row(
