@@ -16,7 +16,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
 
   @override
   Widget build(BuildContext context) {
-    const String double_arrow_icon = "assets/icons/x-icon.png";
+    const String x_icon = "assets/icons/x-icon.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     return Container(
@@ -62,8 +62,8 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
           Column(
             children: [
               Image.asset(
-                double_arrow_icon,
-                width: size.width * 0.05,
+                x_icon,
+                width: size.width * 0.035,
               ),
             ],
           ),

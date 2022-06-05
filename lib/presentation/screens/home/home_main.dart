@@ -5,7 +5,8 @@ import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.d
 import 'package:child_milestone/presentation/screens/home/bottom_bar_view.dart';
 import 'package:child_milestone/presentation/screens/home/tabIcon_data.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/home_tab.dart';
-import 'package:child_milestone/presentation/screens/home/tabs/naotification_tab.dart';
+import 'package:child_milestone/presentation/screens/home/tabs/notifications_tab.dart';
+import 'package:child_milestone/presentation/screens/home/tabs/tips_tab.dart';
 import 'package:child_milestone/presentation/screens/home/top_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -91,6 +92,15 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             }
             setState(() {
               tabBody = NotificationTab();
+            });
+          });
+        } else if (index == 2) {
+          animationController?.reverse().then<dynamic>((data) {
+            if (!mounted) {
+              return;
+            }
+            setState(() {
+              tabBody = TipsTab();
             });
           });
         }

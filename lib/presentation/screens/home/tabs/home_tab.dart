@@ -185,7 +185,10 @@ class _HomeTabState extends State<HomeTab> {
                   SizedBox(width: size.width * 0.075),
                   InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(summary),
+                    child: Image.asset(
+                      summary,
+                      width: size.width * 0.4,
+                    ),
                     onTap: () async {
                       await _notificationService.scheduleNotifications(
                         id: 1,
@@ -199,7 +202,10 @@ class _HomeTabState extends State<HomeTab> {
                   Spacer(),
                   InkWell(
                     borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(tips),
+                    child: Image.asset(
+                      tips,
+                      width: size.width * 0.4,
+                    ),
                     onTap: () {
                       _logout();
                     },
