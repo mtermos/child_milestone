@@ -68,31 +68,34 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                               childrenList = [];
                             }
                             return Center(
-                              child: DropdownButton<ChildModel>(
-                                value: selected_child,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10)),
-                                alignment: AlignmentDirectional.center,
-                                hint: Text("select a child"),
-                                items: childrenList!
-                                    .map<DropdownMenuItem<ChildModel>>(
-                                        (ChildModel value) {
-                                  return DropdownMenuItem<ChildModel>(
-                                    value: value,
-                                    alignment: AlignmentDirectional.center,
-                                    child: Text(value.name),
-                                  );
-                                }).toList(),
-                                onChanged: (ChildModel? newValue) {
-                                  print(childrenList);
-                                  if (newValue != null) {
-                                    setState(() {
-                                      selected_child = newValue;
-                                    });
-                                    BlocProvider.of<CurrentChildCubit>(context)
-                                        .change_current_child(newValue);
-                                  }
-                                },
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton<ChildModel>(
+                                  value: selected_child,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10)),
+                                  alignment: AlignmentDirectional.center,
+                                  hint: Text("select a child"),
+                                  items: childrenList!
+                                      .map<DropdownMenuItem<ChildModel>>(
+                                          (ChildModel value) {
+                                    return DropdownMenuItem<ChildModel>(
+                                      value: value,
+                                      alignment: AlignmentDirectional.center,
+                                      child: Text(value.name),
+                                    );
+                                  }).toList(),
+                                  onChanged: (ChildModel? newValue) {
+                                    print(childrenList);
+                                    if (newValue != null) {
+                                      setState(() {
+                                        selected_child = newValue;
+                                      });
+                                      BlocProvider.of<CurrentChildCubit>(
+                                              context)
+                                          .change_current_child(newValue);
+                                    }
+                                  },
+                                ),
                               ),
                             );
                           },
