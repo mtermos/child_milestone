@@ -1,8 +1,9 @@
-import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 
 class ChildRepository {
-  final childDao = ChildDao();
+  final childDao;
+
+  ChildRepository(this.childDao);
 
   Future getAllChildren() async {
     List<Map<String, dynamic>> result = await childDao.getAllChildren();

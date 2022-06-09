@@ -1,0 +1,68 @@
+import 'package:child_milestone/data/models/milestone_item.dart';
+
+List<MilestoneItem> milestoneItemsList = [
+  MilestoneItem(
+    id: 1,
+    description: "يرفع الرأس والخد عندما ينام على بطنه",
+    startingWeek: 3,
+    endingWeek: 8,
+    category: 1,
+    imagePath: "assets/images/children/infant1.jpeg",
+    videoPath: "",
+  ),
+  MilestoneItem(
+    id: 2,
+    description: "يحرّك يديه و رجليه بسلاسة",
+    startingWeek: 3,
+    endingWeek: 4,
+    category: 2,
+    imagePath: "assets/images/children/infant2.jpeg",
+    videoPath: "",
+  ),
+  MilestoneItem(
+    id: 3,
+    description: "يفتح اليدين لفترة وجيزة",
+    startingWeek: 3,
+    endingWeek: 8,
+    category: 2,
+    imagePath: "assets/images/children/infant3.jpeg",
+    videoPath: "",
+  ),
+  MilestoneItem(
+    id: 4,
+    description: "يراقب أحد الوالدين عندما يتحرك ",
+    startingWeek: 3,
+    endingWeek: 8,
+    category: 1,
+    imagePath: "assets/images/children/infant4.jpeg",
+    videoPath: "",
+  ),
+  MilestoneItem(
+    id: 5,
+    description: "ينظر الى اللعبة لعدة ثوان ",
+    startingWeek: 3,
+    endingWeek: 8,
+    category: 1,
+    imagePath: "assets/images/children/infant5.jpeg",
+    videoPath: "",
+  ),
+  MilestoneItem(
+    id: 6,
+    description:
+        "description2 description2 description2 description2 description2",
+    startingWeek: 2,
+    endingWeek: 3,
+    category: 1,
+    imagePath: "assets/images/children/infant6.jpeg",
+    videoPath: "",
+  ),
+  MilestoneItem(
+    id: 7,
+    description: "يصدر اصوات هديل و مناغاة  غير البكاء  مثل اغو و اوو ",
+    startingWeek: 10,
+    endingWeek: 12,
+    category: 1,
+    imagePath: "assets/images/children/infant7.jpeg",
+    videoPath: "",
+  ),
+];

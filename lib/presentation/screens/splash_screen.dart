@@ -1,9 +1,12 @@
 import 'dart:async';
 
 import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/presentation/screens/milestone/milestone_items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +23,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    reset_data();
     super.initState();
 
     const delay = Duration(seconds: 1);
@@ -53,6 +57,33 @@ class _SplashScreenState extends State<SplashScreen> {
       // });
     } else {
       Navigator.pushNamed(context, '/welcome');
+    }
+  }
+
+  void reset_data() {
+    final dbProvider = DatabaseProvider.dbProvider;
+    dbProvider.deleteDatabase();
+    dbProvider.createDatabase();
+    // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
+    add_temp_child();
+    add_temp_milestones();
+  }
+
+  add_temp_child() {
+    ChildModel newChild = ChildModel(
+        name: "Tester",
+        date_of_birth: DateTime.now().subtract(Duration(days: 30)),
+        image_path: "assets/images/children/child2.png",
+        child_id: "123",
+        gender: "male",
+        pregnancy_duration: 10);
+    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(child: newChild));
+  }
+
+  add_temp_milestones() {
+    for (var milestone in milestoneItemsList) {
+      BlocProvider.of<MilestoneBloc>(context)
+          .add(AddMilestoneEvent(milestone: milestone));
     }
   }
 }

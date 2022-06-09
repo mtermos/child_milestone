@@ -5,8 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
-final childrenTABLE = 'Children';
-final notificationsTABLE = 'Notifications';
+const childrenTABLE = 'Children';
+const notificationsTABLE = 'Notifications';
+const milestonesTABLE = 'Milestones';
+const tipsTABLE = 'Tips';
 
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
@@ -55,6 +57,24 @@ class DatabaseProvider {
         "body TEXT, "
         "opened INTEGER, "
         "issued_time INTEGER "
+        ")");
+
+    await database.execute("CREATE TABLE $milestonesTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "description TEXT, "
+        "imagePath TEXT, "
+        "videoPath TEXT, "
+        "startingWeek INTEGER, "
+        "endingWeek INTEGER, "
+        "category INTEGER "
+        ")");
+
+    await database.execute("CREATE TABLE $tipsTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "title TEXT, "
+        "body TEXT, "
+        "starting_week INTEGER, "
+        "ending_week INTEGER "
         ")");
   }
 }

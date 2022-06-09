@@ -1,6 +1,10 @@
+import 'package:child_milestone/data/dao/child_dao.dart';
+import 'package:child_milestone/data/dao/milestone_dao.dart';
+import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_state.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -12,9 +16,8 @@ import 'package:child_milestone/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  await NotificationService().init(); // 
+  await NotificationService().init(); //
   runApp(Application(
     appRouter: AppRouter(),
     connectivity: Connectivity(),
@@ -33,8 +36,13 @@ class Application extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (context) => ChildRepository(),
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<ChildRepository>(
+            create: (context) => ChildRepository(ChildDao())),
+        RepositoryProvider<MilestoneRepository>(
+            create: (context) => MilestoneRepository(MilestoneDao())),
+      ],
       child: MultiBlocProvider(
         providers: [
           BlocProvider<InternetBloc>(
@@ -46,11 +54,19 @@ class Application extends StatelessWidget {
           ),
           BlocProvider<ChildBloc>(
             create: (context) => ChildBloc(
-              childRepository: RepositoryProvider.of(context),
+              childRepository: RepositoryProvider.of<ChildRepository>(context),
+            ),
+          ),
+          BlocProvider<MilestoneBloc>(
+            create: (context) => MilestoneBloc(
+              milestoneRepository:
+                  RepositoryProvider.of<MilestoneRepository>(context),
             ),
           ),
           BlocProvider<CurrentChildCubit>(
-            create: (context) => CurrentChildCubit(childRepository: RepositoryProvider.of(context),),
+            create: (context) => CurrentChildCubit(
+              childRepository: RepositoryProvider.of(context),
+            ),
           ),
         ],
         child: MaterialApp(

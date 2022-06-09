@@ -34,11 +34,6 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    // final dbProvider = DatabaseProvider.dbProvider;
-    // dbProvider.deleteDatabase();
-    // dbProvider.createDatabase();
-    // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    // add_temp_child();
     BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
     check_child();
     super.initState();
@@ -155,16 +150,5 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
         selected_child = child;
       });
     }
-  }
-
-  add_temp_child() {
-    ChildModel newChild = ChildModel(
-        name: "Tester",
-        date_of_birth: DateTime.now().subtract(Duration(days: 30)),
-        image_path: "assets/images/children/child2.png",
-        child_id: "123",
-        gender: "male",
-        pregnancy_duration: 10);
-    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(child: newChild));
   }
 }
