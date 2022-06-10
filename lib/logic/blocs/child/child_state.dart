@@ -10,7 +10,18 @@ class InitialChildState extends ChildState {}
 
 class AddingChildState extends ChildState {}
 
-class AddedChildState extends ChildState {}
+class ErrorAddingChildState extends ChildState {}
+
+class ErrorAddingChildUniqueIDState extends ChildState {}
+
+class AddedChildState extends ChildState {
+  final ChildModel child;
+
+  AddedChildState(this.child);
+
+  @override
+  List<Object?> get props => [child];
+}
 
 class ChildLoadingState extends ChildState {}
 

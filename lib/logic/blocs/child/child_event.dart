@@ -10,9 +10,11 @@ abstract class ChildEvent extends Equatable {
 
 class AddChildEvent extends ChildEvent {
   ChildModel child;
+  Function whenDone;
 
   AddChildEvent({
     required this.child,
+    required this.whenDone,
   });
 }
 

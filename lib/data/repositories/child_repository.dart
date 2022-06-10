@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 
 class ChildRepository {
@@ -13,7 +14,8 @@ class ChildRepository {
         : null;
   }
 
-  Future insertChild(ChildModel child) => childDao.createChild(child);
+  Future<DaoResponse> insertChild(ChildModel child) =>
+      childDao.createChild(child);
 
   Future updateChild(ChildModel child) => childDao.updateChild(child);
 

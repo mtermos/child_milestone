@@ -45,7 +45,7 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "name TEXT, "
         "gender TEXT, "
-        "child_id TEXT, "
+        "child_id TEXT UNIQUE, "
         "image_path TEXT, "
         "date_of_birth INTEGER, "
         "pregnancy_duration REAL "

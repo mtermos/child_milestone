@@ -43,7 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkUserIsLogged() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(SELECTED_CHILD_ID, "");
+    await prefs.setString(SELECTED_CHILD_ID, "123");
     if ((prefs.getBool(SHARED_LOGGED) != null) &&
         prefs.getBool(SHARED_LOGGED)!) {
       Navigator.pushNamed(context, '/home');
@@ -77,7 +77,8 @@ class _SplashScreenState extends State<SplashScreen> {
         child_id: "123",
         gender: "male",
         pregnancy_duration: 10);
-    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(child: newChild));
+    BlocProvider.of<ChildBloc>(context)
+        .add(AddChildEvent(child: newChild, whenDone: () {}));
   }
 
   add_temp_milestones() {

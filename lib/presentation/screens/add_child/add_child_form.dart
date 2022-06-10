@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
@@ -205,15 +206,38 @@ class _AddChildFormState extends State<AddChildForm> {
                     child_id: idController.text,
                     gender: selected_gender,
                     pregnancy_duration: double.parse(durationController.text));
-                BlocProvider.of<ChildBloc>(context)
-                    .add(AddChildEvent(child: newChild));
-                Navigator.popAndPushNamed(context, "/home");
+                BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
+                    child: newChild,
+                    whenDone: () {
+                      BlocProvider.of<CurrentChildCubit>(context)
+                          .change_current_child(newChild);
+                      Navigator.popAndPushNamed(context, "/home");
+                    }));
+                // final nextState =
+                //     await BlocProvider.of<ChildBloc>(context).state;
+                // // print(nextState);
+                // if (nextState is AddedChildState) {
+                //   BlocProvider.of<CurrentChildCubit>(context)
+                //       .change_current_child(newChild);
+                //   Navigator.popAndPushNamed(context, "/home");
+                // }
                 // Navigator.pop(context);
                 // Navigator.pushNamed(context, '/home');
               },
             ),
           ),
           SizedBox(height: size.height * 0.1),
+          BlocListener<ChildBloc, ChildState>(
+            listener: (context, state) {
+              if (state is ErrorAddingChildUniqueIDState) {
+                const snackBar = SnackBar(
+                  content: Text('Child ID already exists'),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              }
+            },
+            child: Container(),
+          )
         ],
       ),
     );

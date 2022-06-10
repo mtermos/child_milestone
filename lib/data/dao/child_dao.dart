@@ -1,15 +1,26 @@
 import 'dart:async';
 
+import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class ChildDao {
   final dbProvider = DatabaseProvider.dbProvider;
 
   //Adds new Child records
-  Future<int> createChild(ChildModel child) async {
+  Future<DaoResponse<bool, int>> createChild(ChildModel child) async {
     final db = await dbProvider.database;
-    var result = db.insert(childrenTABLE, child.toMap());
+    var result;
+    try {
+      var id = await db.insert(childrenTABLE, child.toMap());
+      result = DaoResponse(true, id);
+    } catch (err) {
+      if (err is DatabaseException) {
+        result = DaoResponse(false, err.getResultCode() ?? 0);
+      }
+    }
+    print(result.item2);
     return result;
   }
 
@@ -23,11 +34,10 @@ class ChildDao {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = new List.empty();
-    result =
-        await db.query(childrenTABLE, where: 'child_id = ?', whereArgs: [child_id]);
+    result = await db
+        .query(childrenTABLE, where: 'child_id = ?', whereArgs: [child_id]);
 
-    if (result.isNotEmpty)
-      return result[0];
+    if (result.isNotEmpty) return result[0];
   }
 
   //Update Child record
@@ -43,7 +53,8 @@ class ChildDao {
   //Delete Child records
   Future<int> deleteChild(int id) async {
     final db = await dbProvider.database;
-    var result = await db.delete(childrenTABLE, where: 'id = ?', whereArgs: [id]);
+    var result =
+        await db.delete(childrenTABLE, where: 'id = ?', whereArgs: [id]);
 
     return result;
   }

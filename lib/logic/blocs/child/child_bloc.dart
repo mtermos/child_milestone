@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:child_milestone/constants/tuples.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -24,8 +25,16 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   void add_child(AddChildEvent event, Emitter<ChildState> emit) async {
     emit(AddingChildState());
-    await childRepository.insertChild(event.child);
-    emit(AddedChildState());
+    DaoResponse result = await childRepository.insertChild(event.child);
+    print(result);
+    if (result.item1) {
+      emit(AddedChildState(event.child));
+      event.whenDone();
+    } else if (result.item2 == 2067) {
+      emit(ErrorAddingChildUniqueIDState());
+    } else {
+      emit(ErrorAddingChildState());
+    }
   }
 
   void get_all_children(
