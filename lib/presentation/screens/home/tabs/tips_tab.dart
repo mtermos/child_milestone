@@ -1,9 +1,8 @@
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/tip.dart';
+import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
-import 'package:child_milestone/presentation/common_widgets/column_with_seprator.dart';
-import 'package:child_milestone/presentation/widgets/notification_item_widget.dart';
 import 'package:child_milestone/presentation/widgets/tip_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,30 +16,7 @@ class TipsTab extends StatefulWidget {
 
 class _TipsState extends State<TipsTab> {
   ChildModel? current_child;
-  var tipsItems = [
-    TipModel(
-      id: 1,
-      title: "Temp Temp 1",
-      body:
-          "Hold a toy above your baby’s head and encourge him to reach fot it.",
-      starting_week: 2,
-      ending_week: 4,
-    ),
-    TipModel(
-      id: 3,
-      title: "Temp Temp 2",
-      body: "Act excited and smile when your baby makes sound.",
-      starting_week: 2,
-      ending_week: 4,
-    ),
-    TipModel(
-      id: 2,
-      title: "Temp Temp 3",
-      body: "Look at pictures with your baby and talk about them.",
-      starting_week: 2,
-      ending_week: 4,
-    ),
-  ];
+  List<TipModel> tipsItems = [];
 
   @override
   void initState() {
@@ -67,6 +43,8 @@ class _TipsState extends State<TipsTab> {
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
             current_child = state.new_current_child;
+            BlocProvider.of<TipBloc>(context).add(
+                GetTipsByAgeEvent(dateOfBirth: current_child!.date_of_birth));
           }
           return SingleChildScrollView(
             child: Column(
@@ -119,18 +97,25 @@ class _TipsState extends State<TipsTab> {
                     ],
                   ),
                 ),
-                Column(
-                    children: tipsItems.map((e) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.05,
-                    ),
-                    width: double.maxFinite,
-                    child: TipItemWidget(
-                      item: e,
-                    ),
-                  );
-                }).toList()),
+                BlocBuilder<TipBloc, TipState>(
+                  builder: (context, state) {
+                    if (state is LoadedTipsByAgeState) {
+                      tipsItems = state.tips;
+                    }
+                    return Column(
+                        children: tipsItems.map((e) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.05,
+                        ),
+                        width: double.maxFinite,
+                        child: TipItemWidget(
+                          item: e,
+                        ),
+                      );
+                    }).toList());
+                  },
+                ),
               ],
             ),
           );

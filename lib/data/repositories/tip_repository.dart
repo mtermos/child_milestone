@@ -28,4 +28,12 @@ class TipRepository {
       return tip;
     }
   }
+
+  Future<List<TipModel>?> getTipsByAge(DateTime dateOfBirth) async {
+    int ageByWeeks = DateTime.now().difference(dateOfBirth).inDays ~/ 7;
+
+    List<Map<String, dynamic>> result = await tipDao.getTipsByAge(ageByWeeks);
+
+    return result.map((item) => TipModel.fromMap(item)).toList();
+  }
 }

@@ -4,12 +4,9 @@ import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
-import 'package:child_milestone/presentation/common_widgets/column_with_seprator.dart';
 import 'package:child_milestone/presentation/components/top_bar_view.dart';
 import 'package:child_milestone/presentation/screens/milestone/milestone_item_widget.dart';
-import 'package:child_milestone/presentation/screens/milestone/milestone_items_list.dart';
 import 'package:child_milestone/presentation/widgets/category_box_widget.dart';
-import 'package:child_milestone/presentation/widgets/notification_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -21,7 +18,6 @@ class MilestoneScreen extends StatefulWidget {
 }
 
 class _MilestoneScreenState extends State<MilestoneScreen> {
-  int age = 0;
   int _selected = 1;
   ChildModel? current_child;
   List<MilestoneItem> items = [];
@@ -70,11 +66,6 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
             current_child = state.new_current_child;
             BlocProvider.of<MilestoneBloc>(context).add(GetMilestonesByAgeEvent(
                 dateOfBirth: current_child!.date_of_birth));
-            age = (DateTime.now()
-                        .difference(current_child!.date_of_birth)
-                        .inDays /
-                    30)
-                .toInt();
           }
           return Column(
             children: [
@@ -124,7 +115,6 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                         builder: (context, state) {
                           if (state is LoadedMilestonesByAgeState) {
                             items = state.milestones;
-                            print(items);
                           }
                           return Column(
                             children: items

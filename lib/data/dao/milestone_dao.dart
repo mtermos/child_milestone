@@ -31,7 +31,7 @@ class MilestoneDao {
 
   Future<List<Map<String, dynamic>>?> getMilestonesByAge(int weeks) async {
     final db = await dbProvider.database;
-    
+
     List<Map<String, dynamic>> result = new List.empty();
     result = await db.query(milestonesTABLE,
         where: 'startingWeek <= ? And endingWeek >= ?',

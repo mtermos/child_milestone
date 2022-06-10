@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/data/data_providers/tips_items_list.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
+import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
-import 'package:child_milestone/presentation/screens/milestone/milestone_items_list.dart';
+import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -67,6 +69,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
     add_temp_child();
     add_temp_milestones();
+    add_temp_tips();
   }
 
   add_temp_child() {
@@ -85,6 +88,12 @@ class _SplashScreenState extends State<SplashScreen> {
     for (var milestone in milestoneItemsList) {
       BlocProvider.of<MilestoneBloc>(context)
           .add(AddMilestoneEvent(milestone: milestone));
+    }
+  }
+
+  add_temp_tips() {
+    for (var tip in tipsItems) {
+      BlocProvider.of<TipBloc>(context).add(AddTipEvent(tip: tip));
     }
   }
 }

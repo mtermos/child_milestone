@@ -1,10 +1,13 @@
 import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/dao/milestone_dao.dart';
+import 'package:child_milestone/data/dao/tip_dao.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
+import 'package:child_milestone/data/repositories/tip_repository.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_state.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
+import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -42,6 +45,8 @@ class Application extends StatelessWidget {
             create: (context) => ChildRepository(ChildDao())),
         RepositoryProvider<MilestoneRepository>(
             create: (context) => MilestoneRepository(MilestoneDao())),
+        RepositoryProvider<TipRepository>(
+            create: (context) => TipRepository(TipDao())),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -61,6 +66,11 @@ class Application extends StatelessWidget {
             create: (context) => MilestoneBloc(
               milestoneRepository:
                   RepositoryProvider.of<MilestoneRepository>(context),
+            ),
+          ),
+          BlocProvider<TipBloc>(
+            create: (context) => TipBloc(
+              tipRepository: RepositoryProvider.of<TipRepository>(context),
             ),
           ),
           BlocProvider<CurrentChildCubit>(

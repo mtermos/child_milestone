@@ -73,8 +73,8 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "title TEXT, "
         "body TEXT, "
-        "starting_week INTEGER, "
-        "ending_week INTEGER "
+        "startingWeek INTEGER, "
+        "endingWeek INTEGER "
         ")");
   }
 }
