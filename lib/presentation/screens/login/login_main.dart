@@ -138,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
               child: GestureDetector(
                 onTap: () => {
-                  print("register")
+                  // print("register")
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
                 },
                 child: const Text(

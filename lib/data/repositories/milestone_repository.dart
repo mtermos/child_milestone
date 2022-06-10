@@ -34,7 +34,6 @@ class MilestoneRepository {
 
   Future<List<MilestoneItem>?> getMilestonesByAge(DateTime dateOfBirth) async {
     int ageByWeeks = DateTime.now().difference(dateOfBirth).inDays ~/ 7;
-    print('ageByWeeks: ${ageByWeeks}');
     List<Map<String, dynamic>> result =
         await milestoneDao.getMilestonesByAge(ageByWeeks);
 

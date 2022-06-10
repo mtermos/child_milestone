@@ -20,7 +20,6 @@ class ChildDao {
         result = DaoResponse(false, err.getResultCode() ?? 0);
       }
     }
-    print(result.item2);
     return result;
   }
 

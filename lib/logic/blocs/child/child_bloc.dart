@@ -26,7 +26,6 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
   void add_child(AddChildEvent event, Emitter<ChildState> emit) async {
     emit(AddingChildState());
     DaoResponse result = await childRepository.insertChild(event.child);
-    print(result);
     if (result.item1) {
       emit(AddedChildState(event.child));
       event.whenDone();

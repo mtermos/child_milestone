@@ -108,7 +108,6 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                     );
                                   }).toList(),
                                   onChanged: (ChildModel? newValue) {
-                                    print(childrenList);
                                     if (newValue != null) {
                                       setState(() {
                                         selected_child = newValue;

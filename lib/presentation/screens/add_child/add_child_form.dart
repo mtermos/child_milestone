@@ -213,16 +213,6 @@ class _AddChildFormState extends State<AddChildForm> {
                           .change_current_child(newChild);
                       Navigator.popAndPushNamed(context, "/home");
                     }));
-                // final nextState =
-                //     await BlocProvider.of<ChildBloc>(context).state;
-                // // print(nextState);
-                // if (nextState is AddedChildState) {
-                //   BlocProvider.of<CurrentChildCubit>(context)
-                //       .change_current_child(newChild);
-                //   Navigator.popAndPushNamed(context, "/home");
-                // }
-                // Navigator.pop(context);
-                // Navigator.pushNamed(context, '/home');
               },
             ),
           ),
