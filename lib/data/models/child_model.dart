@@ -7,40 +7,35 @@ ChildModel childModelFromJson(String str) =>
 String childModelToJson(ChildModel data) => json.encode(data.toJson());
 
 class ChildModel {
+  int id;
   String name;
   DateTime date_of_birth;
   String image_path;
-  String child_id;
   String gender;
   double pregnancy_duration;
 
   ChildModel({
+    required this.id,
     required this.name,
     required this.date_of_birth,
     required this.image_path,
-    required this.child_id,
     required this.gender,
     required this.pregnancy_duration,
   });
 
-  @override
-  String toString() {
-    return 'ChildModel(name: $name, date_of_birth: $date_of_birth, image_path: $image_path, child_id: $child_id, gender: $gender, pregnancy_duration: $pregnancy_duration)';
-  }
-
   ChildModel copyWith({
+    int? id,
     String? name,
     DateTime? date_of_birth,
     String? image_path,
-    String? id,
     String? gender,
     double? pregnancy_duration,
   }) {
     return ChildModel(
+      id: id ?? this.id,
       name: name ?? this.name,
       date_of_birth: date_of_birth ?? this.date_of_birth,
       image_path: image_path ?? this.image_path,
-      child_id: id ?? this.child_id,
       gender: gender ?? this.gender,
       pregnancy_duration: pregnancy_duration ?? this.pregnancy_duration,
     );
@@ -48,10 +43,10 @@ class ChildModel {
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
+      'id': id,
       'name': name,
       'date_of_birth': date_of_birth.millisecondsSinceEpoch,
       'image_path': image_path,
-      'child_id': child_id,
       'gender': gender,
       'pregnancy_duration': pregnancy_duration,
     };
@@ -59,14 +54,24 @@ class ChildModel {
 
   factory ChildModel.fromMap(Map<String, dynamic> map) {
     return ChildModel(
+      id: map['id'] as int,
       name: map['name'] as String,
       date_of_birth:
           DateTime.fromMillisecondsSinceEpoch(map['date_of_birth'] as int),
       image_path: map['image_path'] as String,
-      child_id: map['child_id'] as String,
       gender: map['gender'] as String,
       pregnancy_duration: map['pregnancy_duration'] as double,
     );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory ChildModel.fromJson(String source) =>
+      ChildModel.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  String toString() {
+    return 'ChildModel(id: $id, name: $name, date_of_birth: $date_of_birth, image_path: $image_path, gender: $gender, pregnancy_duration: $pregnancy_duration)';
   }
 
   @override
@@ -74,26 +79,21 @@ class ChildModel {
     if (identical(this, other)) return true;
 
     return other is ChildModel &&
+        other.id == id &&
         other.name == name &&
         other.date_of_birth == date_of_birth &&
         other.image_path == image_path &&
-        other.child_id == child_id &&
         other.gender == gender &&
         other.pregnancy_duration == pregnancy_duration;
   }
 
   @override
   int get hashCode {
-    return name.hashCode ^
+    return id.hashCode ^
+        name.hashCode ^
         date_of_birth.hashCode ^
         image_path.hashCode ^
-        child_id.hashCode ^
         gender.hashCode ^
         pregnancy_duration.hashCode;
   }
-
-  String toJson() => json.encode(toMap());
-
-  factory ChildModel.fromJson(String source) =>
-      ChildModel.fromMap(json.decode(source) as Map<String, dynamic>);
 }

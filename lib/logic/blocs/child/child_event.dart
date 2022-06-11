@@ -23,6 +23,6 @@ class GetAllChildrenEvent extends ChildEvent {}
 class DeleteAllChildrenEvent extends ChildEvent {}
 
 class GetChildEvent extends ChildEvent {
-  String child_id;
-  GetChildEvent({required this.child_id});
+  int id;
+  GetChildEvent({required this.id});
 }

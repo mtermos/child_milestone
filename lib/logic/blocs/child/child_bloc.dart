@@ -56,7 +56,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   void get_child(GetChildEvent event, Emitter<ChildState> emit) async {
     emit(ChildLoadingState());
-    ChildModel? child = await childRepository.getChildByID(event.child_id);
+    ChildModel? child = await childRepository.getChildByID(event.id);
     if (child != null)
       emit(ChildLoadedState(child));
     else

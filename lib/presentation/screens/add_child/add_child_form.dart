@@ -169,6 +169,10 @@ class _AddChildFormState extends State<AddChildForm> {
                 left: size.width * 0.1, right: size.width * 0.4),
             child: TextField(
               controller: idController,
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
+                FilteringTextInputFormatter.digitsOnly
+              ],
               decoration: InputDecoration(labelText: "Child's ID"),
             ),
           ),
@@ -200,12 +204,13 @@ class _AddChildFormState extends State<AddChildForm> {
                 String image_path = '${appDir.path}/$fileName';
                 await chosen_image!.saveTo(image_path);
                 ChildModel newChild = ChildModel(
-                    name: nameController.text,
-                    date_of_birth: _selected_date,
-                    image_path: image_path,
-                    child_id: idController.text,
-                    gender: selected_gender,
-                    pregnancy_duration: double.parse(durationController.text));
+                  name: nameController.text,
+                  date_of_birth: _selected_date,
+                  image_path: image_path,
+                  id: int.parse(idController.text),
+                  gender: selected_gender,
+                  pregnancy_duration: double.parse(durationController.text),
+                );
                 BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
                     child: newChild,
                     whenDone: () {

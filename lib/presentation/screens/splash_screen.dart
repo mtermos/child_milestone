@@ -45,7 +45,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkUserIsLogged() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(SELECTED_CHILD_ID, "123");
+    await prefs.setInt(SELECTED_CHILD_ID, 1);
     if ((prefs.getBool(SHARED_LOGGED) != null) &&
         prefs.getBool(SHARED_LOGGED)!) {
       Navigator.pushNamed(context, '/home');
@@ -74,10 +74,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   add_temp_child() {
     ChildModel newChild = ChildModel(
+        id: 1,
         name: "Tester",
         date_of_birth: DateTime.now().subtract(Duration(days: 30)),
         image_path: "assets/images/children/child2.png",
-        child_id: "123",
         gender: "male",
         pregnancy_duration: 10);
     BlocProvider.of<ChildBloc>(context)

@@ -19,17 +19,17 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
   void change_current_child(ChildModel new_child) async {
     emit(ChangingCurrentChildState());
     final prefs = await SharedPreferences.getInstance();
-    prefs.setString(SELECTED_CHILD_ID, new_child.child_id);
+    prefs.setInt(SELECTED_CHILD_ID, new_child.id);
     emit(CurrentChildChangedState(new_current_child: new_child));
   }
 
-  void change_current_child_by_id(String child_id) async {
+  void change_current_child_by_id(int id) async {
     emit(ChangingCurrentChildState());
-    ChildModel? new_child = await childRepository.getChildByID(child_id);
+    ChildModel? new_child = await childRepository.getChildByID(id);
 
     if (new_child != null) {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString(SELECTED_CHILD_ID, new_child.child_id);
+      prefs.setInt(SELECTED_CHILD_ID, new_child.id);
       emit(CurrentChildChangedState(new_current_child: new_child));
     }
   }
@@ -37,10 +37,10 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
   Future<ChildModel?> get_current_child() async {
     emit(ChangingCurrentChildState());
     final prefs = await SharedPreferences.getInstance();
-    String? child_id = prefs.getString(SELECTED_CHILD_ID);
+    int? id = prefs.getInt(SELECTED_CHILD_ID);
 
-    if (child_id != null && child_id.isNotEmpty) {
-      ChildModel? child = await childRepository.getChildByID(child_id);
+    if (id != null && id >= 0) {
+      ChildModel? child = await childRepository.getChildByID(id);
       if (child != null) {
         emit(CurrentChildChangedState(new_current_child: child));
         return child;

@@ -13,11 +13,11 @@ class NotificationTab extends StatefulWidget {
 }
 
 class _NotificationState extends State<NotificationTab> {
-  ChildModel tempChild = ChildModel(
+  static ChildModel tempChild = ChildModel(
+      id: 1,
       name: "name",
       date_of_birth: DateTime.now(),
       image_path: "assets/images/children/child1.png",
-      child_id: "1",
       gender: "gender",
       pregnancy_duration: 12);
   var demoItems = [
@@ -27,13 +27,7 @@ class _NotificationState extends State<NotificationTab> {
       body: "has an appointment with the doctor tomorrow",
       issued_time: DateTime.now(),
       opened: true,
-      child: ChildModel(
-          name: "Ahmad",
-          date_of_birth: DateTime.now(),
-          image_path: "assets/images/children/child1.png",
-          child_id: "1",
-          gender: "gender",
-          pregnancy_duration: 12),
+      child: tempChild,
     ),
     NotificationModel(
       id: 2,
@@ -41,13 +35,7 @@ class _NotificationState extends State<NotificationTab> {
       body: "has an appointment with the doctor tomorrow",
       issued_time: DateTime.now().subtract(Duration(hours: 1)),
       opened: false,
-      child: ChildModel(
-          name: "name",
-          date_of_birth: DateTime.now(),
-          image_path: "assets/images/children/child1.png",
-          child_id: "1",
-          gender: "gender",
-          pregnancy_duration: 12),
+      child: tempChild,
     ),
     NotificationModel(
       id: 3,
@@ -55,13 +43,7 @@ class _NotificationState extends State<NotificationTab> {
       body: "has an appointment with the doctor tomorrow",
       issued_time: DateTime.now().subtract(Duration(days: 1)),
       opened: false,
-      child: ChildModel(
-          name: "name",
-          date_of_birth: DateTime.now(),
-          image_path: "assets/images/children/child1.png",
-          child_id: "1",
-          gender: "gender",
-          pregnancy_duration: 12),
+      child: tempChild,
     ),
     NotificationModel(
       id: 4,
@@ -69,13 +51,7 @@ class _NotificationState extends State<NotificationTab> {
       body: "has an appointment with the doctor tomorrow",
       issued_time: DateTime.now().subtract(Duration(days: 5)),
       opened: false,
-      child: ChildModel(
-          name: "name",
-          date_of_birth: DateTime.now(),
-          image_path: "assets/images/children/child1.png",
-          child_id: "1",
-          gender: "gender",
-          pregnancy_duration: 12),
+      child: tempChild,
     ),
     NotificationModel(
       id: 4,
@@ -83,13 +59,7 @@ class _NotificationState extends State<NotificationTab> {
       body: "has an appointment with the doctor tomorrow",
       issued_time: DateTime.now().subtract(Duration(days: 10)),
       opened: false,
-      child: ChildModel(
-          name: "name",
-          date_of_birth: DateTime.now(),
-          image_path: "assets/images/children/child1.png",
-          child_id: "1",
-          gender: "gender",
-          pregnancy_duration: 12),
+      child: tempChild,
     ),
   ];
 

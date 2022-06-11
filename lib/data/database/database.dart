@@ -9,6 +9,7 @@ const childrenTABLE = 'Children';
 const notificationsTABLE = 'Notifications';
 const milestonesTABLE = 'Milestones';
 const tipsTABLE = 'Tips';
+const childMilestoneTABLE = 'ChildMilestones';
 
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
@@ -42,13 +43,12 @@ class DatabaseProvider {
 
   void initDB(Database database, int version) async {
     await database.execute("CREATE TABLE $childrenTABLE ("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-        "name TEXT, "
-        "gender TEXT, "
-        "child_id TEXT UNIQUE, "
-        "image_path TEXT, "
-        "date_of_birth INTEGER, "
-        "pregnancy_duration REAL "
+        "id INTEGER PRIMARY KEY NOT NULL, "
+        "name TEXT NOT NULL, "
+        "gender TEXT NOT NULL, "
+        "image_path TEXT NOT NULL, "
+        "date_of_birth INTEGER NOT NULL, "
+        "pregnancy_duration REAL NOT NULL "
         ")");
 
     await database.execute("CREATE TABLE $notificationsTABLE ("
@@ -75,6 +75,15 @@ class DatabaseProvider {
         "body TEXT, "
         "startingWeek INTEGER, "
         "endingWeek INTEGER "
+        ")");
+
+    await database.execute("CREATE TABLE $childMilestoneTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "child_id INTEGER, "
+        "milestone_id INTEGER, "
+        "decision INTEGER, "
+        "FOREIGN KEY (child_id) REFERENCES $childrenTABLE (id), "
+        "FOREIGN KEY (milestone_id) REFERENCES $milestonesTABLE (id) "
         ")");
   }
 }

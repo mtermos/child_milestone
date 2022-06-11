@@ -29,12 +29,12 @@ class ChildDao {
     return result;
   }
 
-  Future<Map<String, dynamic>?> getChildByID(String child_id) async {
+  Future<Map<String, dynamic>?> getChildByID(int id) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
+    List<Map<String, dynamic>> result;
     result = await db
-        .query(childrenTABLE, where: 'child_id = ?', whereArgs: [child_id]);
+        .query(childrenTABLE, where: 'id = ?', whereArgs: [id]);
 
     if (result.isNotEmpty) return result[0];
   }
@@ -44,7 +44,7 @@ class ChildDao {
     final db = await dbProvider.database;
 
     var result = await db.update(childrenTABLE, child.toMap(),
-        where: "child_id = ?", whereArgs: [child.child_id]);
+        where: "id = ?", whereArgs: [child.id]);
 
     return result;
   }
@@ -65,6 +65,26 @@ class ChildDao {
       childrenTABLE,
     );
 
+    return result;
+  }
+
+  Future<DaoResponse<bool, int>> addChildMilestoneDecision(
+      child, milestone, decision) async {
+    final db = await dbProvider.database;
+    DaoResponse<bool, int> result = const DaoResponse(false, 0);
+    var decisionObj = {
+      "child_id": child.id,
+      "milestone_id": milestone.id,
+      "decision": decision
+    };
+    try {
+      var id = await db.insert(childMilestoneTABLE, decisionObj);
+      result = DaoResponse(true, id);
+    } catch (err) {
+      if (err is DatabaseException) {
+        result = DaoResponse(false, err.getResultCode() ?? 0);
+      }
+    }
     return result;
   }
 }
