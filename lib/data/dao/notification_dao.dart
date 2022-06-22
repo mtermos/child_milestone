@@ -1,15 +1,29 @@
 import 'dart:async';
 
+import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/notification.dart';
+import 'package:sqflite/sqlite_api.dart';
 
 class NotificationDao {
   final dbProvider = DatabaseProvider.dbProvider;
 
-  //Adds new Notification record
-  Future<int> createNotification(NotificationModel notification) async {
+  //Adds new Decision record
+  Future<DaoResponse<bool, int>> createNotification(
+      NotificationModel notification) async {
     final db = await dbProvider.database;
-    var result = db.insert(notificationsTABLE, notification.toMap());
+    DaoResponse<bool, int> result = const DaoResponse(false, 0);
+
+    try {
+      var id = await db.insert(notificationsTABLE, notification.toMap());
+      result = DaoResponse(true, id);
+    } catch (err) {
+      if (err is DatabaseException) {
+        print('err: ${err}');
+        result = DaoResponse(false, err.getResultCode() ?? 0);
+      }
+    }
+
     return result;
   }
 
@@ -23,11 +37,10 @@ class NotificationDao {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = new List.empty();
-    result =
-        await db.query(notificationsTABLE, where: 'id = ?', whereArgs: [notification_id]);
+    result = await db.query(notificationsTABLE,
+        where: 'id = ?', whereArgs: [notification_id]);
 
-    if (result.isNotEmpty)
-      return result[0];
+    if (result.isNotEmpty) return result[0];
   }
 
   //Update Notification record
@@ -43,7 +56,8 @@ class NotificationDao {
   //Delete Notification records
   Future<int> deleteNotification(int id) async {
     final db = await dbProvider.database;
-    var result = await db.delete(notificationsTABLE, where: 'id = ?', whereArgs: [id]);
+    var result =
+        await db.delete(notificationsTABLE, where: 'id = ?', whereArgs: [id]);
 
     return result;
   }

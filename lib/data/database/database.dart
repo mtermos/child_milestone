@@ -55,8 +55,11 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "title TEXT, "
         "body TEXT, "
+        "childId INTEGER, "
         "opened INTEGER, "
-        "issued_time INTEGER "
+        "dismissed INTEGER, "
+        "issuedAt INTEGER, "
+        "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id) "
         ")");
 
     await database.execute("CREATE TABLE $milestonesTABLE ("

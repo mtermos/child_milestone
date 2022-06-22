@@ -1,9 +1,12 @@
+import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/notification.dart';
+import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/common_widgets/column_with_seprator.dart';
 import 'package:child_milestone/presentation/widgets/notification_item_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NotificationTab extends StatefulWidget {
   const NotificationTab({Key? key}) : super(key: key);
@@ -13,57 +16,8 @@ class NotificationTab extends StatefulWidget {
 }
 
 class _NotificationState extends State<NotificationTab> {
-  static ChildModel tempChild = ChildModel(
-      id: 1,
-      name: "name",
-      date_of_birth: DateTime.now(),
-      image_path: "assets/images/children/child1.png",
-      gender: "gender",
-      pregnancy_duration: 12);
-  var demoItems = [
-    NotificationModel(
-      id: 1,
-      title: "Temp Temp 1",
-      body: "has an appointment with the doctor tomorrow",
-      issued_time: DateTime.now(),
-      opened: true,
-      child: tempChild,
-    ),
-    NotificationModel(
-      id: 2,
-      title: "Temp Temp 2",
-      body: "has an appointment with the doctor tomorrow",
-      issued_time: DateTime.now().subtract(Duration(hours: 1)),
-      opened: false,
-      child: tempChild,
-    ),
-    NotificationModel(
-      id: 3,
-      title: "Temp Temp 3",
-      body: "has an appointment with the doctor tomorrow",
-      issued_time: DateTime.now().subtract(Duration(days: 1)),
-      opened: false,
-      child: tempChild,
-    ),
-    NotificationModel(
-      id: 4,
-      title: "Temp Temp 4",
-      body: "has an appointment with the doctor tomorrow",
-      issued_time: DateTime.now().subtract(Duration(days: 5)),
-      opened: false,
-      child: tempChild,
-    ),
-    NotificationModel(
-      id: 4,
-      title: "Temp Temp 4",
-      body: "has an appointment with the doctor tomorrow",
-      issued_time: DateTime.now().subtract(Duration(days: 10)),
-      opened: false,
-      child: tempChild,
-    ),
-  ];
+  List<NotificationWithChild> notificationsItems = [];
 
-  int age = 0;
   @override
   void initState() {
     super.initState();
@@ -83,6 +37,8 @@ class _NotificationState extends State<NotificationTab> {
     const String double_arrow_icon = "assets/icons/home_page/double_arrows.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
+    BlocProvider.of<NotificationBloc>(context)
+        .add(GetAllUnopenedNotificationsEvent());
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -98,24 +54,32 @@ class _NotificationState extends State<NotificationTab> {
               ),
             ),
             SizedBox(height: size.height * 0.02),
-            Column(
-              children: getChildrenWithSeperator(
-                addToFirstChild: false,
-                widgets: demoItems.map((e) {
-                  return Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.035,
+            BlocBuilder<NotificationBloc, NotificationState>(
+              builder: (context, state) {
+                if (state is AllUnopenedNotificationsLoadedState) {
+                  notificationsItems = state.notificationsWihChildren;
+                }
+                return Column(
+                  children: getChildrenWithSeperator(
+                    addToFirstChild: false,
+                    widgets: notificationsItems.map((e) {
+                      return Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: size.width * 0.035,
+                        ),
+                        width: double.maxFinite,
+                        child: NotificationItemWidget(
+                          notification: e.notification,
+                          child: e.child,
+                        ),
+                      );
+                    }).toList(),
+                    seperator: Divider(
+                      thickness: 1,
                     ),
-                    width: double.maxFinite,
-                    child: NotificationItemWidget(
-                      item: e,
-                    ),
-                  );
-                }).toList(),
-                seperator: Divider(
-                  thickness: 1,
-                ),
-              ),
+                  ),
+                );
+              },
             ),
           ],
         ),

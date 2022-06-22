@@ -7,34 +7,37 @@ class NotificationModel {
   int id;
   String title;
   String body;
-  DateTime issued_time;
+  DateTime issuedAt;
   bool opened;
-  ChildModel child;
+  bool dismissed;
+  int childId;
   NotificationModel({
     required this.id,
     required this.title,
     required this.body,
-    required this.issued_time,
+    required this.issuedAt,
     required this.opened,
-    required this.child,
+    required this.dismissed,
+    required this.childId,
   });
-  
 
   NotificationModel copyWith({
     int? id,
     String? title,
     String? body,
-    DateTime? issued_time,
+    DateTime? issuedAt,
     bool? opened,
-    ChildModel? child,
+    bool? dismissed,
+    int? childId,
   }) {
     return NotificationModel(
       id: id ?? this.id,
       title: title ?? this.title,
       body: body ?? this.body,
-      issued_time: issued_time ?? this.issued_time,
+      issuedAt: issuedAt ?? this.issuedAt,
       opened: opened ?? this.opened,
-      child: child ?? this.child,
+      dismissed: dismissed ?? this.dismissed,
+      childId: childId ?? this.childId,
     );
   }
 
@@ -43,9 +46,10 @@ class NotificationModel {
       'id': id,
       'title': title,
       'body': body,
-      'issued_time': issued_time.millisecondsSinceEpoch,
-      'opened': opened,
-      'child': child.toMap(),
+      'issuedAt': issuedAt.millisecondsSinceEpoch,
+      'opened': opened ? 1 : 0,
+      'dismissed': dismissed ? 1 : 0,
+      'childId': childId,
     };
   }
 
@@ -54,41 +58,45 @@ class NotificationModel {
       id: map['id'] as int,
       title: map['title'] as String,
       body: map['body'] as String,
-      issued_time: DateTime.fromMillisecondsSinceEpoch(map['issued_time'] as int),
-      opened: map['opened'] as bool,
-      child: ChildModel.fromMap(map['child'] as Map<String,dynamic>),
+      issuedAt: DateTime.fromMillisecondsSinceEpoch(map['issuedAt'] as int),
+      opened: map['opened'] == 1,
+      dismissed: map['dismissed'] == 1,
+      childId: map['childId'] as int,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory NotificationModel.fromJson(String source) => NotificationModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory NotificationModel.fromJson(String source) =>
+      NotificationModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, title: $title, body: $body, issued_time: $issued_time, opened: $opened, child: $child)';
+    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, childId: $childId)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is NotificationModel &&
-      other.id == id &&
-      other.title == title &&
-      other.body == body &&
-      other.issued_time == issued_time &&
-      other.opened == opened &&
-      other.child == child;
+        other.id == id &&
+        other.title == title &&
+        other.body == body &&
+        other.issuedAt == issuedAt &&
+        other.opened == opened &&
+        other.dismissed == dismissed &&
+        other.childId == childId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      title.hashCode ^
-      body.hashCode ^
-      issued_time.hashCode ^
-      opened.hashCode ^
-      child.hashCode;
+        title.hashCode ^
+        body.hashCode ^
+        issuedAt.hashCode ^
+        opened.hashCode ^
+        dismissed.hashCode ^
+        childId.hashCode;
   }
 }

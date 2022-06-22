@@ -1,11 +1,15 @@
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NotificationItemWidget extends StatefulWidget {
-  NotificationItemWidget({Key? key, required this.item}) : super(key: key);
-  final NotificationModel item;
+  NotificationItemWidget(
+      {Key? key, required this.notification, required this.child})
+      : super(key: key);
+  final NotificationModel notification;
+  final ChildModel child;
 
   @override
   _NotificationItemWidgetState createState() => _NotificationItemWidgetState();
@@ -28,7 +32,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
         children: [
           CircleAvatar(
             radius: size.width * 0.05,
-            backgroundImage: Image.asset(widget.item.child.image_path).image,
+            backgroundImage: Image.asset(widget.child.image_path).image,
           ),
           SizedBox(width: size.width * 0.03),
           Column(
@@ -44,16 +48,16 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                     ),
                     children: <TextSpan>[
                       TextSpan(
-                          text: widget.item.child.name + " ",
+                          text: widget.child.name + " ",
                           style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: widget.item.body),
+                      TextSpan(text: widget.notification.body),
                     ],
                   ),
                 ),
               ),
               SizedBox(height: size.height * 0.02),
               AppText(
-                text: readable_date(widget.item.issued_time),
+                text: readable_date(widget.notification.issuedAt),
                 fontSize: textScale * 14,
               )
             ],

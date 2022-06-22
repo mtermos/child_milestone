@@ -2,10 +2,12 @@ import 'dart:async';
 
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/data_providers/tips_items_list.dart';
+import 'package:child_milestone/data/data_providers/notifications_items_list.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
+import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
@@ -70,6 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
     add_temp_child();
     add_temp_milestones();
     add_temp_tips();
+    add_temp_notifications();
   }
 
   add_temp_child() {
@@ -77,11 +80,20 @@ class _SplashScreenState extends State<SplashScreen> {
         id: 1,
         name: "Tester",
         date_of_birth: DateTime.now().subtract(Duration(days: 30)),
-        image_path: "assets/images/children/child2.png",
+        image_path: "assets/images/children/child1.png",
         gender: "male",
         pregnancy_duration: 10);
     BlocProvider.of<ChildBloc>(context)
         .add(AddChildEvent(child: newChild, whenDone: () {}));
+    ChildModel newChild2 = ChildModel(
+        id: 2,
+        name: "Tester2",
+        date_of_birth: DateTime.now().subtract(Duration(days: 130)),
+        image_path: "assets/images/children/child2.png",
+        gender: "female",
+        pregnancy_duration: 10);
+    BlocProvider.of<ChildBloc>(context)
+        .add(AddChildEvent(child: newChild2, whenDone: () {}));
   }
 
   add_temp_milestones() {
@@ -94,6 +106,13 @@ class _SplashScreenState extends State<SplashScreen> {
   add_temp_tips() {
     for (var tip in tipsItems) {
       BlocProvider.of<TipBloc>(context).add(AddTipEvent(tip: tip));
+    }
+  }
+
+  add_temp_notifications() {
+    for (var notification in notificationsItems) {
+      BlocProvider.of<NotificationBloc>(context)
+          .add(AddNotificationEvent(notification: notification));
     }
   }
 }
