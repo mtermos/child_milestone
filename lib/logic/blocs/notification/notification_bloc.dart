@@ -71,7 +71,8 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         await notificationRepository.getAllNotificationsWithChildren();
     if (notifications != null) {
       notifications = notifications
-          .where((element) => !element.notification.opened)
+          .where((element) =>
+              !element.notification.opened && !element.notification.dismissed)
           .toList();
       emit(AllUnopenedNotificationsLoadedState(notifications));
     } else {
