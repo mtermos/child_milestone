@@ -2,6 +2,7 @@ import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
+import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
@@ -131,55 +132,73 @@ class _HomeTabState extends State<HomeTab> {
               SizedBox(
                 height: size.height * 0.05,
               ),
-              InkWell(
-                child: Container(
-                  width: size.width * 0.85,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: size.width * 0.08,
-                      vertical: size.height * 0.03),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: AppColors.primaryColor,
-                      width: textScale * 2,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          AppText(
-                            text: "Milestone checklist",
-                            fontSize: textScale * 20,
+              BlocBuilder<DecisionBloc, DecisionState>(
+                builder: (context, state) {
+                  if (state is LoadedDecisionsByAgeState) {
+                    print('state.decisions: ${state.decisions}');
+                    return InkWell(
+                      child: Container(
+                        width: size.width * 0.85,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: size.width * 0.08,
+                            vertical: size.height * 0.03),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: AppColors.primaryColor,
+                            width: textScale * 2,
                           ),
-                          SizedBox(width: size.width * 0.02),
-                          Image.asset(
-                            double_arrow_icon,
-                            width: size.width * 0.05,
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: size.height * 0.025),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: LinearPercentIndicator(
-                              animation: true,
-                              lineHeight: textScale * 15,
-                              animationDuration: 2500,
-                              percent: 0.2,
-                              progressColor: Colors.red,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                AppText(
+                                  text: "Milestone checklist",
+                                  fontSize: textScale * 20,
+                                ),
+                                SizedBox(width: size.width * 0.02),
+                                Image.asset(
+                                  double_arrow_icon,
+                                  width: size.width * 0.05,
+                                ),
+                              ],
                             ),
-                          ),
-                          SizedBox(width: size.width * 0.015),
-                          Text("2/10"),
-                        ],
+                            SizedBox(height: size.height * 0.025),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: LinearPercentIndicator(
+                                    animation: true,
+                                    lineHeight: textScale * 15,
+                                    animationDuration: 2500,
+                                    percent: (state.decisions.length /
+                                        state.milestonesLength),
+                                    progressColor: Colors.red,
+                                  ),
+                                ),
+                                SizedBox(width: size.width * 0.015),
+                                Text(state.decisions.length.toString() +
+                                    "/" +
+                                    state.milestonesLength.toString()),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
-                  ),
-                ),
-                onTap: () {
-                  Navigator.pushNamed(context, '/milestone');
+                      onTap: () {
+                        Navigator.pushNamed(context, '/milestone');
+                      },
+                    );
+                  } else {
+                    if (current_child != null) {
+                      BlocProvider.of<DecisionBloc>(context).add(
+                          GetDecisionsByAgeEvent(
+                              dateOfBirth: current_child!.date_of_birth,
+                              childId: current_child!.id));
+                    }
+                    return CircularProgressIndicator();
+                  }
                 },
               ),
               Spacer(),

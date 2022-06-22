@@ -67,24 +67,4 @@ class ChildDao {
 
     return result;
   }
-
-  Future<DaoResponse<bool, int>> addChildMilestoneDecision(
-      child, milestone, decision) async {
-    final db = await dbProvider.database;
-    DaoResponse<bool, int> result = const DaoResponse(false, 0);
-    var decisionObj = {
-      "child_id": child.id,
-      "milestone_id": milestone.id,
-      "decision": decision
-    };
-    try {
-      var id = await db.insert(childMilestoneTABLE, decisionObj);
-      result = DaoResponse(true, id);
-    } catch (err) {
-      if (err is DatabaseException) {
-        result = DaoResponse(false, err.getResultCode() ?? 0);
-      }
-    }
-    return result;
-  }
 }

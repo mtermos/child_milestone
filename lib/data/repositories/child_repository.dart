@@ -14,7 +14,7 @@ class ChildRepository {
         : null;
   }
 
-  Future<DaoResponse> insertChild(ChildModel child) =>
+  Future<DaoResponse<bool, int>> insertChild(ChildModel child) =>
       childDao.createChild(child);
 
   Future updateChild(ChildModel child) => childDao.updateChild(child);

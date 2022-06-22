@@ -9,7 +9,7 @@ const childrenTABLE = 'Children';
 const notificationsTABLE = 'Notifications';
 const milestonesTABLE = 'Milestones';
 const tipsTABLE = 'Tips';
-const childMilestoneTABLE = 'ChildMilestones';
+const decisionsTABLE = 'Decisions';
 
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
@@ -77,13 +77,14 @@ class DatabaseProvider {
         "endingWeek INTEGER "
         ")");
 
-    await database.execute("CREATE TABLE $childMilestoneTABLE ("
+    await database.execute("CREATE TABLE $decisionsTABLE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-        "child_id INTEGER, "
-        "milestone_id INTEGER, "
+        "childId INTEGER, "
+        "milestoneId INTEGER, "
         "decision INTEGER, "
-        "FOREIGN KEY (child_id) REFERENCES $childrenTABLE (id), "
-        "FOREIGN KEY (milestone_id) REFERENCES $milestonesTABLE (id) "
+        "takenAt INTEGER, "
+        "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
+        "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
         ")");
   }
 }
