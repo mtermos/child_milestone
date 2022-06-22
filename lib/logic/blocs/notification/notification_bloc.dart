@@ -19,6 +19,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
 
     on<GetAllUnopenedNotificationsEvent>(getAllUnopenedNotifications);
     on<GetNotificationEvent>(getNotification);
+    on<DismissNotificationEvent>(dismissNotification);
   }
 
   void addNotification(
@@ -77,6 +78,19 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       emit(AllUnopenedNotificationsLoadedState(notifications));
     } else {
       emit(AllUnopenedNotificationsLoadingErrorState());
+    }
+  }
+
+  void dismissNotification(
+      DismissNotificationEvent event, Emitter<NotificationState> emit) async {
+    emit(DismissingNotificationState());
+    DaoResponse<bool, int> response =
+        await notificationRepository.dismissNotification(event.notification);
+
+    if (response.item1) {
+      emit(DismissedNotificationsState(notificationId: event.notification.id));
+    } else {
+      emit(ErrorDismissingNotificationState());
     }
   }
 }

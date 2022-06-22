@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 part of 'notification_bloc.dart';
 
 @immutable
@@ -62,6 +63,17 @@ class DeleteingAllNotificationsState extends NotificationState {}
 
 class DeletedAllNotificationsState extends NotificationState {}
 
+class DismissingNotificationState extends NotificationState {}
+
+class DismissedNotificationsState extends NotificationState {
+  int notificationId;
+  DismissedNotificationsState({
+    required this.notificationId,
+  });
+}
+
+class ErrorDismissingNotificationState extends NotificationState {}
+
 class NotificationErrorState extends NotificationState {
   final String error;
 
@@ -70,4 +82,3 @@ class NotificationErrorState extends NotificationState {
   @override
   List<Object?> get props => [error];
 }
-

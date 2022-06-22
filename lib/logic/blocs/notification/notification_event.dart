@@ -27,4 +27,7 @@ class GetNotificationEvent extends NotificationEvent {
   GetNotificationEvent({required this.notificationId});
 }
 
-
+class DismissNotificationEvent extends NotificationEvent {
+  NotificationModel notification;
+  DismissNotificationEvent({required this.notification});
+}

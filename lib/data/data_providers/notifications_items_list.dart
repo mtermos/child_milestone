@@ -7,7 +7,7 @@ var notificationsItems = [
     body: "has an appointment with the doctor tomorrow",
     issuedAt: DateTime.now(),
     opened: true,
-    dismissed: true,
+    dismissed: false,
     childId: 1,
   ),
   NotificationModel(
@@ -16,7 +16,7 @@ var notificationsItems = [
     body: "has an appointment with the doctor tomorrow",
     issuedAt: DateTime.now().subtract(const Duration(hours: 1)),
     opened: false,
-    dismissed: true,
+    dismissed: false,
     childId: 1,
   ),
   NotificationModel(
@@ -25,7 +25,7 @@ var notificationsItems = [
     body: "has an appointment with the doctor tomorrow",
     issuedAt: DateTime.now().subtract(const Duration(days: 1)),
     opened: true,
-    dismissed: true,
+    dismissed: false,
     childId: 2,
   ),
   NotificationModel(
@@ -34,7 +34,7 @@ var notificationsItems = [
     body: "has an appointment with the doctor tomorrow",
     issuedAt: DateTime.now().subtract(const Duration(days: 5)),
     opened: false,
-    dismissed: true,
+    dismissed: false,
     childId: 2,
   ),
   NotificationModel(
@@ -43,7 +43,7 @@ var notificationsItems = [
     body: "has an appointment with the doctor tomorrow",
     issuedAt: DateTime.now().subtract(const Duration(days: 10)),
     opened: false,
-    dismissed: true,
+    dismissed: false,
     childId: 2,
   ),
 ];

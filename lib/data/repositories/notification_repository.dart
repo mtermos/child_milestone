@@ -62,4 +62,15 @@ class NotificationRepository {
       return notification;
     }
   }
+
+  Future<DaoResponse<bool, int>> dismissNotification(
+      NotificationModel notification) async {
+    notification.dismissed = true;
+    int count = await notificationDao.updateNotification(notification);
+    if (count == 1) {
+      return const DaoResponse(true, 1);
+    } else {
+      return DaoResponse(false, count);
+    }
+  }
 }

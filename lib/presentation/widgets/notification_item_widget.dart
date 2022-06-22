@@ -1,7 +1,9 @@
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/notification.dart';
+import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
 class NotificationItemWidget extends StatefulWidget {
@@ -65,9 +67,18 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
           Spacer(),
           Column(
             children: [
-              Image.asset(
-                x_icon,
-                width: size.width * 0.035,
+              InkWell(
+                child: Image.asset(
+                  x_icon,
+                  width: size.width * 0.035,
+                ),
+                onTap: () {
+                  BlocProvider.of<NotificationBloc>(context).add(
+                      DismissNotificationEvent(
+                          notification: widget.notification));
+                  BlocProvider.of<NotificationBloc>(context)
+                      .add(GetAllUnopenedNotificationsEvent());
+                },
               ),
             ],
           ),

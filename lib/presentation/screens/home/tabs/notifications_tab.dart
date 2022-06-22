@@ -30,11 +30,6 @@ class _NotificationState extends State<NotificationTab> {
 
   @override
   Widget build(BuildContext context) {
-    const String profile_pic_bg = "assets/images/profile_pic_bg.svg";
-    const String summary = "assets/images/summary.png";
-    const String tips = "assets/images/tips.png";
-    const String child_pic = "assets/images/children/child1.png";
-    const String double_arrow_icon = "assets/icons/home_page/double_arrows.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     BlocProvider.of<NotificationBloc>(context)
@@ -74,7 +69,7 @@ class _NotificationState extends State<NotificationTab> {
                         ),
                       );
                     }).toList(),
-                    seperator: Divider(
+                    seperator: const Divider(
                       thickness: 1,
                     ),
                   ),
