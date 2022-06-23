@@ -105,7 +105,7 @@ class _AddChildFormState extends State<AddChildForm> {
             margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
             child: TextField(
               controller: nameController,
-              decoration: InputDecoration(labelText: "Child's Name"),
+              decoration: const InputDecoration(labelText: "Child's Name"),
             ),
           ),
           SizedBox(height: size.height * 0.01),
@@ -113,7 +113,7 @@ class _AddChildFormState extends State<AddChildForm> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
             child: DateTimeField(
-              decoration: InputDecoration(labelText: "Date of Birth"),
+              decoration: const InputDecoration(labelText: "Date of Birth"),
               format: format,
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
@@ -139,7 +139,7 @@ class _AddChildFormState extends State<AddChildForm> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                   labelText: "Duration of Pregnancy (in weeks)"),
             ),
           ),
@@ -173,7 +173,7 @@ class _AddChildFormState extends State<AddChildForm> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              decoration: InputDecoration(labelText: "Child's ID"),
+              decoration: const InputDecoration(labelText: "Child's ID"),
             ),
           ),
           SizedBox(height: size.height * 0.04),
@@ -198,9 +198,10 @@ class _AddChildFormState extends State<AddChildForm> {
                 }
 
                 final appDir = await getApplicationDocumentsDirectory();
-                final List<String> strings = chosen_image!.path.split(".");
-                final fileName =
-                    basename(strings[strings.length - 2] + "." + strings.last);
+                // final List<String> strings = chosen_image!.path.split(".");
+                // final fileName =
+                //     basename(strings[strings.length - 2] + "." + strings.last);
+                final fileName = basename(chosen_image!.path);
                 String image_path = '${appDir.path}/$fileName';
                 await chosen_image!.saveTo(image_path);
                 ChildModel newChild = ChildModel(

@@ -92,8 +92,11 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                       decision = state.decision.decision;
                     });
                   }
-                } else if (state is AddedDecisionState) {
-                  decision = state.decision.decision;
+                } else if (state is AddedDecisionState &&
+                    state.decision.milestoneId == widget.item.id) {
+                  setState(() {
+                    decision = state.decision.decision;
+                  });
                 }
               },
               child: Row(

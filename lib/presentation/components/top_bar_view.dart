@@ -64,10 +64,10 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         flex: 2,
                         child: Row(
                           children: [
-                            SvgPicture.asset(side_nav_icon),
-                            SizedBox(
-                              width: size.width * 0.02,
-                            ),
+                            // SvgPicture.asset(side_nav_icon),
+                            // SizedBox(
+                            //   width: size.width * 0.02,
+                            // ),
                             widget.back_route!
                                 ? InkWell(
                                     child: SvgPicture.asset(
@@ -125,10 +125,11 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                       ),
                       Expanded(
                         flex: 2,
-                        child: Container(
-                          child: SvgPicture.asset(settings_icon),
-                          alignment: AlignmentDirectional.centerEnd,
-                        ),
+                        // child: Container(
+                        //   child: SvgPicture.asset(settings_icon),
+                        //   alignment: AlignmentDirectional.centerEnd,
+                        // ),
+                        child: Text(""),
                       ),
                     ],
                   ),
