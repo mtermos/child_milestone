@@ -27,7 +27,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // reset_data();
+    reset_data();
     super.initState();
 
     const delay = Duration(seconds: 1);
@@ -78,7 +78,7 @@ class _SplashScreenState extends State<SplashScreen> {
   add_temp_child() {
     ChildModel newChild = ChildModel(
         id: 1,
-        name: "Tester",
+        name: "رامي",
         date_of_birth: DateTime.now().subtract(Duration(days: 30)),
         image_path: "assets/images/children/child1.png",
         gender: "male",
@@ -87,7 +87,7 @@ class _SplashScreenState extends State<SplashScreen> {
         .add(AddChildEvent(child: newChild, whenDone: () {}));
     ChildModel newChild2 = ChildModel(
         id: 2,
-        name: "Tester2",
+        name: "سارة",
         date_of_birth: DateTime.now().subtract(Duration(days: 130)),
         image_path: "assets/images/children/child2.png",
         gender: "female",

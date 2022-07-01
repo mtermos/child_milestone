@@ -7,6 +7,7 @@ import 'package:child_milestone/presentation/common_widgets/column_with_seprator
 import 'package:child_milestone/presentation/widgets/notification_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationTab extends StatefulWidget {
   const NotificationTab({Key? key}) : super(key: key);
@@ -42,9 +43,10 @@ class _NotificationState extends State<NotificationTab> {
             SizedBox(height: size.height * 0.02),
             Container(
               alignment: AlignmentDirectional.topStart,
-              padding: EdgeInsets.only(left: size.width * 0.05),
-              child: const AppText(
-                text: "Notifications",
+              padding: EdgeInsets.only(
+                  left: size.width * 0.05, right: size.width * 0.05),
+              child: AppText(
+                text: AppLocalizations.of(context)!.notifications,
                 textAlign: TextAlign.start,
               ),
             ),

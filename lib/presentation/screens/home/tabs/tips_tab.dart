@@ -6,6 +6,7 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/widgets/tip_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TipsTab extends StatefulWidget {
   const TipsTab({Key? key}) : super(key: key);
@@ -85,7 +86,8 @@ class _TipsState extends State<TipsTab> {
                             ),
                             SizedBox(height: size.height * 0.035),
                             AppText(
-                              text: "Tips &\nActivities",
+                              text: AppLocalizations.of(context)!
+                                  .tipsAndActivities,
                               color: Colors.white,
                               fontSize: size.height * 0.03,
                               fontWeight: FontWeight.bold,

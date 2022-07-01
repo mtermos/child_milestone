@@ -9,6 +9,7 @@ import 'package:child_milestone/presentation/screens/milestone/milestone_item_wi
 import 'package:child_milestone/presentation/widgets/category_box_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MilestoneScreen extends StatefulWidget {
   const MilestoneScreen({Key? key}) : super(key: key);
@@ -21,29 +22,6 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   int _selected = 1;
   ChildModel? current_child;
   List<MilestoneItem> items = [];
-  List<MilestoneCategoryModel> cagtegories = [
-    MilestoneCategoryModel(
-      id: 1,
-      name: "Social",
-      icon_path: "assets/icons/milestone_page/social_category.png",
-    ),
-    MilestoneCategoryModel(
-      id: 2,
-      name: "Language",
-      icon_path: "assets/icons/milestone_page/language_category.png",
-    ),
-    MilestoneCategoryModel(
-      id: 3,
-      name: "Movement",
-      icon_path: "assets/icons/milestone_page/movement_category.png",
-    ),
-    MilestoneCategoryModel(
-      id: 4,
-      name: "Cognitive",
-      icon_path: "assets/icons/milestone_page/cognitive_category.png",
-    ),
-  ];
-
   @override
   void initState() {
     super.initState();
@@ -58,6 +36,29 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
+
+  List<MilestoneCategoryModel> cagtegories = [
+    MilestoneCategoryModel(
+      id: 1,
+      name: AppLocalizations.of(context)!.social,
+      icon_path: "assets/icons/milestone_page/social_category.png",
+    ),
+    MilestoneCategoryModel(
+      id: 2,
+      name: AppLocalizations.of(context)!.language,
+      icon_path: "assets/icons/milestone_page/language_category.png",
+    ),
+    MilestoneCategoryModel(
+      id: 3,
+      name: AppLocalizations.of(context)!.movement,
+      icon_path: "assets/icons/milestone_page/movement_category.png",
+    ),
+    MilestoneCategoryModel(
+      id: 4,
+      name: AppLocalizations.of(context)!.cognitive,
+      icon_path: "assets/icons/milestone_page/cognitive_category.png",
+    ),
+  ];
 
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
@@ -80,9 +81,9 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                       SizedBox(height: size.height * 0.02),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        padding: EdgeInsets.only(left: size.width * 0.05),
-                        child: const AppText(
-                          text: "Milestone Checklist",
+                        padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                        child: AppText(
+                          text: AppLocalizations.of(context)!.milestoneChecklist,
                           textAlign: TextAlign.start,
                         ),
                       ),

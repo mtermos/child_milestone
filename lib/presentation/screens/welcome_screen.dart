@@ -5,6 +5,8 @@ import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:path/path.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final String imagePath = "assets/images/welcome_image.png";
@@ -48,7 +50,7 @@ class WelcomeScreen extends StatelessWidget {
                   const SizedBox(
                     height: 20,
                   ),
-                  welcomeTextWidget(textScale),
+                  welcomeTextWidget(context, textScale),
                   const SizedBox(
                     height: 10,
                   ),
@@ -83,18 +85,18 @@ class WelcomeScreen extends StatelessWidget {
     // );
   }
 
-  Widget welcomeTextWidget(double textScale) {
+  Widget welcomeTextWidget(BuildContext context, double textScale) {
     return Column(
       children: [
         AppText(
-          text: "Welcome",
+          text: AppLocalizations.of(context)!.welcome,
           fontSize: textScale * 48,
           fontWeight: FontWeight.w600,
           // color: Colors.white,
           color: Color.fromRGBO(78, 76, 76, 1),
         ),
         AppText(
-          text: "to child milestone",
+          text: AppLocalizations.of(context)!.toChildMilestone,
           fontSize: textScale * 28,
           fontWeight: FontWeight.w600,
           color: Color.fromRGBO(78, 76, 76, 1),
@@ -116,7 +118,7 @@ class WelcomeScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: AppButton(
-        label: "Get Started",
+        label: AppLocalizations.of(context)!.getStarted,
         fontWeight: FontWeight.w600,
         padding: const EdgeInsets.symmetric(vertical: 25),
         onPressed: () {

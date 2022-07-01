@@ -15,6 +15,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddChildForm extends StatefulWidget {
   AddChildForm({Key? key}) : super(key: key);
@@ -66,7 +67,7 @@ class _AddChildFormState extends State<AddChildForm> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           AppText(
-            text: "Add Child",
+            text: AppLocalizations.of(context)!.addChild,
             fontSize: textScale * 30,
             fontWeight: FontWeight.bold,
             color: AppColors.primaryColor,
@@ -95,7 +96,7 @@ class _AddChildFormState extends State<AddChildForm> {
           ),
           SizedBox(height: size.height * 0.025),
           AppText(
-            text: "Add Photo",
+            text: AppLocalizations.of(context)!.addPhoto,
             fontSize: textScale * 20,
             color: Colors.black,
           ),
@@ -105,7 +106,8 @@ class _AddChildFormState extends State<AddChildForm> {
             margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
             child: TextField(
               controller: nameController,
-              decoration: const InputDecoration(labelText: "Child's Name"),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.childsNameField),
             ),
           ),
           SizedBox(height: size.height * 0.01),
@@ -113,7 +115,8 @@ class _AddChildFormState extends State<AddChildForm> {
             alignment: Alignment.center,
             margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
             child: DateTimeField(
-              decoration: const InputDecoration(labelText: "Date of Birth"),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.dateOfBirthField),
               format: format,
               onShowPicker: (context, currentValue) {
                 return showDatePicker(
@@ -139,26 +142,30 @@ class _AddChildFormState extends State<AddChildForm> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              decoration: const InputDecoration(
-                  labelText: "Duration of Pregnancy (in weeks)"),
+              decoration: InputDecoration(
+                  labelText:
+                      AppLocalizations.of(context)!.pregnancyDurationField),
             ),
           ),
           SizedBox(height: size.height * 0.01),
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(
-                left: size.width * 0.1, top: size.height * 0.02),
+              left: size.width * 0.1,
+              top: size.height * 0.02,
+              right: size.width * 0.1,
+            ),
             child: Row(
               children: [
                 AppText(
-                  text: "Gender:",
+                  text: AppLocalizations.of(context)!.genderField,
                   fontSize: textScale * 20,
                 ),
-                addRadioButton(0, 'Male'),
+                addRadioButton(0, AppLocalizations.of(context)!.male),
                 SizedBox(
                   width: size.width * 0.05,
                 ),
-                addRadioButton(1, 'Female'),
+                addRadioButton(1, AppLocalizations.of(context)!.female),
               ],
             ),
           ),
@@ -173,7 +180,8 @@ class _AddChildFormState extends State<AddChildForm> {
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
-              decoration: const InputDecoration(labelText: "Child's ID"),
+              decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context)!.childsIdField),
             ),
           ),
           SizedBox(height: size.height * 0.04),
@@ -185,8 +193,9 @@ class _AddChildFormState extends State<AddChildForm> {
               label: "+  Add",
               roundness: 12,
               onPressed: () async {
-                const snackBar = SnackBar(
-                  content: Text('Enter all the fields!'),
+                var snackBar = SnackBar(
+                  content: Text(
+                      AppLocalizations.of(context)!.enterAllFieldsSnackBar),
                 );
                 if (chosen_image == null ||
                     nameController.text == "" ||
@@ -226,8 +235,9 @@ class _AddChildFormState extends State<AddChildForm> {
           BlocListener<ChildBloc, ChildState>(
             listener: (context, state) {
               if (state is ErrorAddingChildUniqueIDState) {
-                const snackBar = SnackBar(
-                  content: Text('Child ID already exists'),
+                var snackBar = SnackBar(
+                  content: Text(
+                      AppLocalizations.of(context)!.childsIdExistsSnackBar),
                 );
                 ScaffoldMessenger.of(context).showSnackBar(snackBar);
               }

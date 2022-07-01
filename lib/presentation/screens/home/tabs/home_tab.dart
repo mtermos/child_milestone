@@ -14,6 +14,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
 // import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
@@ -50,10 +51,17 @@ class _HomeTabState extends State<HomeTab> {
     const String profile_pic_bg = "assets/images/profile_pic_bg.svg";
     const String summary = "assets/images/summary.png";
     const String tips = "assets/images/tips.png";
-    const String double_arrow_icon = "assets/icons/home_page/double_arrows.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     NotificationService _notificationService = NotificationService();
+    String double_arrow_icon = "";
+    bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
+
+    if (isRTL) {
+      double_arrow_icon = "assets/icons/home_page/double_arrows_to_left.png";
+    } else {
+      double_arrow_icon = "assets/icons/home_page/double_arrows.png";
+    }
 
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
@@ -112,14 +120,15 @@ class _HomeTabState extends State<HomeTab> {
                           AppText(
                             text: current_child != null
                                 ? current_child!.name
-                                : "asd",
+                                : "child's name",
                             color: Colors.white,
                             fontSize: size.height * 0.03,
                             fontWeight: FontWeight.bold,
                           ),
                           SizedBox(height: size.height * 0.01),
                           AppText(
-                            text: age.toString() + " months old!",
+                            text: age.toString() +
+                                AppLocalizations.of(context)!.monthsOld,
                             color: Colors.white,
                             fontSize: size.height * 0.015,
                           ),
@@ -135,7 +144,6 @@ class _HomeTabState extends State<HomeTab> {
               BlocBuilder<DecisionBloc, DecisionState>(
                 builder: (context, state) {
                   if (state is LoadedDecisionsByAgeState) {
-                    print('state.decisions: ${state.decisions}');
                     return InkWell(
                       child: Container(
                         width: size.width * 0.85,
@@ -154,7 +162,8 @@ class _HomeTabState extends State<HomeTab> {
                             Row(
                               children: [
                                 AppText(
-                                  text: "Milestone checklist",
+                                  text: AppLocalizations.of(context)!
+                                      .milestoneChecklist,
                                   fontSize: textScale * 20,
                                 ),
                                 SizedBox(width: size.width * 0.02),
@@ -170,6 +179,7 @@ class _HomeTabState extends State<HomeTab> {
                                 Expanded(
                                   child: LinearPercentIndicator(
                                     animation: true,
+                                    isRTL: isRTL,
                                     lineHeight: textScale * 15,
                                     animationDuration: 2500,
                                     percent: (state.decisions.length /

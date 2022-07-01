@@ -4,15 +4,16 @@ import 'package:child_milestone/presentation/screens/home/tabIcon_data.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView(
-      {Key? key, this.tabIconsList, this.changeIndex, this.addClick})
+      {Key? key, required this.tabIconsList, this.changeIndex, this.addClick})
       : super(key: key);
 
   final Function(int index)? changeIndex;
   final Function()? addClick;
-  final List<TabIconData>? tabIconsList;
+  final List<TabIconData> tabIconsList;
   @override
   _BottomBarViewState createState() => _BottomBarViewState();
 }
@@ -63,19 +64,19 @@ class _BottomBarViewState extends State<BottomBarView>
                           children: <Widget>[
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[0],
+                                  tabIconData: widget.tabIconsList[0],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
-                                        widget.tabIconsList?[0]);
+                                        widget.tabIconsList[0]);
                                     widget.changeIndex!(0);
                                   }),
                             ),
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[1],
+                                  tabIconData: widget.tabIconsList[1],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
-                                        widget.tabIconsList?[1]);
+                                        widget.tabIconsList[1]);
                                     widget.changeIndex!(1);
                                   }),
                             ),
@@ -89,19 +90,19 @@ class _BottomBarViewState extends State<BottomBarView>
                             ),
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[2],
+                                  tabIconData: widget.tabIconsList[2],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
-                                        widget.tabIconsList?[2]);
+                                        widget.tabIconsList[2]);
                                     widget.changeIndex!(2);
                                   }),
                             ),
                             Expanded(
                               child: TabIcons(
-                                  tabIconData: widget.tabIconsList?[3],
+                                  tabIconData: widget.tabIconsList[3],
                                   removeAllSelect: () {
                                     setRemoveAllSelection(
-                                        widget.tabIconsList?[3]);
+                                        widget.tabIconsList[3]);
                                     widget.changeIndex!(3);
                                   }),
                             ),
@@ -178,7 +179,7 @@ class _BottomBarViewState extends State<BottomBarView>
   void setRemoveAllSelection(TabIconData? tabIconData) {
     if (!mounted) return;
     setState(() {
-      widget.tabIconsList?.forEach((TabIconData tab) {
+      widget.tabIconsList.forEach((TabIconData tab) {
         tab.isSelected = false;
         if (tabIconData!.index == tab.index) {
           tab.isSelected = true;
@@ -189,10 +190,10 @@ class _BottomBarViewState extends State<BottomBarView>
 }
 
 class TabIcons extends StatefulWidget {
-  const TabIcons({Key? key, this.tabIconData, this.removeAllSelect})
+  const TabIcons({Key? key, required this.tabIconData, this.removeAllSelect})
       : super(key: key);
 
-  final TabIconData? tabIconData;
+  final TabIconData tabIconData;
   final Function()? removeAllSelect;
   @override
   _TabIconsState createState() => _TabIconsState();
@@ -201,25 +202,26 @@ class TabIcons extends StatefulWidget {
 class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
   @override
   void initState() {
-    widget.tabIconData?.animationController = AnimationController(
+    widget.tabIconData.animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 400),
     )..addStatusListener((AnimationStatus status) {
         if (status == AnimationStatus.completed) {
           if (!mounted) return;
           widget.removeAllSelect!();
-          widget.tabIconData?.animationController?.reverse();
+          widget.tabIconData.animationController?.reverse();
         }
       });
     super.initState();
   }
 
   void setAnimation() {
-    widget.tabIconData?.animationController?.forward();
+    widget.tabIconData.animationController?.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+    localizeTitle(widget.tabIconData);
     final Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     return AspectRatio(
@@ -231,7 +233,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
           highlightColor: Colors.transparent,
           hoverColor: Colors.transparent,
           onTap: () {
-            if (!widget.tabIconData!.isSelected) {
+            if (!widget.tabIconData.isSelected) {
               setAnimation();
             }
           },
@@ -243,22 +245,22 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                   alignment: Alignment.center,
                   scale: Tween<double>(begin: 0.88, end: 1.0).animate(
                       CurvedAnimation(
-                          parent: widget.tabIconData!.animationController!,
+                          parent: widget.tabIconData.animationController!,
                           curve:
                               Interval(0.1, 1.0, curve: Curves.fastOutSlowIn))),
                   child: Column(
                     children: [
                       SvgPicture.asset(
-                        widget.tabIconData!.imagePath,
-                        color: widget.tabIconData!.isSelected
-                            ? widget.tabIconData!.selectedColor
-                            : widget.tabIconData!.notSelectedColor,
+                        widget.tabIconData.imagePath,
+                        color: widget.tabIconData.isSelected
+                            ? widget.tabIconData.selectedColor
+                            : widget.tabIconData.notSelectedColor,
                         width: 35,
                         height: 35,
                       ),
                       SizedBox(height: size.height * 0.005),
                       AppText(
-                        text: widget.tabIconData!.title,
+                        text: widget.tabIconData.title,
                         fontSize: 15 * textScale,
                       ),
                     ],
@@ -272,7 +274,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                     alignment: Alignment.center,
                     scale: Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
-                            parent: widget.tabIconData!.animationController!,
+                            parent: widget.tabIconData.animationController!,
                             curve: Interval(0.2, 1.0,
                                 curve: Curves.fastOutSlowIn))),
                     child: Container(
@@ -293,7 +295,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                     alignment: Alignment.center,
                     scale: Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
-                            parent: widget.tabIconData!.animationController!,
+                            parent: widget.tabIconData.animationController!,
                             curve: Interval(0.5, 0.8,
                                 curve: Curves.fastOutSlowIn))),
                     child: Container(
@@ -314,7 +316,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                     alignment: Alignment.center,
                     scale: Tween<double>(begin: 0.0, end: 1.0).animate(
                         CurvedAnimation(
-                            parent: widget.tabIconData!.animationController!,
+                            parent: widget.tabIconData.animationController!,
                             curve: Interval(0.5, 0.6,
                                 curve: Curves.fastOutSlowIn))),
                     child: Container(
@@ -333,6 +335,23 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
         ),
       ),
     );
+  }
+
+  void localizeTitle(TabIconData tabIconData) {
+    switch (tabIconData.slug) {
+      case "home":
+        tabIconData.title = AppLocalizations.of(context)!.home;
+        break;
+      case "notifications":
+        tabIconData.title = AppLocalizations.of(context)!.notifications;
+        break;
+      case "tips":
+        tabIconData.title = AppLocalizations.of(context)!.tips;
+        break;
+      case "appRate":
+        tabIconData.title = AppLocalizations.of(context)!.appRate;
+        break;
+    }
   }
 }
 

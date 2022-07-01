@@ -7,6 +7,7 @@ import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MilestoneItemWidget extends StatefulWidget {
   const MilestoneItemWidget({Key? key, required this.item}) : super(key: key);
@@ -47,7 +48,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset(
-                    widget.item.imagePath ?? "asd",
+                    widget.item.imagePath ?? "",
                     alignment: Alignment.topCenter,
                     color: Colors.white.withOpacity(0.8),
                     colorBlendMode: BlendMode.modulate,
@@ -138,7 +139,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                         horizontal: textScale * 20,
                       ),
                       child: Text(
-                        "نعم",
+                        AppLocalizations.of(context)!.yes,
                         textAlign: TextAlign.right,
                       ),
                     ),
@@ -183,7 +184,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                         horizontal: textScale * 20,
                       ),
                       child: Text(
-                        "كلا",
+                        AppLocalizations.of(context)!.no,
                         textAlign: TextAlign.right,
                       ),
                     ),
@@ -225,7 +226,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                         horizontal: textScale * 20,
                       ),
                       child: Text(
-                        "ربما",
+                        AppLocalizations.of(context)!.maybe,
                         textAlign: TextAlign.right,
                       ),
                     ),

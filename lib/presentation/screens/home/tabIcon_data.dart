@@ -5,6 +5,7 @@ class TabIconData {
   TabIconData({
     this.imagePath = '',
     this.title = '',
+    this.slug = '',
     this.index = 0,
     this.selectedColor = AppColors.primaryColor,
     this.notSelectedColor = Colors.grey,
@@ -14,6 +15,7 @@ class TabIconData {
 
   String imagePath;
   String title;
+  String slug;
   Color selectedColor;
   Color notSelectedColor;
   bool isSelected;
@@ -25,6 +27,7 @@ class TabIconData {
     TabIconData(
       imagePath: 'assets/icons/home_page/home_icon.svg',
       title: 'Home',
+      slug: 'home',
       index: 0,
       isSelected: true,
       animationController: null,
@@ -32,6 +35,7 @@ class TabIconData {
     TabIconData(
       imagePath: 'assets/icons/home_page/notification_icon.svg',
       title: 'Notifications',
+      slug: 'notifications',
       index: 1,
       isSelected: false,
       animationController: null,
@@ -39,6 +43,7 @@ class TabIconData {
     TabIconData(
       imagePath: 'assets/icons/home_page/insights_icon.svg',
       title: 'Tips',
+      slug: 'tips',
       index: 2,
       isSelected: false,
       animationController: null,
@@ -46,6 +51,7 @@ class TabIconData {
     TabIconData(
       imagePath: 'assets/icons/home_page/star_icon.svg',
       title: 'App Rate',
+      slug: 'appRate',
       index: 3,
       isSelected: false,
       animationController: null,

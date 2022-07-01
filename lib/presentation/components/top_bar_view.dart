@@ -10,6 +10,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TopBarView extends StatefulWidget {
   bool? back_route;
@@ -27,7 +28,6 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
       "assets/icons/home_page/settings_icon.svg";
   static const String side_nav_icon =
       "assets/icons/home_page/side_nav_icon.svg";
-  static const String chevron_duo_left = "assets/icons/chevron_duo_left.svg";
 
   List<ChildModel>? childrenList;
   ChildModel? selected_child;
@@ -43,6 +43,12 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
+
+    bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
+    String chevron_duo_left = "assets/icons/chevron_duo_left.svg";
+    if (isRTL) {
+      chevron_duo_left = "assets/icons/home_page/double_arrows.svg";
+    }
 
     return Stack(
       alignment: AlignmentDirectional.topCenter,

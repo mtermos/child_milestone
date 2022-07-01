@@ -2,6 +2,7 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/screens/add_child/add_child_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddChildScreen extends StatefulWidget {
   @override
@@ -61,7 +62,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
           Navigator.pop(context);
         },
         child: AppText(
-          text: "Cancel",
+          text: AppLocalizations.of(context)!.cancel,
           fontSize: size.height * 0.025,
         ),
       ),

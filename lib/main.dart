@@ -23,6 +23,8 @@ import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/logic/blocs/internet/internet_bloc.dart';
 import 'package:child_milestone/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -107,6 +109,9 @@ class Application extends StatelessWidget {
             // accentColor: Colors.blue,
             visualDensity: VisualDensity.standard,
           ),
+          locale: const Locale("ar"),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           onGenerateRoute: appRouter.onGenerateRoute,
         ),
       ),

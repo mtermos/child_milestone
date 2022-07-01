@@ -5,6 +5,7 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationItemWidget extends StatefulWidget {
   NotificationItemWidget(
@@ -93,7 +94,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
     DateTime localDateTime = dateTime.toLocal();
 
     if (!localDateTime.difference(justNow).isNegative) {
-      return 'Just now';
+      return AppLocalizations.of(context)!.justNow;
     }
 
     String roughTimeString = DateFormat('jm').format(dateTime);
@@ -108,7 +109,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
     if (localDateTime.day == yesterday.day &&
         localDateTime.month == yesterday.month &&
         localDateTime.year == yesterday.year) {
-      return 'Yesterday, ' + roughTimeString;
+      return AppLocalizations.of(context)!.yesterday + roughTimeString;
     }
 
     // if (now.difference(localDateTime).inDays < 4) {

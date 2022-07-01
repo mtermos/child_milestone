@@ -8,16 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
-// import 'package:flutter_bloc_login_example/screens/home/main.dart';
-// import 'package:flutter_bloc_login_example/screens/login/signUp.dart';
-// import 'package:flutter_bloc_login_example/shared/colors.dart';
-// import 'package:flutter_bloc_login_example/shared/components.dart';
-// import 'package:flutter_bloc_login_example/shared/screen_transitions/slide.transition.dart';
-// import 'package:flutter_bloc_login_example/shared/styles.dart';
-// import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'forgotPassword.dart';
 
@@ -44,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   String _validatorEmail(value) {
     if (!regExp.hasMatch(value)) {
-      return "type a valid email";
+      return AppLocalizations.of(context)!.invalidEmailAlert;
     }
     return "null";
   }
@@ -106,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextField(
                 controller: usernameController,
-                decoration: InputDecoration(labelText: "Username"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.username),
               ),
             ),
             SizedBox(height: size.height * 0.03),
@@ -115,15 +106,15 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextField(
                 controller: passController,
-                decoration: InputDecoration(labelText: "Password"),
+                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.password),
                 obscureText: true,
               ),
             ),
             Container(
               alignment: Alignment.centerRight,
               margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: const Text(
-                "Forgot your password?",
+              child: Text(
+                AppLocalizations.of(context)!.forgotPassword,
                 style: TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
               ),
             ),
@@ -141,8 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   // print("register")
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
                 },
-                child: const Text(
-                  "Don't Have an Account? Sign up",
+                child: Text(
+                  AppLocalizations.of(context)!.noAccount,
                   style: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.bold,
@@ -160,7 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: AppButton(
-        label: "LOGIN",
+        label: AppLocalizations.of(context)!.loginLabel,
         fontWeight: FontWeight.w600,
         padding: const EdgeInsets.symmetric(vertical: 25),
         onPressed: () {
@@ -177,8 +168,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget loginTextWidget() {
-    return const AppText(
-      text: "LOGIN",
+    return AppText(
+      text: AppLocalizations.of(context)!.loginLabel,
       fontSize: 36,
       fontWeight: FontWeight.w600,
       // color: Colors.white,
