@@ -21,7 +21,7 @@
     "tipsAndActivities": "النصائح والأنشطة",
     "home": "الرئيسية",
     "tips": "نصائح",
-    "appRate": "تقييم التقرير",
+    "appRate": "تقييم التطبيق",
     "invalidEmailAlert": "اكتب بريدًا إلكترونيًا صالحًا",
     "username": "اسم المستخدم",
     "password": "كلمة المرور",
@@ -37,5 +37,7 @@
     "cognitive": "معرفي",
     "justNow": "الآن",
     "yesterday": "البارحة, ",
-    "selectLanguage": "إلى تطبيق متابعة الأطفال"
+    "settingsCap": "الاعدادات",
+    "goBack": "العودة",
+    "selectLanguage": "اختار اللغة"
 }

@@ -131,11 +131,16 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                       ),
                       Expanded(
                         flex: 2,
-                        // child: Container(
-                        //   child: SvgPicture.asset(settings_icon),
-                        //   alignment: AlignmentDirectional.centerEnd,
-                        // ),
-                        child: Text(""),
+                        child: Container(
+                          child: InkWell(
+                            child: SvgPicture.asset(settings_icon),
+                            onTap: () {
+                              Navigator.pushNamed(context, "/settings");
+                            },
+                          ),
+                          alignment: AlignmentDirectional.centerEnd,
+                        ),
+                        // child: Text(""),
                       ),
                     ],
                   ),

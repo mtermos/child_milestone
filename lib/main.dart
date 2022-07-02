@@ -15,6 +15,7 @@ import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -29,20 +30,25 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String startLang = prefs.getString('lang') ?? "en";
   runApp(Application(
     appRouter: AppRouter(),
     connectivity: Connectivity(),
+    startLang: Locale(startLang),
   ));
 }
 
 class Application extends StatelessWidget {
   final AppRouter appRouter;
   final Connectivity connectivity;
+  final Locale startLang;
 
   const Application({
     Key? key,
     required this.appRouter,
     required this.connectivity,
+    required this.startLang,
   }) : super(key: key);
 
   @override
@@ -103,16 +109,23 @@ class Application extends StatelessWidget {
               childRepository: RepositoryProvider.of(context),
             ),
           ),
-        ],
-        child: MaterialApp(
-          theme: ThemeData(
-            // accentColor: Colors.blue,
-            visualDensity: VisualDensity.standard,
+          BlocProvider<LanguageCubit>(
+            create: (context) => LanguageCubit(startLang),
           ),
-          locale: const Locale("ar"),
-          localizationsDelegates: AppLocalizations.localizationsDelegates,
-          supportedLocales: AppLocalizations.supportedLocales,
-          onGenerateRoute: appRouter.onGenerateRoute,
+        ],
+        child: BlocBuilder<LanguageCubit, Locale>(
+          builder: (context, lang) {
+            return MaterialApp(
+              theme: ThemeData(
+                // accentColor: Colors.blue,
+                visualDensity: VisualDensity.standard,
+              ),
+              locale: lang,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              onGenerateRoute: appRouter.onGenerateRoute,
+            );
+          },
         ),
       ),
     );

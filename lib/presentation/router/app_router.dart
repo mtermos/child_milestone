@@ -2,6 +2,7 @@ import 'package:child_milestone/presentation/screens/add_child/add_child_main.da
 import 'package:child_milestone/presentation/screens/login/login_main.dart';
 import 'package:child_milestone/presentation/screens/home/home_main.dart';
 import 'package:child_milestone/presentation/screens/milestone/milestone_main.dart';
+import 'package:child_milestone/presentation/screens/settings/settings_main.dart';
 import 'package:child_milestone/presentation/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/screens/splash_screen.dart';
@@ -26,6 +27,10 @@ class AppRouter {
       case '/home':
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
+        );
+      case '/settings':
+        return MaterialPageRoute(
+          builder: (_) => SettingsScreen(),
         );
       case '/milestone':
         return MaterialPageRoute(

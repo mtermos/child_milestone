@@ -36,5 +36,7 @@
     "cognitive": "Cognitive",
     "justNow": "Just Now",
     "yesterday": "Yesterday, ",
+    "settingsCap": "SETTINGS",
+    "goBack": "Go Back",
     "selectLanguage": "Select Language"
 }
