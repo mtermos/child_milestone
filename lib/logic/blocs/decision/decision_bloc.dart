@@ -28,6 +28,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
         await decisionRepository.insertDecision(event.decision);
     if (daoResponse.item1) {
       emit(AddedDecisionState(event.decision));
+      event.onSuccess();
     }
   }
 

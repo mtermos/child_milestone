@@ -36,22 +36,26 @@ class _TipItemWidgetState extends State<TipItemWidget> {
           ),
         ],
       ),
-      alignment: Alignment.centerLeft,
       padding: EdgeInsets.symmetric(
         vertical: textScale * 15,
         horizontal: textScale * 20,
       ),
-      child: RichText(
-        text: TextSpan(
-          style: TextStyle(
-            fontSize: textScale * 16,
-            color: Colors.black,
-          ),
-          children: <TextSpan>[
-            TextSpan(text: widget.item.body),
-          ],
-        ),
+      child: AppText(
+        text: widget.item.body,
+        color: Colors.black,
+        fontSize: textScale * 16,
       ),
+      // RichText(
+      //   text: TextSpan(
+      //     style: TextStyle(
+      //       fontSize: textScale * 16,
+      //       color: Colors.black,
+      //     ),
+      //     children: <TextSpan>[
+      //       TextSpan(),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

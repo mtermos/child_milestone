@@ -1,6 +1,10 @@
 import 'dart:async';
 
+import 'package:child_milestone/constants/classes.dart';
+import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
+import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,15 +15,17 @@ part "milestone_state.dart";
 
 class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
   final MilestoneRepository milestoneRepository;
+  final DecisionRepository decisionRepository;
 
-  MilestoneBloc({required this.milestoneRepository})
+  MilestoneBloc(
+      {required this.milestoneRepository, required this.decisionRepository})
       : super(InitialMilestoneState()) {
     on<AddMilestoneEvent>(add_milestone);
     on<GetAllMilestonesEvent>(get_all_milestones);
     on<DeleteAllMilestonesEvent>(delete_all_milestones);
 
     on<GetMilestoneEvent>(get_milestone);
-    on<GetMilestonesByAgeEvent>(get_by_age);
+    on<GetMilestonesWithDecisionsByAgeEvent>(get_by_age);
   }
 
   void add_milestone(
@@ -59,14 +65,29 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
       emit(MilestoneLoadingErrorState());
   }
 
-  void get_by_age(
-      GetMilestonesByAgeEvent event, Emitter<MilestoneState> emit) async {
-    emit(LoadingMilestonesByAgeState());
+  void get_by_age(GetMilestonesWithDecisionsByAgeEvent event,
+      Emitter<MilestoneState> emit) async {
+    emit(LoadingMilestonesWithDecisionsByAgeState());
+    List<MilestoneWithDecision> items = [];
     List<MilestoneItem>? milestones =
-        await milestoneRepository.getMilestonesByAge(event.dateOfBirth);
-    if (milestones != null)
-      emit(LoadedMilestonesByAgeState(milestones));
-    else
-      emit(ErrorLoadingMilestonesByAgeState());
+        await milestoneRepository.getMilestonesByAge(event.child.date_of_birth);
+
+    if (milestones != null) {
+      for (var milestone in milestones) {
+        DecisionModel? decision = await decisionRepository
+            .getDecisionByChildAndMilestone(event.child.id, milestone.id);
+        items.add(MilestoneWithDecision(
+            milestoneItem: milestone,
+            decision: decision ??
+                DecisionModel(
+                    childId: event.child.id,
+                    milestoneId: milestone.id,
+                    decision: -1,
+                    takenAt: DateTime.now())));
+      }
+
+      emit(LoadedMilestonesWithDecisionsByAgeState(items));
+    } else
+      emit(ErrorLoadingMilestonesWithDecisionsByAgeState());
   }
 }

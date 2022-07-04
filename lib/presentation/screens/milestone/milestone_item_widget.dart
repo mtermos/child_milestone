@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
@@ -11,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MilestoneItemWidget extends StatefulWidget {
   const MilestoneItemWidget({Key? key, required this.item}) : super(key: key);
-  final MilestoneItem item;
+  final MilestoneWithDecision item;
 
   @override
   _MilestoneItemWidgetState createState() => _MilestoneItemWidgetState();
@@ -48,7 +49,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset(
-                    widget.item.imagePath ?? "",
+                    widget.item.milestoneItem.imagePath ?? "",
                     alignment: Alignment.topCenter,
                     color: Colors.white.withOpacity(0.8),
                     colorBlendMode: BlendMode.modulate,
@@ -76,163 +77,164 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     horizontal: textScale * 20,
                   ),
                   child: Text(
-                    widget.item.description,
+                    widget.item.milestoneItem.description,
                     textAlign: TextAlign.right,
                   ),
                 ),
               ),
             ],
           ),
-          BlocListener<DecisionBloc, DecisionState>(
-              listener: (context, state) {
-                if (state is LoadedDecisionByChildAndMilestoneState &&
-                    state.decision.milestoneId == widget.item.id) {
-                  if (selected_child != null &&
-                      state.decision.childId == selected_child!.id) {
+          Row(
+            children: [
+              SizedBox(width: size.width * 0.05),
+              InkWell(
+                onTap: () {
+                  if (selected_child != null) {
                     setState(() {
-                      decision = state.decision.decision;
+                      decision = 1;
                     });
+                    BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
+                      decision: DecisionModel(
+                        childId: selected_child!.id,
+                        milestoneId: widget.item.milestoneItem.id,
+                        decision: 1,
+                        takenAt: DateTime.now(),
+                      ),
+                      onSuccess: () {
+                        BlocProvider.of<MilestoneBloc>(context).add(
+                            GetMilestonesWithDecisionsByAgeEvent(
+                                child: selected_child!));
+                      },
+                    ));
                   }
-                } else if (state is AddedDecisionState &&
-                    state.decision.milestoneId == widget.item.id) {
-                  setState(() {
-                    decision = state.decision.decision;
-                  });
-                }
-              },
-              child: Row(
-                children: [
-                  SizedBox(width: size.width * 0.05),
-                  InkWell(
-                    onTap: () {
-                      if (selected_child != null) {
-                        setState(() {
-                          decision = 1;
-                        });
-                        BlocProvider.of<DecisionBloc>(context)
-                            .add(AddDecisionEvent(
-                          decision: DecisionModel(
-                            childId: selected_child!.id,
-                            milestoneId: widget.item.id,
-                            decision: 1,
-                            takenAt: DateTime.now(),
-                          ),
-                        ));
-                      }
-                    },
-                    child: Container(
-                      width: size.width * 0.15,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: decision == 1 ? Colors.green[200] : Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black54,
-                            offset: Offset(textScale * 2, textScale * 4),
-                            blurRadius: textScale * 8,
-                          ),
-                        ],
+                },
+                child: Container(
+                  width: size.width * 0.15,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    color: widget.item.decision.decision == 1
+                        ? Colors.green[200]
+                        : Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        offset: Offset(textScale * 2, textScale * 4),
+                        blurRadius: textScale * 8,
                       ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: textScale * 15,
-                        horizontal: textScale * 20,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.yes,
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
+                    ],
                   ),
-                  SizedBox(width: size.width * 0.01),
-                  InkWell(
-                    onTap: () {
-                      if (selected_child != null) {
-                        setState(() {
-                          decision = 2;
-                        });
-                        BlocProvider.of<DecisionBloc>(context)
-                            .add(AddDecisionEvent(
-                          decision: DecisionModel(
-                            childId: selected_child!.id,
-                            milestoneId: widget.item.id,
-                            decision: 2,
-                            takenAt: DateTime.now(),
-                          ),
-                        ));
-                        // BlocProvider.of<DecisionBloc>(context).add(
-                        //     GetDecisionsByAgeEvent(
-                        //         dateOfBirth: selected_child!.date_of_birth));
-                      }
-                    },
-                    child: Container(
-                      width: size.width * 0.15,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: decision == 2 ? Colors.red[200] : Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black54,
-                            offset: Offset(textScale * 2, textScale * 4),
-                            blurRadius: textScale * 8,
-                          ),
-                        ],
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: textScale * 15,
-                        horizontal: textScale * 20,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.no,
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: textScale * 15,
+                    horizontal: textScale * 20,
                   ),
-                  SizedBox(width: size.width * 0.01),
-                  InkWell(
-                    onTap: () {
-                      if (selected_child != null) {
-                        setState(() {
-                          decision = 3;
-                        });
-                        BlocProvider.of<DecisionBloc>(context)
-                            .add(AddDecisionEvent(
-                          decision: DecisionModel(
-                            childId: selected_child!.id,
-                            milestoneId: widget.item.id,
-                            decision: 3,
-                            takenAt: DateTime.now(),
-                          ),
-                        ));
-                      }
-                    },
-                    child: Container(
-                      width: size.width * 0.15,
-                      decoration: BoxDecoration(
-                        border: Border.all(),
-                        borderRadius: BorderRadius.all(Radius.circular(6)),
-                        color: decision == 3 ? Colors.blue[200] : Colors.white,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black54,
-                            offset: Offset(textScale * 2, textScale * 4),
-                            blurRadius: textScale * 8,
-                          ),
-                        ],
-                      ),
-                      padding: EdgeInsets.symmetric(
-                        vertical: textScale * 15,
-                        horizontal: textScale * 20,
-                      ),
-                      child: Text(
-                        AppLocalizations.of(context)!.maybe,
-                        textAlign: TextAlign.right,
-                      ),
-                    ),
+                  child: Text(
+                    AppLocalizations.of(context)!.yes,
+                    textAlign: TextAlign.right,
                   ),
-                ],
-              )),
+                ),
+              ),
+              SizedBox(width: size.width * 0.01),
+              InkWell(
+                onTap: () {
+                  if (selected_child != null) {
+                    setState(() {
+                      decision = 2;
+                    });
+                    BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
+                      decision: DecisionModel(
+                        childId: selected_child!.id,
+                        milestoneId: widget.item.milestoneItem.id,
+                        decision: 2,
+                        takenAt: DateTime.now(),
+                      ),
+                      onSuccess: () {
+                        BlocProvider.of<MilestoneBloc>(context).add(
+                            GetMilestonesWithDecisionsByAgeEvent(
+                                child: selected_child!));
+                      },
+                    ));
+                    // BlocProvider.of<DecisionBloc>(context).add(
+                    //     GetDecisionsByAgeEvent(
+                    //         dateOfBirth: selected_child!.date_of_birth));
+                  }
+                },
+                child: Container(
+                  width: size.width * 0.15,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    color: widget.item.decision.decision == 2
+                        ? Colors.red[200]
+                        : Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        offset: Offset(textScale * 2, textScale * 4),
+                        blurRadius: textScale * 8,
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: textScale * 15,
+                    horizontal: textScale * 20,
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.no,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ),
+              SizedBox(width: size.width * 0.01),
+              InkWell(
+                onTap: () {
+                  if (selected_child != null) {
+                    setState(() {
+                      decision = 3;
+                    });
+                    BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
+                      decision: DecisionModel(
+                        childId: selected_child!.id,
+                        milestoneId: widget.item.milestoneItem.id,
+                        decision: 3,
+                        takenAt: DateTime.now(),
+                      ),
+                      onSuccess: () {
+                        BlocProvider.of<MilestoneBloc>(context).add(
+                            GetMilestonesWithDecisionsByAgeEvent(
+                                child: selected_child!));
+                      },
+                    ));
+                  }
+                },
+                child: Container(
+                  width: size.width * 0.15,
+                  decoration: BoxDecoration(
+                    border: Border.all(),
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    color: widget.item.decision.decision == 3
+                        ? Colors.blue[200]
+                        : Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black54,
+                        offset: Offset(textScale * 2, textScale * 4),
+                        blurRadius: textScale * 8,
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.symmetric(
+                    vertical: textScale * 15,
+                    horizontal: textScale * 20,
+                  ),
+                  child: Text(
+                    AppLocalizations.of(context)!.maybe,
+                    textAlign: TextAlign.right,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -244,7 +246,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
     if (child != null) {
       BlocProvider.of<DecisionBloc>(context).add(
           GetDecisionByChildAndMilestoneEvent(
-              childId: child.id, milestoneId: widget.item.id));
+              childId: child.id, milestoneId: widget.item.milestoneItem.id));
       setState(() {
         selected_child = child;
       });

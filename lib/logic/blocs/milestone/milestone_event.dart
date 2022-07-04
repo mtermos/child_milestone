@@ -25,7 +25,7 @@ class GetMilestoneEvent extends MilestoneEvent {
   GetMilestoneEvent({required this.milestone_id});
 }
 
-class GetMilestonesByAgeEvent extends MilestoneEvent {
-  DateTime dateOfBirth;
-  GetMilestonesByAgeEvent({required this.dateOfBirth});
+class GetMilestonesWithDecisionsByAgeEvent extends MilestoneEvent {
+  ChildModel child;
+  GetMilestonesWithDecisionsByAgeEvent({required this.child});
 }

@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/milestone_category.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
@@ -21,7 +22,7 @@ class MilestoneScreen extends StatefulWidget {
 class _MilestoneScreenState extends State<MilestoneScreen> {
   int _selected = 1;
   ChildModel? current_child;
-  List<MilestoneItem> items = [];
+  List<MilestoneWithDecision> items = [];
   @override
   void initState() {
     super.initState();
@@ -37,36 +38,36 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
 
-  List<MilestoneCategoryModel> cagtegories = [
-    MilestoneCategoryModel(
-      id: 1,
-      name: AppLocalizations.of(context)!.social,
-      icon_path: "assets/icons/milestone_page/social_category.png",
-    ),
-    MilestoneCategoryModel(
-      id: 2,
-      name: AppLocalizations.of(context)!.language,
-      icon_path: "assets/icons/milestone_page/language_category.png",
-    ),
-    MilestoneCategoryModel(
-      id: 3,
-      name: AppLocalizations.of(context)!.movement,
-      icon_path: "assets/icons/milestone_page/movement_category.png",
-    ),
-    MilestoneCategoryModel(
-      id: 4,
-      name: AppLocalizations.of(context)!.cognitive,
-      icon_path: "assets/icons/milestone_page/cognitive_category.png",
-    ),
-  ];
+    List<MilestoneCategoryModel> cagtegories = [
+      MilestoneCategoryModel(
+        id: 1,
+        name: AppLocalizations.of(context)!.social,
+        icon_path: "assets/icons/milestone_page/social_category.png",
+      ),
+      MilestoneCategoryModel(
+        id: 2,
+        name: AppLocalizations.of(context)!.language,
+        icon_path: "assets/icons/milestone_page/language_category.png",
+      ),
+      MilestoneCategoryModel(
+        id: 3,
+        name: AppLocalizations.of(context)!.movement,
+        icon_path: "assets/icons/milestone_page/movement_category.png",
+      ),
+      MilestoneCategoryModel(
+        id: 4,
+        name: AppLocalizations.of(context)!.cognitive,
+        icon_path: "assets/icons/milestone_page/cognitive_category.png",
+      ),
+    ];
 
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
             current_child = state.new_current_child;
-            BlocProvider.of<MilestoneBloc>(context).add(GetMilestonesByAgeEvent(
-                dateOfBirth: current_child!.date_of_birth));
+            BlocProvider.of<MilestoneBloc>(context).add(
+                GetMilestonesWithDecisionsByAgeEvent(child: current_child!));
           }
           return Column(
             children: [
@@ -81,9 +82,11 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                       SizedBox(height: size.height * 0.02),
                       Container(
                         alignment: AlignmentDirectional.topStart,
-                        padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.05),
                         child: AppText(
-                          text: AppLocalizations.of(context)!.milestoneChecklist,
+                          text:
+                              AppLocalizations.of(context)!.milestoneChecklist,
                           textAlign: TextAlign.start,
                         ),
                       ),
@@ -114,13 +117,14 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                       SizedBox(height: size.height * 0.01),
                       BlocBuilder<MilestoneBloc, MilestoneState>(
                         builder: (context, state) {
-                          if (state is LoadedMilestonesByAgeState) {
-                            items = state.milestones;
+                          if (state
+                              is LoadedMilestonesWithDecisionsByAgeState) {
+                            items = state.items;
                           }
                           return Column(
                             children: items
-                                .where(
-                                    (element) => element.category == _selected)
+                                .where((element) =>
+                                    element.milestoneItem.category == _selected)
                                 .map((e) => MilestoneItemWidget(item: e))
                                 .toList(),
                           );

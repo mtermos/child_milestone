@@ -85,6 +85,8 @@ class Application extends StatelessWidget {
             create: (context) => MilestoneBloc(
               milestoneRepository:
                   RepositoryProvider.of<MilestoneRepository>(context),
+              decisionRepository:
+                  RepositoryProvider.of<DecisionRepository>(context),
             ),
           ),
           BlocProvider<TipBloc>(

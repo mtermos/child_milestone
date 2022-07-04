@@ -51,15 +51,15 @@ class MilestoneErrorState extends MilestoneState {
   List<Object?> get props => [error];
 }
 
-class LoadingMilestonesByAgeState extends MilestoneState {}
+class LoadingMilestonesWithDecisionsByAgeState extends MilestoneState {}
 
-class ErrorLoadingMilestonesByAgeState extends MilestoneState {}
+class ErrorLoadingMilestonesWithDecisionsByAgeState extends MilestoneState {}
 
-class LoadedMilestonesByAgeState extends MilestoneState {
-  final List<MilestoneItem> milestones;
+class LoadedMilestonesWithDecisionsByAgeState extends MilestoneState {
+  final List<MilestoneWithDecision> items;
 
-  LoadedMilestonesByAgeState(this.milestones);
+  LoadedMilestonesWithDecisionsByAgeState(this.items);
 
   @override
-  List<Object?> get props => [milestones];
+  List<Object?> get props => [items];
 }

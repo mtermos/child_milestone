@@ -10,9 +10,11 @@ abstract class DecisionEvent extends Equatable {
 
 class AddDecisionEvent extends DecisionEvent {
   DecisionModel decision;
+  Function onSuccess;
 
   AddDecisionEvent({
     required this.decision,
+    required this.onSuccess,
   });
 }
 
