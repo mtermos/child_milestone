@@ -1,12 +1,16 @@
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/notification.dart';
 
 class NotificationRepository {
   final notificationDao;
   final childDao;
+  final milestoneDao;
 
-  NotificationRepository(this.notificationDao, this.childDao);
+  NotificationRepository(
+      this.notificationDao, this.childDao, this.milestoneDao);
 
   Future getAllNotifications() async {
     List<Map<String, dynamic>> result =
@@ -17,27 +21,38 @@ class NotificationRepository {
         : null;
   }
 
-  Future<List<NotificationWithChild>?> getAllNotificationsWithChildren() async {
+  Future<List<NotificationWithChildAndMilestone>?>
+      getAllNotificationsWithChildren() async {
     List<Map<String, dynamic>> notifications =
         await notificationDao.getAllNotifications();
 
     if (notifications.isEmpty) return null;
 
     List<Map<String, dynamic>> children = await childDao.getAllChildren();
+    List<Map<String, dynamic>> milestones = await milestoneDao.getAllMilestones();
 
-    if (children.isEmpty) return null;
+    if (children.isEmpty || milestones.isEmpty) return null;
     List<NotificationModel> notificationsModels =
         notifications.map((item) => NotificationModel.fromMap(item)).toList();
+
     List<ChildModel> childrenModels =
         children.map((item) => ChildModel.fromMap(item)).toList();
+    List<MilestoneItem> milestonesModels =
+        milestones.map((item) => MilestoneItem.fromMap(item)).toList();
 
-    List<NotificationWithChild> result = [];
+    List<NotificationWithChildAndMilestone> result = [];
 
     for (var notification in notificationsModels) {
-      result.add(NotificationWithChild(
-          notification,
-          childrenModels
-              .firstWhere((element) => element.id == notification.childId)));
+      MilestoneItem? milestoneItem;
+      if (notification.milestoneId != null) {
+        milestoneItem = milestonesModels
+            .firstWhere((element) => element.id == notification.milestoneId);
+      }
+      result.add(NotificationWithChildAndMilestone(
+          notification: notification,
+          child: childrenModels
+              .firstWhere((element) => element.id == notification.childId),
+          milestone: milestoneItem));
     }
 
     return result;

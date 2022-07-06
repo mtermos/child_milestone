@@ -51,17 +51,6 @@ class DatabaseProvider {
         "pregnancy_duration REAL NOT NULL "
         ")");
 
-    await database.execute("CREATE TABLE $notificationsTABLE ("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-        "title TEXT, "
-        "body TEXT, "
-        "childId INTEGER, "
-        "opened INTEGER, "
-        "dismissed INTEGER, "
-        "issuedAt INTEGER, "
-        "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id) "
-        ")");
-
     await database.execute("CREATE TABLE $milestonesTABLE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "description TEXT, "
@@ -70,6 +59,20 @@ class DatabaseProvider {
         "startingWeek INTEGER, "
         "endingWeek INTEGER, "
         "category INTEGER "
+        ")");
+
+    await database.execute("CREATE TABLE $notificationsTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "title TEXT, "
+        "body TEXT, "
+        "route TEXT, "
+        "childId INTEGER, "
+        "milestoneId INTEGER, "
+        "opened INTEGER, "
+        "dismissed INTEGER, "
+        "issuedAt INTEGER, "
+        "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
+        "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
         ")");
 
     await database.execute("CREATE TABLE $tipsTABLE ("

@@ -10,7 +10,9 @@ class NotificationModel {
   DateTime issuedAt;
   bool opened;
   bool dismissed;
+  String route;
   int childId;
+  int? milestoneId;
   NotificationModel({
     required this.id,
     required this.title,
@@ -18,7 +20,9 @@ class NotificationModel {
     required this.issuedAt,
     required this.opened,
     required this.dismissed,
+    required this.route,
     required this.childId,
+    this.milestoneId,
   });
 
   NotificationModel copyWith({
@@ -28,7 +32,9 @@ class NotificationModel {
     DateTime? issuedAt,
     bool? opened,
     bool? dismissed,
+    String? route,
     int? childId,
+    int? milestoneId,
   }) {
     return NotificationModel(
       id: id ?? this.id,
@@ -37,7 +43,9 @@ class NotificationModel {
       issuedAt: issuedAt ?? this.issuedAt,
       opened: opened ?? this.opened,
       dismissed: dismissed ?? this.dismissed,
+      route: route ?? this.route,
       childId: childId ?? this.childId,
+      milestoneId: milestoneId ?? this.milestoneId,
     );
   }
 
@@ -49,7 +57,9 @@ class NotificationModel {
       'issuedAt': issuedAt.millisecondsSinceEpoch,
       'opened': opened ? 1 : 0,
       'dismissed': dismissed ? 1 : 0,
+      'route': route,
       'childId': childId,
+      'milestoneId': milestoneId,
     };
   }
 
@@ -61,42 +71,47 @@ class NotificationModel {
       issuedAt: DateTime.fromMillisecondsSinceEpoch(map['issuedAt'] as int),
       opened: map['opened'] == 1,
       dismissed: map['dismissed'] == 1,
+      route: map['route'] as String,
       childId: map['childId'] as int,
+      milestoneId: map['milestoneId'] != null ? map['milestoneId'] as int : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory NotificationModel.fromJson(String source) =>
-      NotificationModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory NotificationModel.fromJson(String source) => NotificationModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, childId: $childId)';
+    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, route: $route, childId: $childId, milestoneId: $milestoneId)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is NotificationModel &&
-        other.id == id &&
-        other.title == title &&
-        other.body == body &&
-        other.issuedAt == issuedAt &&
-        other.opened == opened &&
-        other.dismissed == dismissed &&
-        other.childId == childId;
+      other.id == id &&
+      other.title == title &&
+      other.body == body &&
+      other.issuedAt == issuedAt &&
+      other.opened == opened &&
+      other.dismissed == dismissed &&
+      other.route == route &&
+      other.childId == childId &&
+      other.milestoneId == milestoneId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-        title.hashCode ^
-        body.hashCode ^
-        issuedAt.hashCode ^
-        opened.hashCode ^
-        dismissed.hashCode ^
-        childId.hashCode;
+      title.hashCode ^
+      body.hashCode ^
+      issuedAt.hashCode ^
+      opened.hashCode ^
+      dismissed.hashCode ^
+      route.hashCode ^
+      childId.hashCode ^
+      milestoneId.hashCode;
   }
 }

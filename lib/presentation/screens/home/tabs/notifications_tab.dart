@@ -1,6 +1,4 @@
-import 'package:child_milestone/constants/tuples.dart';
-import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/data/models/notification.dart';
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/common_widgets/column_with_seprator.dart';
@@ -17,7 +15,7 @@ class NotificationTab extends StatefulWidget {
 }
 
 class _NotificationState extends State<NotificationTab> {
-  List<NotificationWithChild> notificationsItems = [];
+  List<NotificationWithChildAndMilestone> notificationsItems = [];
 
   @override
   void initState() {
@@ -66,8 +64,7 @@ class _NotificationState extends State<NotificationTab> {
                         ),
                         width: double.maxFinite,
                         child: NotificationItemWidget(
-                          notification: e.notification,
-                          child: e.child,
+                          item: e
                         ),
                       );
                     }).toList(),

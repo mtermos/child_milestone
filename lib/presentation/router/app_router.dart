@@ -11,6 +11,7 @@ class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     // ignore: unused_local_variable
     final Object? key = settings.arguments;
+    print('key: ${key}');
     switch (settings.name) {
       case '/':
         return MaterialPageRoute(
@@ -34,7 +35,7 @@ class AppRouter {
         );
       case '/milestone':
         return MaterialPageRoute(
-          builder: (_) => MilestoneScreen(),
+          builder: (_) => MilestoneScreen(category: key as int),
         );
       case '/add_child':
         return MaterialPageRoute(

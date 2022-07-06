@@ -51,7 +51,7 @@ class AllUnopenedNotificationsLoadingState extends NotificationState {}
 class AllUnopenedNotificationsLoadingErrorState extends NotificationState {}
 
 class AllUnopenedNotificationsLoadedState extends NotificationState {
-  final List<NotificationWithChild> notificationsWihChildren;
+  final List<NotificationWithChildAndMilestone> notificationsWihChildren;
 
   AllUnopenedNotificationsLoadedState(this.notificationsWihChildren);
 

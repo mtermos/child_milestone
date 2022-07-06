@@ -4,10 +4,3 @@ class DaoResponse<T1, T2> {
 
   const DaoResponse(this.item1, this.item2);
 }
-
-class NotificationWithChild<NotificationModel, ChildModel> {
-  final NotificationModel notification;
-  final ChildModel child;
-
-  const NotificationWithChild(this.notification, this.child);
-}

@@ -1,3 +1,8 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/milestone_category.dart';
@@ -8,12 +13,13 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/components/top_bar_view.dart';
 import 'package:child_milestone/presentation/screens/milestone/milestone_item_widget.dart';
 import 'package:child_milestone/presentation/widgets/category_box_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MilestoneScreen extends StatefulWidget {
-  const MilestoneScreen({Key? key}) : super(key: key);
+  int? category;
+  MilestoneScreen({
+    Key? key,
+    this.category,
+  }) : super(key: key);
 
   @override
   _MilestoneScreenState createState() => _MilestoneScreenState();
@@ -25,6 +31,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   List<MilestoneWithDecision> items = [];
   @override
   void initState() {
+    _selected = widget.category ?? 1;
     super.initState();
   }
 

@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/notification.dart';
 
 var notificationsItems = [
@@ -9,7 +10,9 @@ var notificationsItems = [
     issuedAt: DateTime.now(),
     opened: true,
     dismissed: false,
+    route: milestoneRoute,
     childId: 1,
+    milestoneId: 1,
   ),
   NotificationModel(
     id: 2,
@@ -18,7 +21,9 @@ var notificationsItems = [
     issuedAt: DateTime.now().subtract(const Duration(hours: 1)),
     opened: false,
     dismissed: false,
+    route: milestoneRoute,
     childId: 1,
+    milestoneId: 2,
   ),
   NotificationModel(
     id: 3,
@@ -27,6 +32,7 @@ var notificationsItems = [
     issuedAt: DateTime.now().subtract(const Duration(days: 1)),
     opened: true,
     dismissed: false,
+    route: milestoneRoute,
     childId: 2,
   ),
   NotificationModel(
@@ -36,6 +42,7 @@ var notificationsItems = [
     issuedAt: DateTime.now().subtract(const Duration(days: 5)),
     opened: false,
     dismissed: false,
+    route: milestoneRoute,
     childId: 2,
   ),
   NotificationModel(
@@ -45,6 +52,7 @@ var notificationsItems = [
     issuedAt: DateTime.now().subtract(const Duration(days: 10)),
     opened: false,
     dismissed: false,
+    route: milestoneRoute,
     childId: 2,
   ),
 ];

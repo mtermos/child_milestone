@@ -1,3 +1,5 @@
+import 'package:child_milestone/constants/classes.dart';
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
@@ -8,11 +10,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationItemWidget extends StatefulWidget {
-  NotificationItemWidget(
-      {Key? key, required this.notification, required this.child})
-      : super(key: key);
-  final NotificationModel notification;
-  final ChildModel child;
+  NotificationItemWidget({Key? key, required this.item}) : super(key: key);
+  final NotificationWithChildAndMilestone item;
 
   @override
   _NotificationItemWidgetState createState() => _NotificationItemWidgetState();
@@ -33,37 +32,50 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: size.width * 0.05,
-            backgroundImage: Image.asset(widget.child.image_path).image,
-          ),
-          SizedBox(width: size.width * 0.03),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: size.width * 0.65,
-                child: RichText(
-                  text: TextSpan(
-                    style: const TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.black,
-                    ),
-                    children: <TextSpan>[
-                      TextSpan(
-                          text: widget.child.name + " ",
-                          style: TextStyle(fontWeight: FontWeight.bold)),
-                      TextSpan(text: widget.notification.body),
-                    ],
-                  ),
+          InkWell(
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: size.width * 0.05,
+                  backgroundImage:
+                      Image.asset(widget.item.child.image_path).image,
                 ),
-              ),
-              SizedBox(height: size.height * 0.02),
-              AppText(
-                text: readable_date(widget.notification.issuedAt),
-                fontSize: textScale * 14,
-              )
-            ],
+                SizedBox(width: size.width * 0.03),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: size.width * 0.65,
+                      child: RichText(
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontSize: 14.0,
+                            color: Colors.black,
+                          ),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: widget.item.child.name + " ",
+                                style: TextStyle(fontWeight: FontWeight.bold)),
+                            TextSpan(text: widget.item.notification.body),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                    AppText(
+                      text: readable_date(widget.item.notification.issuedAt),
+                      fontSize: textScale * 14,
+                    )
+                  ],
+                ),
+              ],
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, widget.item.notification.route,
+                  arguments: widget.item.milestone != null
+                      ? widget.item.milestone!.category
+                      : null);
+            },
           ),
           Spacer(),
           Column(
@@ -76,7 +88,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                 onTap: () {
                   BlocProvider.of<NotificationBloc>(context).add(
                       DismissNotificationEvent(
-                          notification: widget.notification));
+                          notification: widget.item.notification));
                   BlocProvider.of<NotificationBloc>(context)
                       .add(GetAllUnopenedNotificationsEvent());
                 },

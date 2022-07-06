@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -120,7 +121,13 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                       });
                                       BlocProvider.of<CurrentChildCubit>(
                                               context)
-                                          .change_current_child(newValue);
+                                          .changeCurrentChild(newValue, () {
+                                        BlocProvider.of<DecisionBloc>(context)
+                                            .add(GetDecisionsByAgeEvent(
+                                                dateOfBirth:
+                                                    newValue.date_of_birth,
+                                                childId: newValue.id));
+                                      });
                                     }
                                   },
                                 ),
@@ -155,7 +162,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
 
   check_child() async {
     ChildModel? child =
-        await BlocProvider.of<CurrentChildCubit>(context).get_current_child();
+        await BlocProvider.of<CurrentChildCubit>(context).getCurrentChild();
     if (child != null) {
       setState(() {
         selected_child = child;

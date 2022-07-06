@@ -16,25 +16,26 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
   }) : super(NoCurrentChildState());
   final ChildRepository childRepository;
 
-  void change_current_child(ChildModel new_child) async {
+  void changeCurrentChild(ChildModel newChild, Function onSuccess) async {
     emit(ChangingCurrentChildState());
     final prefs = await SharedPreferences.getInstance();
-    prefs.setInt(SELECTED_CHILD_ID, new_child.id);
-    emit(CurrentChildChangedState(new_current_child: new_child));
+    prefs.setInt(SELECTED_CHILD_ID, newChild.id);
+    onSuccess();
+    emit(CurrentChildChangedState(new_current_child: newChild));
   }
 
-  void change_current_child_by_id(int id) async {
+  void changeCurrentChildById(int id) async {
     emit(ChangingCurrentChildState());
-    ChildModel? new_child = await childRepository.getChildByID(id);
+    ChildModel? newChild = await childRepository.getChildByID(id);
 
-    if (new_child != null) {
+    if (newChild != null) {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setInt(SELECTED_CHILD_ID, new_child.id);
-      emit(CurrentChildChangedState(new_current_child: new_child));
+      prefs.setInt(SELECTED_CHILD_ID, newChild.id);
+      emit(CurrentChildChangedState(new_current_child: newChild));
     }
   }
 
-  Future<ChildModel?> get_current_child() async {
+  Future<ChildModel?> getCurrentChild() async {
     emit(ChangingCurrentChildState());
     final prefs = await SharedPreferences.getInstance();
     int? id = prefs.getInt(SELECTED_CHILD_ID);

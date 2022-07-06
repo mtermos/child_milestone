@@ -65,7 +65,7 @@ class Application extends StatelessWidget {
             create: (context) => DecisionRepository(DecisionDao())),
         RepositoryProvider<NotificationRepository>(
             create: (context) =>
-                NotificationRepository(NotificationDao(), ChildDao())),
+                NotificationRepository(NotificationDao(), ChildDao(), MilestoneDao())),
       ],
       child: MultiBlocProvider(
         providers: [

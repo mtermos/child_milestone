@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
@@ -18,7 +19,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddChildForm extends StatefulWidget {
-  AddChildForm({Key? key}) : super(key: key);
+  const AddChildForm({Key? key}) : super(key: key);
 
   @override
   State<AddChildForm> createState() => _AddChildFormState();
@@ -225,7 +226,12 @@ class _AddChildFormState extends State<AddChildForm> {
                     child: newChild,
                     whenDone: () {
                       BlocProvider.of<CurrentChildCubit>(context)
-                          .change_current_child(newChild);
+                          .changeCurrentChild(newChild, () {
+                        BlocProvider.of<DecisionBloc>(context).add(
+                            GetDecisionsByAgeEvent(
+                                dateOfBirth: newChild.date_of_birth,
+                                childId: newChild.id));
+                      });
                       Navigator.popAndPushNamed(context, "/home");
                     }));
               },

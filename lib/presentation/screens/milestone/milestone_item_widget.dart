@@ -242,7 +242,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
 
   check_child() async {
     ChildModel? child =
-        await BlocProvider.of<CurrentChildCubit>(context).get_current_child();
+        await BlocProvider.of<CurrentChildCubit>(context).getCurrentChild();
     if (child != null) {
       BlocProvider.of<DecisionBloc>(context).add(
           GetDecisionByChildAndMilestoneEvent(

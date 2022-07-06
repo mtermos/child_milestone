@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
@@ -68,7 +69,7 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
       Emitter<NotificationState> emit) async {
     emit(AllUnopenedNotificationsLoadingState());
     // await notificationRepository.deleteAllNotifications();
-    List<NotificationWithChild>? notifications =
+    List<NotificationWithChildAndMilestone>? notifications =
         await notificationRepository.getAllNotificationsWithChildren();
     if (notifications != null) {
       notifications = notifications
