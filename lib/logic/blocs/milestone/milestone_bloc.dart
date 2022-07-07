@@ -20,22 +20,23 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
   MilestoneBloc(
       {required this.milestoneRepository, required this.decisionRepository})
       : super(InitialMilestoneState()) {
-    on<AddMilestoneEvent>(add_milestone);
-    on<GetAllMilestonesEvent>(get_all_milestones);
-    on<DeleteAllMilestonesEvent>(delete_all_milestones);
+    on<AddMilestoneEvent>(addMilestone);
+    on<GetAllMilestonesEvent>(getAllMilestones);
+    on<DeleteAllMilestonesEvent>(deleteAllMilestones);
 
-    on<GetMilestoneEvent>(get_milestone);
-    on<GetMilestonesWithDecisionsByAgeEvent>(get_by_age);
+    on<GetMilestoneEvent>(getMilestone);
+    on<GetMilestonesWithDecisionsByAgeEvent>(getByAge);
+    on<GetMilestonesWithDecisionsByChildEvent>(getByChild);
   }
 
-  void add_milestone(
+  void addMilestone(
       AddMilestoneEvent event, Emitter<MilestoneState> emit) async {
     emit(AddingMilestoneState());
     await milestoneRepository.insertMilestone(event.milestone);
     emit(AddedMilestoneState());
   }
 
-  void get_all_milestones(
+  void getAllMilestones(
       GetAllMilestonesEvent event, Emitter<MilestoneState> emit) async {
     emit(AllMilestonesLoadingState());
     // await milestoneRepository.deleteAllMilestones();
@@ -47,25 +48,25 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
       emit(AllMilestonesLoadingErrorState());
   }
 
-  void delete_all_milestones(
+  void deleteAllMilestones(
       DeleteAllMilestonesEvent event, Emitter<MilestoneState> emit) async {
     emit(DeleteingAllMilestonesState());
     await milestoneRepository.deleteAllMilestones();
     emit(DeletedAllMilestonesState());
   }
 
-  void get_milestone(
+  void getMilestone(
       GetMilestoneEvent event, Emitter<MilestoneState> emit) async {
     emit(MilestoneLoadingState());
     MilestoneItem? milestone =
-        await milestoneRepository.getMilestoneByID(event.milestone_id);
+        await milestoneRepository.getMilestoneByID(event.milestoneId);
     if (milestone != null)
       emit(MilestoneLoadedState(milestone));
     else
       emit(MilestoneLoadingErrorState());
   }
 
-  void get_by_age(GetMilestonesWithDecisionsByAgeEvent event,
+  void getByAge(GetMilestonesWithDecisionsByAgeEvent event,
       Emitter<MilestoneState> emit) async {
     emit(LoadingMilestonesWithDecisionsByAgeState());
     List<MilestoneWithDecision> items = [];
@@ -89,5 +90,31 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
       emit(LoadedMilestonesWithDecisionsByAgeState(items));
     } else
       emit(ErrorLoadingMilestonesWithDecisionsByAgeState());
+  }
+
+  void getByChild(GetMilestonesWithDecisionsByChildEvent event,
+      Emitter<MilestoneState> emit) async {
+    emit(LoadingMilestonesWithDecisionsByChildState());
+    List<MilestoneWithDecision> items = [];
+    List<MilestoneItem>? milestones =
+        await milestoneRepository.getAllMilestones();
+
+    if (milestones != null) {
+      for (var milestone in milestones) {
+        DecisionModel? decision = await decisionRepository
+            .getDecisionByChildAndMilestone(event.child.id, milestone.id);
+        items.add(MilestoneWithDecision(
+            milestoneItem: milestone,
+            decision: decision ??
+                DecisionModel(
+                    childId: event.child.id,
+                    milestoneId: milestone.id,
+                    decision: -1,
+                    takenAt: DateTime.now())));
+      }
+
+      emit(LoadedMilestonesWithDecisionsByChildState(items));
+    } else
+      emit(ErrorLoadingMilestonesWithDecisionsByChildState());
   }
 }

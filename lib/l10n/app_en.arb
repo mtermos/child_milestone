@@ -39,5 +39,7 @@
     "settingsCap": "SETTINGS",
     "goBack": "Go Back",
     "tipsRate": "How you find the given tips?",
+    "selectChild": "select a child",
+    "childSummary": "Child Summary",
     "selectLanguage": "Select Language"
 }

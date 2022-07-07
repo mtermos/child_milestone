@@ -41,4 +41,13 @@ class MilestoneRepository {
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
         : [];
   }
+
+  Future<List<MilestoneItem>?> getMilestonesByChild(DateTime dateOfBirth) async {
+    List<Map<String, dynamic>> result =
+        await milestoneDao.getMilestonesByChild();
+
+    return result.isNotEmpty
+        ? result.map((item) => MilestoneItem.fromMap(item)).toList()
+        : [];
+  }
 }

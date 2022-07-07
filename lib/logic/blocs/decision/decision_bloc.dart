@@ -18,6 +18,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     on<DeleteAllDecisionsEvent>(deleteAllDecisions);
 
     on<GetDecisionEvent>(getDecision);
+    on<GetDecisionsByChild>(getByChild);
     on<GetDecisionsByAgeEvent>(getByAge);
     on<GetDecisionByChildAndMilestoneEvent>(getByChildAndMilestone);
   }
@@ -60,6 +61,19 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     } else {
       emit(DecisionLoadingErrorState());
     }
+  }
+
+  void getByChild(
+      GetDecisionsByChild event, Emitter<DecisionState> emit) async {
+    emit(LoadingDecisionsByChildState());
+    List<DecisionModel> daoResponse =
+        await decisionRepository.getDecisionsByChild(event.childId);
+    emit(LoadedDecisionsByChildState(daoResponse));
+    // if (daoResponse.item1) {
+    //   emit(LoadedDecisionsByAgeState(daoResponse.item1, daoResponse.item2));
+    // } else {
+    //   emit(ErrorLoadingDecisionsByAgeState());
+    // }
   }
 
   void getByAge(

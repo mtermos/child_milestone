@@ -27,6 +27,11 @@ class GetDecisionEvent extends DecisionEvent {
   GetDecisionEvent({required this.decision_id});
 }
 
+class GetDecisionsByChild extends DecisionEvent {
+  int childId;
+  GetDecisionsByChild({required this.childId});
+}
+
 class GetDecisionsByAgeEvent extends DecisionEvent {
   DateTime dateOfBirth;
   int childId;

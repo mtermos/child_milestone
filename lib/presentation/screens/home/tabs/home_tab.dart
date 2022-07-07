@@ -1,40 +1,26 @@
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
-import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
-import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
-// import 'package:flutter_bloc_login_example/screens/home/main.dart';
-// import 'package:flutter_bloc_login_example/screens/login/signUp.dart';
-// import 'package:flutter_bloc_login_example/shared/colors.dart';
-// import 'package:flutter_bloc_login_example/shared/components.dart';
-// import 'package:flutter_bloc_login_example/shared/screen_transitions/slide.transition.dart';
-// import 'package:flutter_bloc_login_example/shared/styles.dart';
-// import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HomeTab extends StatefulWidget {
-  HomeTab({Key? key}) : super(key: key);
+  const HomeTab({Key? key}) : super(key: key);
 
   @override
   _HomeTabState createState() => _HomeTabState();
 }
 
 class _HomeTabState extends State<HomeTab> {
-  ChildModel? current_child;
+  ChildModel? currentChild;
   int age = 0;
   @override
   void initState() {
@@ -48,35 +34,33 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    const String profile_pic_bg = "assets/images/profile_pic_bg.svg";
+    const String profilePicBg = "assets/images/profile_pic_bg.svg";
     const String summary = "assets/images/summary.png";
     const String tips = "assets/images/tips.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     NotificationService _notificationService = NotificationService();
-    String double_arrow_icon = "";
+    String doubleArrowIcon = "";
     bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
 
     if (isRTL) {
-      double_arrow_icon = "assets/icons/home_page/double_arrows_to_left.png";
+      doubleArrowIcon = "assets/icons/home_page/double_arrows_to_left.png";
     } else {
-      double_arrow_icon = "assets/icons/home_page/double_arrows.png";
+      doubleArrowIcon = "assets/icons/home_page/double_arrows.png";
     }
 
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
-            current_child = state.new_current_child;
-            age = (DateTime.now()
-                        .difference(current_child!.date_of_birth)
-                        .inDays /
-                    30)
-                .toInt();
+            currentChild = state.new_current_child;
+            age =
+                DateTime.now().difference(currentChild!.date_of_birth).inDays ~/
+                    30;
           }
           return Column(
             children: [
-              Container(
+              SizedBox(
                 height: size.height * 0.3,
                 child: Stack(
                   alignment: Alignment.topCenter,
@@ -85,7 +69,7 @@ class _HomeTabState extends State<HomeTab> {
                       top: size.height * 0.02,
                       child: Center(
                         child: SvgPicture.asset(
-                          profile_pic_bg,
+                          profilePicBg,
                           width: size.width * 0.9,
                           alignment: Alignment.topCenter,
                         ),
@@ -102,11 +86,11 @@ class _HomeTabState extends State<HomeTab> {
                                 backgroundColor: Colors.white,
                                 radius: size.width * 0.16,
                               ),
-                              current_child != null
+                              currentChild != null
                                   ? CircleAvatar(
                                       radius: size.width * 0.15,
                                       backgroundImage:
-                                          Image.asset(current_child!.image_path)
+                                          Image.asset(currentChild!.image_path)
                                               .image
                                       // child_pic).image,
                                       )
@@ -118,8 +102,8 @@ class _HomeTabState extends State<HomeTab> {
                           ),
                           SizedBox(height: size.height * 0.01),
                           AppText(
-                            text: current_child != null
-                                ? current_child!.name
+                            text: currentChild != null
+                                ? currentChild!.name
                                 : "child's name",
                             color: Colors.white,
                             fontSize: size.height * 0.03,
@@ -168,7 +152,7 @@ class _HomeTabState extends State<HomeTab> {
                                 ),
                                 SizedBox(width: size.width * 0.02),
                                 Image.asset(
-                                  double_arrow_icon,
+                                  doubleArrowIcon,
                                   width: size.width * 0.05,
                                 ),
                               ],
@@ -201,17 +185,17 @@ class _HomeTabState extends State<HomeTab> {
                       },
                     );
                   } else {
-                    if (current_child != null) {
+                    if (currentChild != null) {
                       BlocProvider.of<DecisionBloc>(context).add(
                           GetDecisionsByAgeEvent(
-                              dateOfBirth: current_child!.date_of_birth,
-                              childId: current_child!.id));
+                              dateOfBirth: currentChild!.date_of_birth,
+                              childId: currentChild!.id));
                     }
-                    return CircularProgressIndicator();
+                    return const CircularProgressIndicator();
                   }
                 },
               ),
-              Spacer(),
+              const Spacer(),
               Row(
                 children: [
                   SizedBox(width: size.width * 0.075),
@@ -219,6 +203,17 @@ class _HomeTabState extends State<HomeTab> {
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       summary,
+                      width: size.width * 0.4,
+                    ),
+                    onTap: () {
+                      Navigator.pushNamed(context, childSummaryRoute);
+                    },
+                  ),
+                  const Spacer(),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      tips,
                       width: size.width * 0.4,
                     ),
                     onTap: () async {
@@ -229,17 +224,7 @@ class _HomeTabState extends State<HomeTab> {
                         scheduledDate: tz.TZDateTime.now(tz.local)
                             .add(const Duration(seconds: 5)),
                       );
-                    },
-                  ),
-                  Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      tips,
-                      width: size.width * 0.4,
-                    ),
-                    onTap: () {
-                      _logout();
+                      // _logout();
                     },
                   ),
                   SizedBox(width: size.width * 0.075),
@@ -260,13 +245,5 @@ class _HomeTabState extends State<HomeTab> {
         },
       ),
     );
-  }
-
-  _logout() async {
-    BlocProvider.of<AuthBloc>(context).add(LogoutEvent(
-      () {
-        Navigator.pushNamed(context, '/');
-      },
-    ));
   }
 }

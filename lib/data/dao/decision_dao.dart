@@ -44,6 +44,16 @@ class DecisionDao {
     return [];
   }
 
+  Future<List<Map<String, dynamic>>> getDecisionsByChild(int childId) async {
+    final db = await dbProvider.database;
+
+    return db.query(
+      decisionsTABLE,
+      where: 'childId = ?',
+      whereArgs: [childId],
+    );
+  }
+
   Future<DaoResponse<List<Map<String, dynamic>>, int>> getDecisionsByAge(
       int weeks, int childId) async {
     final db = await dbProvider.database;

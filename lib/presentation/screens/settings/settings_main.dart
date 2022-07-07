@@ -1,3 +1,5 @@
+import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
+import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
@@ -99,5 +101,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
       default:
         return "";
     }
+  }
+
+  _logout() async {
+    BlocProvider.of<AuthBloc>(context).add(LogoutEvent(
+      () {
+        Navigator.pushNamed(context, '/');
+      },
+    ));
   }
 }

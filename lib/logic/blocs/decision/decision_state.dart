@@ -58,6 +58,19 @@ class DecisionErrorState extends DecisionState {
   List<Object?> get props => [error];
 }
 
+class LoadingDecisionsByChildState extends DecisionState {}
+
+class ErrorLoadingDecisionsByChildState extends DecisionState {}
+
+class LoadedDecisionsByChildState extends DecisionState {
+  final List<DecisionModel> decisions;
+
+  LoadedDecisionsByChildState(this.decisions);
+
+  @override
+  List<Object?> get props => [decisions];
+}
+
 class LoadingDecisionsByAgeState extends DecisionState {}
 
 class ErrorLoadingDecisionsByAgeState extends DecisionState {}

@@ -81,7 +81,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               SizedBox(
                 height: MediaQuery.of(context).padding.top,
               ),
-              TopBarView(back_route: true),
+              TopBarView(backRoute: true),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(

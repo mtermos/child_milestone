@@ -21,12 +21,12 @@ class MilestoneDao {
     return result;
   }
 
-  Future<Map<String, dynamic>?> getMilestoneByID(int milestone_id) async {
+  Future<Map<String, dynamic>?> getMilestoneByID(int milestoneId) async {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = new List.empty();
     result = await db
-        .query(milestonesTABLE, where: 'id = ?', whereArgs: [milestone_id]);
+        .query(milestonesTABLE, where: 'id = ?', whereArgs: [milestoneId]);
 
     if (result.isNotEmpty) return result[0];
   }

@@ -9,9 +9,9 @@ abstract class MilestoneEvent extends Equatable {
 }
 
 class AddMilestoneEvent extends MilestoneEvent {
-  MilestoneItem milestone;
+  final MilestoneItem milestone;
 
-  AddMilestoneEvent({
+  const AddMilestoneEvent({
     required this.milestone,
   });
 }
@@ -21,11 +21,17 @@ class GetAllMilestonesEvent extends MilestoneEvent {}
 class DeleteAllMilestonesEvent extends MilestoneEvent {}
 
 class GetMilestoneEvent extends MilestoneEvent {
-  int milestone_id;
-  GetMilestoneEvent({required this.milestone_id});
+  final int milestoneId;
+  const GetMilestoneEvent({required this.milestoneId});
 }
 
 class GetMilestonesWithDecisionsByAgeEvent extends MilestoneEvent {
-  ChildModel child;
-  GetMilestonesWithDecisionsByAgeEvent({required this.child});
+  final ChildModel child;
+  const GetMilestonesWithDecisionsByAgeEvent({required this.child});
+}
+
+
+class GetMilestonesWithDecisionsByChildEvent extends MilestoneEvent {
+  final ChildModel child;
+  const GetMilestonesWithDecisionsByChildEvent({required this.child});
 }

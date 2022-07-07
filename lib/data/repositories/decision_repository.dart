@@ -33,7 +33,16 @@ class DecisionRepository {
     }
   }
 
-  Future<DaoResponse<List<DecisionModel>, int>> getDecisionsByAge(DateTime dateOfBirth, int childId) async {
+  Future<List<DecisionModel>> getDecisionsByChild(int childId) async {
+    List response = await decisionDao.getDecisionsByChild(childId);
+
+    return response.isNotEmpty
+        ? response.map((item) => DecisionModel.fromMap(item)).toList()
+        : [];
+  }
+
+  Future<DaoResponse<List<DecisionModel>, int>> getDecisionsByAge(
+      DateTime dateOfBirth, int childId) async {
     int ageByWeeks = DateTime.now().difference(dateOfBirth).inDays ~/ 7;
     DaoResponse<List, int> daoResponse =
         await decisionDao.getDecisionsByAge(ageByWeeks, childId);
@@ -47,12 +56,11 @@ class DecisionRepository {
         daoResponse.item2);
   }
 
-  Future<DecisionModel?> getDecisionByChildAndMilestone(int childId, int milestoneId) async {
+  Future<DecisionModel?> getDecisionByChildAndMilestone(
+      int childId, int milestoneId) async {
     Map<String, dynamic> decisionMap =
         await decisionDao.getDecisionByChildAndMilestone(childId, milestoneId);
 
-    return decisionMap.isNotEmpty
-            ? DecisionModel.fromMap(decisionMap)
-            : null;
+    return decisionMap.isNotEmpty ? DecisionModel.fromMap(decisionMap) : null;
   }
 }

@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
+import 'package:child_milestone/presentation/common_widgets/app_text.dart';
+import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,10 +16,12 @@ import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TopBarView extends StatefulWidget {
-  bool? back_route;
+  bool backRoute;
+  bool light;
   TopBarView({
     Key? key,
-    bool? this.back_route = false,
+    this.backRoute = false,
+    this.light = false,
   }) : super(key: key);
 
   @override
@@ -75,10 +79,13 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                             // SizedBox(
                             //   width: size.width * 0.02,
                             // ),
-                            widget.back_route!
+                            widget.backRoute
                                 ? InkWell(
                                     child: SvgPicture.asset(
                                       chevron_duo_left,
+                                      color: widget.light
+                                          ? Colors.white
+                                          : AppColors.primaryColor,
                                     ),
                                     onTap: () {
                                       Navigator.pop(context);
@@ -103,15 +110,31 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                   value: selected_child,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
+                                  icon: Icon(
+                                    Icons.arrow_drop_down,
+                                    color: widget.light
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
                                   alignment: AlignmentDirectional.center,
-                                  hint: Text("select a child"),
+                                  hint: AppText(
+                                    text: AppLocalizations.of(context)!
+                                        .selectChild,
+                                    fontSize: textScale * 20,
+                                  ),
                                   items: childrenList!
                                       .map<DropdownMenuItem<ChildModel>>(
                                           (ChildModel value) {
                                     return DropdownMenuItem<ChildModel>(
                                       value: value,
                                       alignment: AlignmentDirectional.center,
-                                      child: Text(value.name),
+                                      child: AppText(
+                                        text: value.name,
+                                        fontSize: textScale * 24,
+                                        color: widget.light
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     );
                                   }).toList(),
                                   onChanged: (ChildModel? newValue) {
@@ -140,7 +163,12 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         flex: 2,
                         child: Container(
                           child: InkWell(
-                            child: SvgPicture.asset(settings_icon),
+                            child: SvgPicture.asset(
+                              settings_icon,
+                              color: widget.light
+                                  ? Colors.white
+                                  : AppColors.primaryColor,
+                            ),
                             onTap: () {
                               Navigator.pushNamed(context, "/settings");
                             },

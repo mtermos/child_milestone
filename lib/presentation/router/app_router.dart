@@ -1,4 +1,6 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/presentation/screens/add_child/add_child_main.dart';
+import 'package:child_milestone/presentation/screens/child_summary/child_summary_main.dart';
 import 'package:child_milestone/presentation/screens/login/login_main.dart';
 import 'package:child_milestone/presentation/screens/home/home_main.dart';
 import 'package:child_milestone/presentation/screens/milestone/milestone_main.dart';
@@ -35,11 +37,15 @@ class AppRouter {
         );
       case '/milestone':
         return MaterialPageRoute(
-          builder: (_) => MilestoneScreen(category: key as int),
+          builder: (_) => MilestoneScreen(category: key != null ? key as int : 1),
         );
       case '/add_child':
         return MaterialPageRoute(
           builder: (_) => AddChildScreen(),
+        );
+      case childSummaryRoute:
+        return MaterialPageRoute(
+          builder: (_) => ChildSummaryScreen(),
         );
       default:
         return null;

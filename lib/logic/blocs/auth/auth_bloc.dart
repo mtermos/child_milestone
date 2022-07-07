@@ -3,6 +3,7 @@ import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/shared/api_auth.dart';
 import 'package:child_milestone/logic/shared/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import 'auth_state.dart';
 import 'auth_event.dart';
@@ -20,6 +21,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _login(LoginEvent event, Emitter<AuthState> emit) async {
     emit(LoadingLoginState());
+    Future<http.Response> fetchAlbum() {
+      final response = http.post(Uri.parse(backend + '/user/login'));
+      print('response: ${response}');
+      return response;
+    }
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool(SHARED_LOGGED, true);
     await prefs.setString(SHARED_USER, event.username);

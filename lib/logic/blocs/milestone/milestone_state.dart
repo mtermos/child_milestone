@@ -63,3 +63,17 @@ class LoadedMilestonesWithDecisionsByAgeState extends MilestoneState {
   @override
   List<Object?> get props => [items];
 }
+
+
+class LoadingMilestonesWithDecisionsByChildState extends MilestoneState {}
+
+class ErrorLoadingMilestonesWithDecisionsByChildState extends MilestoneState {}
+
+class LoadedMilestonesWithDecisionsByChildState extends MilestoneState {
+  final List<MilestoneWithDecision> items;
+
+  LoadedMilestonesWithDecisionsByChildState(this.items);
+
+  @override
+  List<Object?> get props => [items];
+}

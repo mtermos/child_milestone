@@ -7,6 +7,7 @@ class AppButton extends StatelessWidget {
   final FontWeight fontWeight;
   final EdgeInsets padding;
   final Widget? trailingWidget;
+  final Color? color;
   final Function? onPressed;
 
   const AppButton({
@@ -15,6 +16,7 @@ class AppButton extends StatelessWidget {
     this.fontWeight = FontWeight.bold,
     this.padding = const EdgeInsets.symmetric(vertical: 24),
     this.trailingWidget,
+    this.color = AppColors.primaryColor,
     this.onPressed,
   }) : super();
 
@@ -27,7 +29,7 @@ class AppButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(roundness),
         ),
-        color: AppColors.primaryColor,
+        color: color,
         textColor: Colors.white,
         elevation: 0.0,
         padding: padding,
