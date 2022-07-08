@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:child_milestone/constants/strings.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -9,6 +10,8 @@ import 'auth_state.dart';
 import 'auth_event.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final storage = const FlutterSecureStorage();
+
   AuthBloc() : super(UnlogedState()) {
     on<LoginEvent>(_login);
     on<LogoutEvent>(_logout);
@@ -19,12 +22,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     final response = await http.post(Uri.parse(Urls.backendUrl + Urls.loginUrl),
         body: {"email": event.username, "password": event.password});
-    print('response: ${response.body}');
+    var responseBody = json.decode(response.body);
     if (response.statusCode == 200) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(SHARED_LOGGED, true);
-      await prefs.setString(SHARED_USER, event.username);
-      await prefs.setString(SHARED_PASSWORD, event.password);
+      await prefs.setBool(SharedPrefKeys.isLogged, true);
+      await prefs.setString(SharedPrefKeys.accessToken, responseBody["token"]);
+      await storage.write(key: StorageKeys.username, value: event.username);
+      await storage.write(key: StorageKeys.password, value: event.password);
       event.onSuccess();
 
       emit(LogedState());
@@ -42,63 +46,4 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     emit(UnlogedState());
   }
-
-  // @override
-  // Stream<AuthState> mapEventToState(AuthEvent event) async* {
-  //   try {
-  //     if (event is LoginEvent) {
-  //       yield LoadingLoginState();
-  //       print('LoadingLoginState');
-  //       SharedPreferences prefs = await SharedPreferences.getInstance();
-  //       await prefs.setBool(SHARED_LOGGED, true);
-  //       await prefs.setString(SHARED_USER, "email@test.com");
-  //       await prefs.setString(SHARED_PASSWORD, "password");
-
-  //       await Locator.instance.get<ApiAuth>().login();
-
-  //       yield LogedState();
-  //     } else if (event is LogoutEvent) {
-  //       yield LoadingLogoutState();
-  //       print('LoadingLogoutState');
-
-  //       // await Locator.instance.get<ApiAuth>().logout();
-
-  //       yield UnlogedState();
-  //     } else if (event is ForceLoginEvent) {
-  //       yield ForcingLoginState();
-
-  //       // verify if is loged
-  //       await Future.delayed(Duration(seconds: 1));
-
-  //       yield _isLoged ? LogedState() : UnlogedState();
-
-  //       yield LoginErrorState();
-  //     } else if (event is SignUpEvent) {
-  //       yield LoadingSignUpState();
-  //       print('LoadingSignUpState');
-
-  //       // await Locator.instance.get<ApiAuth>().signUp();
-
-  //       yield LoadedSignUpState();
-  //     } else if (event is ForgotPasswordEvent) {
-  //       yield LoadingForgotPasswordState();
-  //       print('LoadingForgotPasswordState');
-
-  //       // await Locator.instance.get<ApiAuth>().changePassword();
-
-  //       yield LoadedForgotPasswordState();
-  //     } else if (event is ResendCodeEvent) {
-  //       yield LoadingResendCodeState();
-  //       print('LoadingResendCodeState');
-
-  //       // await Locator.instance.get<ApiAuth>().resendCode(email: event.email);
-
-  //       yield LoadedResendCodeState();
-  //     } else {
-  //       yield UnlogedState();
-  //     }
-  //   } catch (e) {
-  //     yield LoginErrorState();
-  //   }
-  // }
 }

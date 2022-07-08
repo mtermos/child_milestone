@@ -120,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _logout() async {
     BlocProvider.of<AuthBloc>(context).add(LogoutEvent(
       () {
-        Navigator.pushNamed(context, Routes.splashScreen);
+        Navigator.popAndPushNamed(context, Routes.splashScreen);
       },
     ));
   }

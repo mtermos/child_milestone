@@ -47,20 +47,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkUserIsLogged() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(SELECTED_CHILD_ID, 1);
-    if ((prefs.getBool(SHARED_LOGGED) != null) &&
-        prefs.getBool(SHARED_LOGGED)!) {
-      Navigator.pushNamed(context, Routes.home);
-
-      // ApiRepository.get().login(LoginRequest(username: prefs.getString(SHARED_USER), password: prefs.getString(SHARED_PASSWORD))).then((response) {
-      //   if (response != null) {
-      //     Navigator.of(context).pushReplacementNamed(HomePage.routeName);
-      //   }
-      // }).catchError((error) {
-      //   Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
-      // });
+    await prefs.setInt(SharedPrefKeys.selectedChildId, 1);
+    if ((prefs.getBool(SharedPrefKeys.isLogged) != null) &&
+        prefs.getBool(SharedPrefKeys.isLogged)!) {
+      Navigator.popAndPushNamed(context, Routes.home);
     } else {
-      Navigator.pushNamed(context, Routes.welcome);
+      Navigator.popAndPushNamed(context, Routes.welcome);
     }
   }
 

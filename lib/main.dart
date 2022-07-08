@@ -8,7 +8,6 @@ import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/data/repositories/tip_repository.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
-import 'package:child_milestone/logic/blocs/auth/auth_state.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
@@ -24,7 +23,6 @@ import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/logic/blocs/internet/internet_bloc.dart';
 import 'package:child_milestone/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
@@ -64,8 +62,8 @@ class Application extends StatelessWidget {
         RepositoryProvider<DecisionRepository>(
             create: (context) => DecisionRepository(DecisionDao())),
         RepositoryProvider<NotificationRepository>(
-            create: (context) =>
-                NotificationRepository(NotificationDao(), ChildDao(), MilestoneDao())),
+            create: (context) => NotificationRepository(
+                NotificationDao(), ChildDao(), MilestoneDao())),
       ],
       child: MultiBlocProvider(
         providers: [

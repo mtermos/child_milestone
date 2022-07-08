@@ -98,7 +98,8 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextField(
                 controller: usernameController,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.username),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.username),
               ),
             ),
             SizedBox(height: size.height * 0.03),
@@ -107,7 +108,8 @@ class _LoginScreenState extends State<LoginScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
               child: TextField(
                 controller: passController,
-                decoration: InputDecoration(labelText: AppLocalizations.of(context)!.password),
+                decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context)!.password),
                 obscureText: true,
               ),
             ),
@@ -160,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
             usernameController.text,
             passController.text,
             () {
-              Navigator.pushNamed(context, Routes.home);
+              Navigator.popAndPushNamed(context, Routes.home);
             },
           ));
         },

@@ -130,7 +130,7 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   void onGetStartedClicked(BuildContext context) {
-    Navigator.pushNamed(context, Routes.login);
+    Navigator.popAndPushNamed(context, Routes.login);
     // BlocProvider.of<AuthBloc>(context).add(LoginEvent());
     // Navigator.of(context).pushReplacement(new MaterialPageRoute(
     //   builder: (BuildContext context) {

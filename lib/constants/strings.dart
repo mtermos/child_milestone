@@ -1,8 +1,3 @@
-const String SHARED_LOGGED = "USER_IS_LOGGED";
-const String SHARED_USER = "USER";
-const String SHARED_PASSWORD = "PASSWORD";
-const String SELECTED_CHILD_ID = "SELECTED_CHILD_ID";
-
 class Routes {
   static const String splashScreen = "/";
   static const String welcome = "/welcome";
@@ -17,4 +12,16 @@ class Routes {
 class Urls {
   static const String backendUrl = "http://localhost:3000/api";
   static const String loginUrl = "/user/login";
+}
+
+class StorageKeys {
+  static const String username = "username";
+  static const String password = "password";
+}
+
+
+class SharedPrefKeys {
+  static const String isLogged = "logged";
+  static const String accessToken = "access_token";
+  static const String selectedChildId = "selectedChildId";
 }
