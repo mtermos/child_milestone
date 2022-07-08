@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
@@ -232,7 +233,7 @@ class _AddChildFormState extends State<AddChildForm> {
                                 dateOfBirth: newChild.date_of_birth,
                                 childId: newChild.id));
                       });
-                      Navigator.popAndPushNamed(context, "/home");
+                      Navigator.popAndPushNamed(context, Routes.home);
                     }));
               },
             ),

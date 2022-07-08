@@ -170,7 +170,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                   : AppColors.primaryColor,
                             ),
                             onTap: () {
-                              Navigator.pushNamed(context, "/settings");
+                              Navigator.pushNamed(context, Routes.settings);
                             },
                           ),
                           alignment: AlignmentDirectional.centerEnd,

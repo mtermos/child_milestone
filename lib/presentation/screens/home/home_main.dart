@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     return BottomBarView(
       tabIconsList: tabIconsList,
       addClick: () {
-        Navigator.pushNamed(context, '/add_child');
+        Navigator.pushNamed(context, Routes.addChild);
       },
       changeIndex: (int index) {
         if (index == 0) {

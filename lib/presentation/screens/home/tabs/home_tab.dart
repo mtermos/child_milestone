@@ -181,7 +181,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, '/milestone');
+                        Navigator.pushNamed(context, Routes.milestone);
                       },
                     );
                   } else {
@@ -206,7 +206,7 @@ class _HomeTabState extends State<HomeTab> {
                       width: size.width * 0.4,
                     ),
                     onTap: () {
-                      Navigator.pushNamed(context, childSummaryRoute);
+                      Navigator.pushNamed(context, Routes.childSummary);
                     },
                   ),
                   const Spacer(),

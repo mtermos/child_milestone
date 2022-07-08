@@ -1,7 +1,7 @@
+import 'dart:convert';
+
 import 'package:bloc/bloc.dart';
 import 'package:child_milestone/constants/strings.dart';
-import 'package:child_milestone/logic/shared/api_auth.dart';
-import 'package:child_milestone/logic/shared/locator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,40 +14,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogoutEvent>(_logout);
   }
 
-  @override
-  get initialState => UnlogedState();
-
-  bool _isLoged = false;
-
   void _login(LoginEvent event, Emitter<AuthState> emit) async {
     emit(LoadingLoginState());
-    Future<http.Response> fetchAlbum() {
-      final response = http.post(Uri.parse(backend + '/user/login'));
-      print('response: ${response}');
-      return response;
+
+    final response = await http.post(Uri.parse(Urls.backendUrl + Urls.loginUrl),
+        body: {"email": event.username, "password": event.password});
+    print('response: ${response.body}');
+    if (response.statusCode == 200) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(SHARED_LOGGED, true);
+      await prefs.setString(SHARED_USER, event.username);
+      await prefs.setString(SHARED_PASSWORD, event.password);
+      event.onSuccess();
+
+      emit(LogedState());
+    } else {
+      emit(LoginErrorState(error: jsonDecode(response.body)["message"]));
     }
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(SHARED_LOGGED, true);
-    await prefs.setString(SHARED_USER, event.username);
-    await prefs.setString(SHARED_PASSWORD, event.password);
-    await Future.delayed(Duration(seconds: 1));
-    event.onSuccess();
-    // await Locator.instance.get<ApiAuth>().login();
-
-    emit(LogedState());
   }
 
   void _logout(LogoutEvent event, Emitter<AuthState> emit) async {
     emit(LoadingLogoutState());
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(SHARED_LOGGED, false);
-    await prefs.setString(SHARED_USER, "");
-    await prefs.setString(SHARED_PASSWORD, "");
-    await prefs.setInt(SELECTED_CHILD_ID, -1);
-    await Future.delayed(Duration(milliseconds: 500));
+    await prefs.clear();
     event.onSuccess();
-    // await Locator.instance.get<ApiAuth>().login();
 
     emit(UnlogedState());
   }

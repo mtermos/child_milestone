@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
@@ -159,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
             usernameController.text,
             passController.text,
             () {
-              Navigator.pushNamed(context, '/home');
+              Navigator.pushNamed(context, Routes.home);
             },
           ));
         },

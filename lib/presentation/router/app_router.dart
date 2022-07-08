@@ -13,39 +13,38 @@ class AppRouter {
   Route? onGenerateRoute(RouteSettings settings) {
     // ignore: unused_local_variable
     final Object? key = settings.arguments;
-    print('key: ${key}');
     switch (settings.name) {
-      case '/':
+      case Routes.splashScreen:
         return MaterialPageRoute(
-          builder: (_) => SplashScreen(),
+          builder: (_) => const SplashScreen(),
         );
-      case '/welcome':
+      case Routes.welcome:
         return MaterialPageRoute(
-          builder: (_) => WelcomeScreen(),
+          builder: (_) => const WelcomeScreen(),
         );
-      case '/login':
+      case Routes.login:
         return MaterialPageRoute(
           builder: (_) => LoginScreen(),
         );
-      case '/home':
+      case Routes.home:
         return MaterialPageRoute(
           builder: (_) => HomeScreen(),
         );
-      case '/settings':
+      case Routes.settings:
         return MaterialPageRoute(
-          builder: (_) => SettingsScreen(),
+          builder: (_) => const SettingsScreen(),
         );
-      case '/milestone':
+      case Routes.milestone:
         return MaterialPageRoute(
           builder: (_) => MilestoneScreen(category: key != null ? key as int : 1),
         );
-      case '/add_child':
+      case Routes.addChild:
         return MaterialPageRoute(
           builder: (_) => AddChildScreen(),
         );
-      case childSummaryRoute:
+      case Routes.childSummary:
         return MaterialPageRoute(
-          builder: (_) => ChildSummaryScreen(),
+          builder: (_) => const ChildSummaryScreen(),
         );
       default:
         return null;

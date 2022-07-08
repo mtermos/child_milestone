@@ -27,7 +27,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    reset_data();
+    // reset_data();
     super.initState();
 
     const delay = Duration(seconds: 1);
@@ -50,7 +50,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await prefs.setInt(SELECTED_CHILD_ID, 1);
     if ((prefs.getBool(SHARED_LOGGED) != null) &&
         prefs.getBool(SHARED_LOGGED)!) {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(context, Routes.home);
 
       // ApiRepository.get().login(LoginRequest(username: prefs.getString(SHARED_USER), password: prefs.getString(SHARED_PASSWORD))).then((response) {
       //   if (response != null) {
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
       //   Navigator.of(context).pushReplacementNamed(LoginPage.routeName);
       // });
     } else {
-      Navigator.pushNamed(context, '/welcome');
+      Navigator.pushNamed(context, Routes.welcome);
     }
   }
 

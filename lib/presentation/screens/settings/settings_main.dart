@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -69,6 +70,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
             ),
+            Container(
+              alignment: Alignment.center,
+              width: size.width * 0.8,
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.25),
+              child: AppButton(
+                label: AppLocalizations.of(context)!.logout,
+                fontWeight: FontWeight.w600,
+                padding: const EdgeInsets.symmetric(vertical: 25),
+                onPressed: () {
+                  _logout();
+                },
+              ),
+            ),
             Spacer(),
             Container(
               alignment: Alignment.center,
@@ -79,7 +93,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fontWeight: FontWeight.w600,
                 padding: const EdgeInsets.symmetric(vertical: 25),
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, '/home');
+                  Navigator.popAndPushNamed(context, Routes.home);
                 },
               ),
             ),
@@ -106,7 +120,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   _logout() async {
     BlocProvider.of<AuthBloc>(context).add(LogoutEvent(
       () {
-        Navigator.pushNamed(context, '/');
+        Navigator.pushNamed(context, Routes.splashScreen);
       },
     ));
   }

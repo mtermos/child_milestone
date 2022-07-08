@@ -41,5 +41,6 @@
     "tipsRate": "How you find the given tips?",
     "selectChild": "select a child",
     "childSummary": "Child Summary",
+    "logout": "Log out",
     "selectLanguage": "Select Language"
 }

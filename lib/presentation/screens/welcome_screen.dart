@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:flutter/material.dart';
@@ -129,7 +130,7 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   void onGetStartedClicked(BuildContext context) {
-    Navigator.pushNamed(context, '/login');
+    Navigator.pushNamed(context, Routes.login);
     // BlocProvider.of<AuthBloc>(context).add(LoginEvent());
     // Navigator.of(context).pushReplacement(new MaterialPageRoute(
     //   builder: (BuildContext context) {
