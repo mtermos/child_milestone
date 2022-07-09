@@ -37,8 +37,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     if (result.item1) {
       emit(AddedChildState(event.child));
       if (event.addNotifications) {
-        await _addPeriodsNotifications(
-            event.context, event.child, event.child.name);
+        await _addPeriodsNotifications(event.context, event.child);
       }
       event.whenDone();
     } else if (result.item2 == 2067) {
@@ -77,7 +76,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
   }
 
   Future _addPeriodsNotifications(
-      BuildContext context, ChildModel child, String name) async {
+      BuildContext context, ChildModel child) async {
     DateTime after2Years = DateTime(child.date_of_birth.year + 2,
         child.date_of_birth.month, child.date_of_birth.day + 1);
     DateTime temp = child.date_of_birth;
@@ -93,7 +92,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
       String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
       String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
-          name +
+          child.name +
           AppLocalizations.of(context)!.newPeriodNotificationBody2;
 
       NotificationModel notification = NotificationModel(
