@@ -43,5 +43,8 @@
     "selectChild": "اختر طفلا",
     "childSummary": "ملخص متابعة الطفل",
     "logout": "تسجيل خروج",
+    "newPeriodNotificationTitle": "مرحلة جديدة",
+    "newPeriodNotificationBody1": " الطفل",
+    "newPeriodNotificationBody2": " دخل في مرحلة عمرية جديدة نرجو منكم الاجابة على الأسئلة الجديدة لهذه المرحلة",
     "selectLanguage": "اختار اللغة"
 }

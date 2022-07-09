@@ -213,18 +213,20 @@ class _AddChildFormState extends State<AddChildForm> {
                 // final fileName =
                 //     basename(strings[strings.length - 2] + "." + strings.last);
                 final fileName = basename(chosen_image!.path);
-                String image_path = '${appDir.path}/$fileName';
-                await chosen_image!.saveTo(image_path);
+                String imagePath = '${appDir.path}/$fileName';
+                await chosen_image!.saveTo(imagePath);
                 ChildModel newChild = ChildModel(
                   name: nameController.text,
                   date_of_birth: _selected_date,
-                  image_path: image_path,
+                  image_path: imagePath,
                   id: int.parse(idController.text),
                   gender: selected_gender,
                   pregnancy_duration: double.parse(durationController.text),
                 );
                 BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
+                    context: context,
                     child: newChild,
+                    addNotifications: true,
                     whenDone: () {
                       BlocProvider.of<CurrentChildCubit>(context)
                           .changeCurrentChild(newChild, () {

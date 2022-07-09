@@ -11,7 +11,7 @@ class ChildDao {
   //Adds new Child records
   Future<DaoResponse<bool, int>> createChild(ChildModel child) async {
     final db = await dbProvider.database;
-    var result;
+    DaoResponse<bool, int> result;
     try {
       var id = await db.insert(childrenTABLE, child.toMap());
       result = DaoResponse(true, id);
@@ -19,6 +19,8 @@ class ChildDao {
       if (err is DatabaseException) {
         result = DaoResponse(false, err.getResultCode() ?? 0);
       }
+      print(err.toString());
+      result = const DaoResponse(false, -1);
     }
     return result;
   }
@@ -33,8 +35,7 @@ class ChildDao {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result;
-    result = await db
-        .query(childrenTABLE, where: 'id = ?', whereArgs: [id]);
+    result = await db.query(childrenTABLE, where: 'id = ?', whereArgs: [id]);
 
     if (result.isNotEmpty) return result[0];
   }

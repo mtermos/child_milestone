@@ -9,12 +9,11 @@ import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
-import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -60,14 +59,16 @@ class _SplashScreenState extends State<SplashScreen> {
     final dbProvider = DatabaseProvider.dbProvider;
     dbProvider.deleteDatabase();
     dbProvider.createDatabase();
+    NotificationService _notificationService = NotificationService();
+    _notificationService.cancelAllNotifications();
     // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    add_temp_child();
-    add_temp_milestones();
-    add_temp_tips();
-    add_temp_notifications();
+    addTempChild();
+    addTempMilestones();
+    addTempTips();
+    addTempNotifications();
   }
 
-  add_temp_child() {
+  addTempChild() {
     ChildModel newChild = ChildModel(
         id: 1,
         name: "رامي",
@@ -75,8 +76,11 @@ class _SplashScreenState extends State<SplashScreen> {
         image_path: "assets/images/children/child1.png",
         gender: "male",
         pregnancy_duration: 10);
-    BlocProvider.of<ChildBloc>(context)
-        .add(AddChildEvent(child: newChild, whenDone: () {}));
+    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
+        context: context,
+        child: newChild,
+        addNotifications: false,
+        whenDone: () {}));
     ChildModel newChild2 = ChildModel(
         id: 2,
         name: "سارة",
@@ -84,24 +88,27 @@ class _SplashScreenState extends State<SplashScreen> {
         image_path: "assets/images/children/child2.png",
         gender: "female",
         pregnancy_duration: 10);
-    BlocProvider.of<ChildBloc>(context)
-        .add(AddChildEvent(child: newChild2, whenDone: () {}));
+    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
+        context: context,
+        child: newChild2,
+        addNotifications: false,
+        whenDone: () {}));
   }
 
-  add_temp_milestones() {
+  addTempMilestones() {
     for (var milestone in milestoneItemsList) {
       BlocProvider.of<MilestoneBloc>(context)
           .add(AddMilestoneEvent(milestone: milestone));
     }
   }
 
-  add_temp_tips() {
+  addTempTips() {
     for (var tip in tipsItems) {
       BlocProvider.of<TipBloc>(context).add(AddTipEvent(tip: tip));
     }
   }
 
-  add_temp_notifications() {
+  addTempNotifications() {
     for (var notification in notificationsItems) {
       BlocProvider.of<NotificationBloc>(context)
           .add(AddNotificationEvent(notification: notification));

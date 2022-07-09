@@ -24,4 +24,5 @@ class SharedPrefKeys {
   static const String isLogged = "logged";
   static const String accessToken = "access_token";
   static const String selectedChildId = "selectedChildId";
+  static const String langCode = "lang";
 }

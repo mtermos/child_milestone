@@ -1,10 +1,13 @@
-import 'dart:async';
-
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/tuples.dart';
+import 'package:child_milestone/data/models/notification.dart';
+import 'package:child_milestone/data/repositories/notification_repository.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
-import 'package:child_milestone/logic/blocs/internet/internet_bloc.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../data/models/child_model.dart';
 import '../../../data/repositories/child_repository.dart';
@@ -14,20 +17,29 @@ part "child_state.dart";
 
 class ChildBloc extends Bloc<ChildEvent, ChildState> {
   final ChildRepository childRepository;
+  final NotificationRepository notificationRepository;
+  final NotificationService _notificationService = NotificationService();
 
-  ChildBloc({required this.childRepository}) : super(InitialChildState()) {
-    on<AddChildEvent>(add_child);
-    on<GetAllChildrenEvent>(get_all_children);
-    on<DeleteAllChildrenEvent>(delete_all_children);
+  ChildBloc(
+      {required this.childRepository, required this.notificationRepository})
+      : super(InitialChildState()) {
+    on<AddChildEvent>(addChild);
+    on<GetAllChildrenEvent>(getAllChildren);
+    on<DeleteAllChildrenEvent>(deleteAllChildren);
 
-    on<GetChildEvent>(get_child);
+    on<GetChildEvent>(getChild);
   }
 
-  void add_child(AddChildEvent event, Emitter<ChildState> emit) async {
+  void addChild(AddChildEvent event, Emitter<ChildState> emit) async {
     emit(AddingChildState());
     DaoResponse result = await childRepository.insertChild(event.child);
+    print('result: ${result.item2}');
     if (result.item1) {
       emit(AddedChildState(event.child));
+      if (event.addNotifications) {
+        await _addPeriodsNotifications(
+            event.context, event.child, event.child.name);
+      }
       event.whenDone();
     } else if (result.item2 == 2067) {
       emit(ErrorAddingChildUniqueIDState());
@@ -36,30 +48,68 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     }
   }
 
-  void get_all_children(
+  void getAllChildren(
       GetAllChildrenEvent event, Emitter<ChildState> emit) async {
     emit(AllChildrenLoadingState());
-    // await childRepository.deleteAllChilds();
     List<ChildModel>? children = await childRepository.getAllChildren();
-    if (children != null)
+    if (children != null) {
       emit(AllChildrenLoadedState(children));
-    else
+    } else {
       emit(AllChildrenLoadingErrorState());
+    }
   }
 
-  void delete_all_children(
+  void deleteAllChildren(
       DeleteAllChildrenEvent event, Emitter<ChildState> emit) async {
     emit(DeleteingAllChildrenState());
     await childRepository.deleteAllChildren();
     emit(DeletedAllChildrenState());
   }
 
-  void get_child(GetChildEvent event, Emitter<ChildState> emit) async {
+  void getChild(GetChildEvent event, Emitter<ChildState> emit) async {
     emit(ChildLoadingState());
     ChildModel? child = await childRepository.getChildByID(event.id);
-    if (child != null)
+    if (child != null) {
       emit(ChildLoadedState(child));
-    else
+    } else {
       emit(ChildLoadingErrorState());
+    }
+  }
+
+  Future _addPeriodsNotifications(
+      BuildContext context, ChildModel child, String name) async {
+    DateTime after2Years = DateTime(child.date_of_birth.year + 2,
+        child.date_of_birth.month, child.date_of_birth.day + 1);
+    DateTime temp = child.date_of_birth;
+
+    while (temp.isBefore(after2Years)) {
+      temp = temp.add(const Duration(days: 60));
+      temp = temp.toLocal();
+      temp = DateTime(temp.year, temp.month, temp.day, 10);
+      
+      String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+      String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
+          name +
+          AppLocalizations.of(context)!.newPeriodNotificationBody2;
+
+      NotificationModel notification = NotificationModel(
+        title: title,
+        body: body,
+        issuedAt: temp,
+        opened: false,
+        dismissed: false,
+        route: Routes.milestone,
+        childId: child.id,
+      );
+      DaoResponse<bool, int> response =
+          await notificationRepository.insertNotification(notification);
+      notification.id = response.item2;
+      await _notificationService.scheduleNotifications(
+        id: response.item2,
+        title: title,
+        body: body,
+        scheduledDate: tz.TZDateTime.from(temp, tz.local),
+      );
+    }
   }
 }

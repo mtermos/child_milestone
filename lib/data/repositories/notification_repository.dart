@@ -59,10 +59,10 @@ class NotificationRepository {
   }
 
   Future insertNotification(NotificationModel notification) =>
-      notificationDao.createNotification(notification);
+      notificationDao.createNotification(notification.toMap());
 
   Future updateNotification(NotificationModel notification) =>
-      notificationDao.updateNotification(notification);
+      notificationDao.updateNotification(notification.toMap());
 
   Future deleteNotificationById(int id) =>
       notificationDao.deleteNotification(id);

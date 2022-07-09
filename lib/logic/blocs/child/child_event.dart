@@ -9,11 +9,15 @@ abstract class ChildEvent extends Equatable {
 }
 
 class AddChildEvent extends ChildEvent {
-  ChildModel child;
-  Function whenDone;
+  final BuildContext context;
+  final ChildModel child;
+  final bool addNotifications;
+  final Function whenDone;
 
-  AddChildEvent({
+  const AddChildEvent({
+    required this.context,
     required this.child,
+    required this.addNotifications,
     required this.whenDone,
   });
 }
@@ -23,6 +27,6 @@ class GetAllChildrenEvent extends ChildEvent {}
 class DeleteAllChildrenEvent extends ChildEvent {}
 
 class GetChildEvent extends ChildEvent {
-  int id;
-  GetChildEvent({required this.id});
+  final int id;
+  const GetChildEvent({required this.id});
 }

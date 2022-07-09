@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/database/database.dart';
-import 'package:child_milestone/data/models/notification.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class NotificationDao {
@@ -10,12 +9,12 @@ class NotificationDao {
 
   //Adds new Decision record
   Future<DaoResponse<bool, int>> createNotification(
-      NotificationModel notification) async {
+      Map<String, dynamic> notification) async {
     final db = await dbProvider.database;
     DaoResponse<bool, int> result = const DaoResponse(false, 0);
 
     try {
-      var id = await db.insert(notificationsTABLE, notification.toMap());
+      var id = await db.insert(notificationsTABLE, notification);
       result = DaoResponse(true, id);
     } catch (err) {
       if (err is DatabaseException) {
@@ -33,22 +32,23 @@ class NotificationDao {
     return result;
   }
 
-  Future<Map<String, dynamic>?> getNotificationByID(int notification_id) async {
+  Future<Map<String, dynamic>?> getNotificationByID(int notificationId) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
+    List<Map<String, dynamic>> result = [];
     result = await db.query(notificationsTABLE,
-        where: 'id = ?', whereArgs: [notification_id]);
+        where: 'id = ?', whereArgs: [notificationId]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   //Update Notification record
-  Future<int> updateNotification(NotificationModel notification) async {
+  Future<int> updateNotification(Map<String, dynamic> notification) async {
     final db = await dbProvider.database;
 
-    var result = await db.update(notificationsTABLE, notification.toMap(),
-        where: "id = ?", whereArgs: [notification.id]);
+    var result = await db.update(notificationsTABLE, notification,
+        where: "id = ?", whereArgs: [notification["id"]]);
 
     return result;
   }

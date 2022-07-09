@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:child_milestone/data/models/child_model.dart';
 
 class NotificationModel {
-  int id;
+  int? id;
   String title;
   String body;
   DateTime issuedAt;
@@ -14,7 +14,7 @@ class NotificationModel {
   int childId;
   int? milestoneId;
   NotificationModel({
-    required this.id,
+    this.id,
     required this.title,
     required this.body,
     required this.issuedAt,
@@ -65,7 +65,7 @@ class NotificationModel {
 
   factory NotificationModel.fromMap(Map<String, dynamic> map) {
     return NotificationModel(
-      id: map['id'] as int,
+      id: map['id'] != null ? map['id'] as int : null,
       title: map['title'] as String,
       body: map['body'] as String,
       issuedAt: DateTime.fromMillisecondsSinceEpoch(map['issuedAt'] as int),
@@ -73,13 +73,15 @@ class NotificationModel {
       dismissed: map['dismissed'] == 1,
       route: map['route'] as String,
       childId: map['childId'] as int,
-      milestoneId: map['milestoneId'] != null ? map['milestoneId'] as int : null,
+      milestoneId:
+          map['milestoneId'] != null ? map['milestoneId'] as int : null,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory NotificationModel.fromJson(String source) => NotificationModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory NotificationModel.fromJson(String source) =>
+      NotificationModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
@@ -89,29 +91,29 @@ class NotificationModel {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-  
+
     return other is NotificationModel &&
-      other.id == id &&
-      other.title == title &&
-      other.body == body &&
-      other.issuedAt == issuedAt &&
-      other.opened == opened &&
-      other.dismissed == dismissed &&
-      other.route == route &&
-      other.childId == childId &&
-      other.milestoneId == milestoneId;
+        other.id == id &&
+        other.title == title &&
+        other.body == body &&
+        other.issuedAt == issuedAt &&
+        other.opened == opened &&
+        other.dismissed == dismissed &&
+        other.route == route &&
+        other.childId == childId &&
+        other.milestoneId == milestoneId;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      title.hashCode ^
-      body.hashCode ^
-      issuedAt.hashCode ^
-      opened.hashCode ^
-      dismissed.hashCode ^
-      route.hashCode ^
-      childId.hashCode ^
-      milestoneId.hashCode;
+        title.hashCode ^
+        body.hashCode ^
+        issuedAt.hashCode ^
+        opened.hashCode ^
+        dismissed.hashCode ^
+        route.hashCode ^
+        childId.hashCode ^
+        milestoneId.hashCode;
   }
 }

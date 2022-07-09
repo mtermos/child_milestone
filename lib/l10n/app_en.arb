@@ -42,5 +42,6 @@
     "selectChild": "select a child",
     "childSummary": "Child Summary",
     "logout": "Log out",
+    "newPeriodNotificationTitle": "Log out",
     "selectLanguage": "Select Language"
 }

@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/dao/decision_dao.dart';
 import 'package:child_milestone/data/dao/milestone_dao.dart';
@@ -29,7 +30,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //
   SharedPreferences prefs = await SharedPreferences.getInstance();
-  String startLang = prefs.getString('lang') ?? "en";
+  String startLang = prefs.getString(SharedPrefKeys.langCode) ?? "ar";
   runApp(Application(
     appRouter: AppRouter(),
     connectivity: Connectivity(),
@@ -77,6 +78,8 @@ class Application extends StatelessWidget {
           BlocProvider<ChildBloc>(
             create: (context) => ChildBloc(
               childRepository: RepositoryProvider.of<ChildRepository>(context),
+              notificationRepository:
+                  RepositoryProvider.of<NotificationRepository>(context),
             ),
           ),
           BlocProvider<MilestoneBloc>(
