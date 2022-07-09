@@ -85,8 +85,12 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     while (temp.isBefore(after2Years)) {
       temp = temp.add(const Duration(days: 60));
       temp = temp.toLocal();
-      temp = DateTime(temp.year, temp.month, temp.day, 10);
-      
+      if (temp.hour > 10) {
+        temp = DateTime(temp.year, temp.month, temp.day + 1, 10);
+      } else {
+        temp = DateTime(temp.year, temp.month, temp.day, 10);
+      }
+
       String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
       String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
           name +
