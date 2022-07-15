@@ -46,5 +46,8 @@
     "newPeriodNotificationTitle": "مرحلة جديدة",
     "newPeriodNotificationBody1": " الطفل",
     "newPeriodNotificationBody2": " دخل في مرحلة عمرية جديدة نرجو منكم الاجابة على الأسئلة الجديدة لهذه المرحلة",
+    "weeklyNotificationTitle": "تذكير، اكمل جميع المتابعات",
+    "weeklyNotificationBody1": " لم يتم إكمال المتابعات للطفل",
+    "weeklyNotificationBody2": ". نرجوإكمال المتبقي منها",
     "selectLanguage": "اختار اللغة"
 }

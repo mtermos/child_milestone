@@ -4,6 +4,7 @@ import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:meta/meta.dart';
 
 part 'notification_event.dart';

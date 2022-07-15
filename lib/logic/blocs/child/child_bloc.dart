@@ -80,15 +80,22 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     DateTime after2Years = DateTime(child.date_of_birth.year + 2,
         child.date_of_birth.month, child.date_of_birth.day + 1);
     DateTime temp = child.date_of_birth;
+    List<DateTime> weeklyTemps = [];
 
+    int period = 0;
     while (temp.isBefore(after2Years)) {
-      temp = temp.add(const Duration(days: 60));
+      period++;
       temp = temp.toLocal();
+
       if (temp.hour > 10) {
-        temp = DateTime(temp.year, temp.month, temp.day + 1, 10);
+        temp = DateTime(temp.year, temp.month + 2, temp.day + 1, 10);
       } else {
-        temp = DateTime(temp.year, temp.month, temp.day, 10);
+        temp = DateTime(temp.year, temp.month + 2, temp.day, 10);
       }
+      weeklyTemps.add(temp.add(const Duration(days: 14)));
+      weeklyTemps.add(temp.add(const Duration(days: 14)));
+      weeklyTemps.add(temp.add(const Duration(days: 14)));
+      weeklyTemps.add(temp.add(const Duration(days: 14)));
 
       String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
       String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
@@ -102,6 +109,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         opened: false,
         dismissed: false,
         route: Routes.milestone,
+        period: period,
         childId: child.id,
       );
       DaoResponse<bool, int> response =
@@ -113,6 +121,50 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         body: body,
         scheduledDate: tz.TZDateTime.from(temp, tz.local),
       );
+
+      for (var weeklyTemp in weeklyTemps) {
+        _addWeeklyNotification(weeklyTemp, period, context, child);
+      }
     }
+  }
+
+  Future _addWeeklyNotification(DateTime dateTime, int period,
+      BuildContext context, ChildModel child) async {
+    // const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    //     AndroidNotificationDetails(
+    //         'repeating channel id', 'repeating channel name',
+    //         channelDescription: 'repeating description');
+    // const NotificationDetails platformChannelSpecifics =
+    //     NotificationDetails(android: androidPlatformChannelSpecifics);
+    // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+    //     FlutterLocalNotificationsPlugin();
+    // await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
+    //     'repeating body', RepeatInterval.weekly, platformChannelSpecifics,
+    //     androidAllowWhileIdle: true);
+
+    String title = AppLocalizations.of(context)!.weeklyNotificationTitle;
+    String body = AppLocalizations.of(context)!.weeklyNotificationBody1 +
+        child.name +
+        AppLocalizations.of(context)!.weeklyNotificationBody2;
+
+    NotificationModel notification = NotificationModel(
+      title: title,
+      body: body,
+      issuedAt: dateTime,
+      opened: false,
+      dismissed: false,
+      route: Routes.milestone,
+      period: period,
+      childId: child.id,
+    );
+    DaoResponse<bool, int> response =
+        await notificationRepository.insertNotification(notification);
+    notification.id = response.item2;
+    await _notificationService.scheduleNotifications(
+      id: response.item2,
+      title: title,
+      body: body,
+      scheduledDate: tz.TZDateTime.from(dateTime, tz.local),
+    );
   }
 }

@@ -71,6 +71,7 @@ class DatabaseProvider {
         "opened INTEGER, "
         "dismissed INTEGER, "
         "issuedAt INTEGER, "
+        "period INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
         "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
         ")");

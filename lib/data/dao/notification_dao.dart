@@ -32,6 +32,32 @@ class NotificationDao {
     return result;
   }
 
+  Future<List<Map<String, dynamic>>> getNotificationsBtwDates(
+      DateTime startDate, DateTime endDate) async {
+    final db = await dbProvider.database;
+
+    List<Map<String, dynamic>> result = [];
+    result = await db.query(notificationsTABLE,
+        where: 'issuedAt >= ? AND issuedAt <= ?',
+        whereArgs: [
+          startDate.millisecondsSinceEpoch,
+          endDate..millisecondsSinceEpoch
+        ]);
+
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getNotificationsByChildIdAndPeriod(
+      int childId, int period) async {
+    final db = await dbProvider.database;
+
+    List<Map<String, dynamic>> result = [];
+    result = await db.query(notificationsTABLE,
+        where: 'childId = ? AND period = ?', whereArgs: [childId, period]);
+
+    return result;
+  }
+
   Future<Map<String, dynamic>?> getNotificationByID(int notificationId) async {
     final db = await dbProvider.database;
 

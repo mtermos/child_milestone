@@ -26,7 +26,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    // reset_data();
+    resetData();
     super.initState();
 
     const delay = Duration(seconds: 1);
@@ -55,7 +55,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void reset_data() {
+  void resetData() {
     final dbProvider = DatabaseProvider.dbProvider;
     dbProvider.deleteDatabase();
     dbProvider.createDatabase();

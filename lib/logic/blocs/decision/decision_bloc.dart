@@ -1,6 +1,11 @@
 import 'package:child_milestone/constants/tuples.dart';
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
+import 'package:child_milestone/data/models/notification.dart';
+import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
+import 'package:child_milestone/data/repositories/notification_repository.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -10,8 +15,13 @@ part 'decision_state.dart';
 
 class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   final DecisionRepository decisionRepository;
+  final NotificationRepository notificationRepository;
+  final ChildRepository childRepository;
 
-  DecisionBloc({required this.decisionRepository})
+  DecisionBloc(
+      {required this.decisionRepository,
+      required this.notificationRepository,
+      required this.childRepository})
       : super(InitialDecisionState()) {
     on<AddDecisionEvent>(addDecision);
     on<GetAllDecisionsEvent>(getAllDecisions);
@@ -27,6 +37,11 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     emit(AddingDecisionState());
     DaoResponse<bool, int> daoResponse =
         await decisionRepository.insertDecision(event.decision);
+
+    bool allTaken = await checkIfAllDecisions(event.decision.childId);
+    if (allTaken) {
+      await stopWeeklyNotifications(event.decision.childId);
+    }
     if (daoResponse.item1) {
       emit(AddedDecisionState(event.decision));
       event.onSuccess();
@@ -103,5 +118,57 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     // } else {
     //   emit(ErrorLoadingDecisionsByAgeState());
     // }
+  }
+
+  Future<bool> checkIfAllDecisions(int childId) async {
+    List<DecisionModel> daoResponse =
+        await decisionRepository.getDecisionsByChild(childId);
+    for (var dec in daoResponse) {
+      if (dec.decision < 1) return false;
+    }
+    return true;
+  }
+
+  Future stopWeeklyNotifications(int childId) async {
+    int period = await _computePeriod(childId);
+    List<NotificationModel> notifications = await notificationRepository
+        .getNotificationsByChildIdAndPeriod(childId, period);
+    NotificationService _notificationService = NotificationService();
+
+    for (var notification in notifications) {
+      if (notification.id != null) {
+        notificationRepository.deleteNotificationById(notification.id!);
+        _notificationService.cancelNotifications(notification.id!);
+      }
+    }
+    return true;
+  }
+
+  Future<int> _computePeriod(int childId) async {
+    ChildModel? child = await childRepository.getChildByID(childId);
+    DateTime nowDate = DateTime.now();
+    if (child != null) {
+      DateTime after2Years = DateTime(child.date_of_birth.year + 2,
+          child.date_of_birth.month, child.date_of_birth.day + 1);
+
+      DateTime temp = child.date_of_birth;
+      List<DateTime> weeklyTemps = [];
+
+      int period = 0;
+      while (temp.isBefore(after2Years)) {
+        period++;
+        temp = temp.toLocal();
+
+        if (temp.hour > 10) {
+          temp = DateTime(temp.year, temp.month + 2, temp.day + 1, 10);
+        } else {
+          temp = DateTime(temp.year, temp.month + 2, temp.day, 10);
+        }
+
+        if (temp.isAfter(nowDate)) break;
+      }
+      return period;
+    }
+    return 0;
   }
 }

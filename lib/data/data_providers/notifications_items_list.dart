@@ -11,6 +11,7 @@ var notificationsItems = [
     opened: true,
     dismissed: false,
     route: Routes.milestone,
+    period: 1,
     childId: 1,
     milestoneId: 1,
   ),
@@ -22,6 +23,7 @@ var notificationsItems = [
     opened: false,
     dismissed: false,
     route: Routes.milestone,
+    period: 1,
     childId: 1,
     milestoneId: 2,
   ),
@@ -33,6 +35,7 @@ var notificationsItems = [
     opened: true,
     dismissed: false,
     route: Routes.milestone,
+    period: 1,
     childId: 2,
   ),
   NotificationModel(
@@ -43,6 +46,7 @@ var notificationsItems = [
     opened: false,
     dismissed: false,
     route: Routes.milestone,
+    period: 1,
     childId: 2,
   ),
   NotificationModel(
@@ -53,6 +57,7 @@ var notificationsItems = [
     opened: false,
     dismissed: false,
     route: Routes.milestone,
+    period: 1,
     childId: 2,
   ),
 ];

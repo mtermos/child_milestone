@@ -99,6 +99,9 @@ class Application extends StatelessWidget {
             create: (context) => DecisionBloc(
               decisionRepository:
                   RepositoryProvider.of<DecisionRepository>(context),
+              notificationRepository:
+                  RepositoryProvider.of<NotificationRepository>(context),
+              childRepository: RepositoryProvider.of<ChildRepository>(context),
             ),
           ),
           BlocProvider<NotificationBloc>(

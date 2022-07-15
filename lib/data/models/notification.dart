@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:child_milestone/data/models/child_model.dart';
-
 class NotificationModel {
   int? id;
   String title;
@@ -11,6 +9,7 @@ class NotificationModel {
   bool opened;
   bool dismissed;
   String route;
+  int period;
   int childId;
   int? milestoneId;
   NotificationModel({
@@ -21,6 +20,7 @@ class NotificationModel {
     required this.opened,
     required this.dismissed,
     required this.route,
+    required this.period,
     required this.childId,
     this.milestoneId,
   });
@@ -33,6 +33,7 @@ class NotificationModel {
     bool? opened,
     bool? dismissed,
     String? route,
+    int? period,
     int? childId,
     int? milestoneId,
   }) {
@@ -44,6 +45,7 @@ class NotificationModel {
       opened: opened ?? this.opened,
       dismissed: dismissed ?? this.dismissed,
       route: route ?? this.route,
+      period: period ?? this.period,
       childId: childId ?? this.childId,
       milestoneId: milestoneId ?? this.milestoneId,
     );
@@ -58,6 +60,7 @@ class NotificationModel {
       'opened': opened ? 1 : 0,
       'dismissed': dismissed ? 1 : 0,
       'route': route,
+      'period': period,
       'childId': childId,
       'milestoneId': milestoneId,
     };
@@ -72,6 +75,7 @@ class NotificationModel {
       opened: map['opened'] == 1,
       dismissed: map['dismissed'] == 1,
       route: map['route'] as String,
+      period: map['period'] as int,
       childId: map['childId'] as int,
       milestoneId:
           map['milestoneId'] != null ? map['milestoneId'] as int : null,
@@ -85,7 +89,7 @@ class NotificationModel {
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, route: $route, childId: $childId, milestoneId: $milestoneId)';
+    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, route: $route, period: $period, childId: $childId, milestoneId: $milestoneId)';
   }
 
   @override
@@ -100,6 +104,7 @@ class NotificationModel {
         other.opened == opened &&
         other.dismissed == dismissed &&
         other.route == route &&
+        other.period == period &&
         other.childId == childId &&
         other.milestoneId == milestoneId;
   }
@@ -113,6 +118,7 @@ class NotificationModel {
         opened.hashCode ^
         dismissed.hashCode ^
         route.hashCode ^
+        period.hashCode ^
         childId.hashCode ^
         milestoneId.hashCode;
   }
