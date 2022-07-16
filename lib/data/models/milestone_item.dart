@@ -4,8 +4,7 @@ import 'dart:convert';
 class MilestoneItem {
   int id;
   String description;
-  int startingWeek;
-  int endingWeek;
+  int period;
   int category;
   String? imagePath;
   String? videoPath;
@@ -13,8 +12,7 @@ class MilestoneItem {
   MilestoneItem({
     required this.id,
     required this.description,
-    required this.startingWeek,
-    required this.endingWeek,
+    required this.period,
     required this.category,
     this.imagePath,
     this.videoPath,
@@ -23,8 +21,7 @@ class MilestoneItem {
   MilestoneItem copyWith({
     int? id,
     String? description,
-    int? startingWeek,
-    int? endingWeek,
+    int? period,
     int? category,
     String? imagePath,
     String? videoPath,
@@ -32,8 +29,7 @@ class MilestoneItem {
     return MilestoneItem(
       id: id ?? this.id,
       description: description ?? this.description,
-      startingWeek: startingWeek ?? this.startingWeek,
-      endingWeek: endingWeek ?? this.endingWeek,
+      period: period ?? this.period,
       category: category ?? this.category,
       imagePath: imagePath ?? this.imagePath,
       videoPath: videoPath ?? this.videoPath,
@@ -44,8 +40,7 @@ class MilestoneItem {
     return <String, dynamic>{
       'id': id,
       'description': description,
-      'startingWeek': startingWeek,
-      'endingWeek': endingWeek,
+      'period': period,
       'category': category,
       'imagePath': imagePath,
       'videoPath': videoPath,
@@ -56,8 +51,7 @@ class MilestoneItem {
     return MilestoneItem(
       id: map['id'] as int,
       description: map['description'] as String,
-      startingWeek: map['startingWeek'] as int,
-      endingWeek: map['endingWeek'] as int,
+      period: map['period'] as int,
       category: map['category'] as int,
       imagePath: map['imagePath'] != null ? map['imagePath'] as String : null,
       videoPath: map['videoPath'] != null ? map['videoPath'] as String : null,
@@ -71,7 +65,7 @@ class MilestoneItem {
 
   @override
   String toString() {
-    return 'MilestoneItem(id: $id, description: $description, startingWeek: $startingWeek, endingWeek: $endingWeek, category: $category, imagePath: $imagePath, videoPath: $videoPath)';
+    return 'MilestoneItem(id: $id, description: $description, period: $period, category: $category, imagePath: $imagePath, videoPath: $videoPath)';
   }
 
   @override
@@ -81,8 +75,7 @@ class MilestoneItem {
     return other is MilestoneItem &&
         other.id == id &&
         other.description == description &&
-        other.startingWeek == startingWeek &&
-        other.endingWeek == endingWeek &&
+        other.period == period &&
         other.category == category &&
         other.imagePath == imagePath &&
         other.videoPath == videoPath;
@@ -92,8 +85,7 @@ class MilestoneItem {
   int get hashCode {
     return id.hashCode ^
         description.hashCode ^
-        startingWeek.hashCode ^
-        endingWeek.hashCode ^
+        period.hashCode ^
         category.hashCode ^
         imagePath.hashCode ^
         videoPath.hashCode;

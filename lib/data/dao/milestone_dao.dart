@@ -31,13 +31,13 @@ class MilestoneDao {
     if (result.isNotEmpty) return result[0];
   }
 
-  Future<List<Map<String, dynamic>>?> getMilestonesByAge(int weeks) async {
+  Future<List<Map<String, dynamic>>?> getMilestonesByAge(int period) async {
     final db = await dbProvider.database;
 
     List<Map<String, dynamic>> result = new List.empty();
     result = await db.query(milestonesTABLE,
-        where: 'startingWeek <= ? And endingWeek >= ?',
-        whereArgs: [weeks, weeks]);
+        where: 'period = ?',
+        whereArgs: [period]);
 
     if (result.isNotEmpty) return result;
     return [];

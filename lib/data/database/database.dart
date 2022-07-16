@@ -56,8 +56,7 @@ class DatabaseProvider {
         "description TEXT, "
         "imagePath TEXT, "
         "videoPath TEXT, "
-        "startingWeek INTEGER, "
-        "endingWeek INTEGER, "
+        "period INTEGER, "
         "category INTEGER "
         ")");
 
@@ -80,8 +79,7 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "title TEXT, "
         "body TEXT, "
-        "startingWeek INTEGER, "
-        "endingWeek INTEGER "
+        "period INTEGER "
         ")");
 
     await database.execute("CREATE TABLE $decisionsTABLE ("

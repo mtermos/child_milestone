@@ -45,26 +45,31 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
 
+// cagtegories:
+//   1: movement
+//   2: perception
+//   3: communication
+//   4: interaction
     List<MilestoneCategoryModel> cagtegories = [
       MilestoneCategoryModel(
         id: 1,
-        name: AppLocalizations.of(context)!.social,
-        icon_path: "assets/icons/milestone_page/social_category.png",
-      ),
-      MilestoneCategoryModel(
-        id: 2,
-        name: AppLocalizations.of(context)!.language,
-        icon_path: "assets/icons/milestone_page/language_category.png",
-      ),
-      MilestoneCategoryModel(
-        id: 3,
         name: AppLocalizations.of(context)!.movement,
         icon_path: "assets/icons/milestone_page/movement_category.png",
       ),
       MilestoneCategoryModel(
-        id: 4,
-        name: AppLocalizations.of(context)!.cognitive,
+        id: 2,
+        name: AppLocalizations.of(context)!.perception,
         icon_path: "assets/icons/milestone_page/cognitive_category.png",
+      ),
+      MilestoneCategoryModel(
+        id: 3,
+        name: AppLocalizations.of(context)!.communication,
+        icon_path: "assets/icons/milestone_page/language_category.png",
+      ),
+      MilestoneCategoryModel(
+        id: 4,
+        name: AppLocalizations.of(context)!.interaction,
+        icon_path: "assets/icons/milestone_page/social_category.png",
       ),
     ];
 

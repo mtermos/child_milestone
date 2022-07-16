@@ -20,12 +20,11 @@ class TipDao {
     return [];
   }
 
-  Future<List<Map<String, dynamic>>> getTipsByAge(int weeks) async {
+  Future<List<Map<String, dynamic>>> getTipsByAge(int period) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = await db.query(tipsTABLE,
-        where: 'startingWeek <= ? And endingWeek >= ?',
-        whereArgs: [weeks, weeks]);
+    List<Map<String, dynamic>> result =
+        await db.query(tipsTABLE, where: 'period = ?', whereArgs: [period]);
 
     if (result.isNotEmpty) return result;
     return [];

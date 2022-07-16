@@ -1,7 +1,7 @@
 Frontend:
     Child: adding child, selecting from mulitple added children: done
 
-    Milestones displayed by the age of child (by week): done
+    Milestones displayed by the age of child: done
 
     Decision taken: saved in database with time taken: done
 
@@ -9,15 +9,15 @@ Frontend:
 
     Notifications are displayed and saved to database (also fields if dismissed or opened): done
 
-need more time:
-    some bugs in displaying the child image on android (shouldn't take a long time).
-
-    some bugs when displaying previous taken decision (shouldn't take a long time).
+    fixing some bugs when displaying previous taken decision.
 
     arabic language, two options:
         1. hardcoded strings: fast
-        2. localization and dynamic: at most one day
+        2. localization and dynamic: at most one day --selected
 
+
+need more time:
+    some bugs in displaying the child image on android (shouldn't take a long time).
     App Rate page: one day or two
 
     Complete the connection process with backend

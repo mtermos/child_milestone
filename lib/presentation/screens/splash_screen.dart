@@ -72,7 +72,7 @@ class _SplashScreenState extends State<SplashScreen> {
     ChildModel newChild = ChildModel(
         id: 1,
         name: "رامي",
-        date_of_birth: DateTime.now().subtract(Duration(days: 30)),
+        date_of_birth: DateTime.now().subtract(const Duration(days: 30)),
         image_path: "assets/images/children/child1.png",
         gender: "male",
         pregnancy_duration: 10);
@@ -84,7 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
     ChildModel newChild2 = ChildModel(
         id: 2,
         name: "سارة",
-        date_of_birth: DateTime.now().subtract(Duration(days: 130)),
+        date_of_birth: DateTime.now().subtract(const Duration(days: 70)),
         image_path: "assets/images/children/child2.png",
         gender: "female",
         pregnancy_duration: 10);

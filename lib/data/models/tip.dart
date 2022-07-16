@@ -5,29 +5,25 @@ class TipModel {
   int id;
   String title;
   String body;
-  int startingWeek;
-  int endingWeek;
+  int period;
   TipModel({
     required this.id,
     required this.title,
     required this.body,
-    required this.startingWeek,
-    required this.endingWeek,
+    required this.period,
   });
 
   TipModel copyWith({
     int? id,
     String? title,
     String? body,
-    int? startingWeek,
-    int? endingWeek,
+    int? period,
   }) {
     return TipModel(
       id: id ?? this.id,
       title: title ?? this.title,
       body: body ?? this.body,
-      startingWeek: startingWeek ?? this.startingWeek,
-      endingWeek: endingWeek ?? this.endingWeek,
+      period: period ?? this.period,
     );
   }
 
@@ -36,8 +32,7 @@ class TipModel {
       'id': id,
       'title': title,
       'body': body,
-      'startingWeek': startingWeek,
-      'endingWeek': endingWeek,
+      'period': period,
     };
   }
 
@@ -46,8 +41,7 @@ class TipModel {
       id: map['id'] as int,
       title: map['title'] as String,
       body: map['body'] as String,
-      startingWeek: map['startingWeek'] as int,
-      endingWeek: map['endingWeek'] as int,
+      period: map['period'] as int,
     );
   }
 
@@ -58,7 +52,7 @@ class TipModel {
 
   @override
   String toString() {
-    return 'TipModel(id: $id, title: $title, body: $body, startingWeek: $startingWeek, endingWeek: $endingWeek)';
+    return 'TipModel(id: $id, title: $title, body: $body, period: $period)';
   }
 
   @override
@@ -69,16 +63,11 @@ class TipModel {
         other.id == id &&
         other.title == title &&
         other.body == body &&
-        other.startingWeek == startingWeek &&
-        other.endingWeek == endingWeek;
+        other.period == period;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^
-        title.hashCode ^
-        body.hashCode ^
-        startingWeek.hashCode ^
-        endingWeek.hashCode;
+    return id.hashCode ^ title.hashCode ^ body.hashCode ^ period.hashCode;
   }
 }

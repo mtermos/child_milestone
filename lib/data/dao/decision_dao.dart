@@ -55,14 +55,14 @@ class DecisionDao {
   }
 
   Future<DaoResponse<List<Map<String, dynamic>>, int>> getDecisionsByAge(
-      int weeks, int childId) async {
+      int period, int childId) async {
     final db = await dbProvider.database;
     List<Map<String, dynamic>> result = [];
 
     List<Map<String, dynamic>> milestones = await db.query(
       milestonesTABLE,
-      where: 'startingWeek <= ? And endingWeek >= ?',
-      whereArgs: [weeks, weeks],
+      where: 'period = ?',
+      whereArgs: [period],
     );
 
     for (var milestoneMap in milestones) {
