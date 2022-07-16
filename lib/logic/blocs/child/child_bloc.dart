@@ -1,5 +1,7 @@
+import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/tuples.dart';
+import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
@@ -77,25 +79,19 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   Future _addPeriodsNotifications(
       BuildContext context, ChildModel child) async {
-    DateTime after2Years = DateTime(child.date_of_birth.year + 2,
-        child.date_of_birth.month, child.date_of_birth.day + 1);
-    DateTime temp = child.date_of_birth;
-    List<DateTime> weeklyTemps = [];
+    DateTime temp;
 
-    int period = 0;
-    while (temp.isBefore(after2Years)) {
-      period++;
-      temp = temp.toLocal();
+    // adding the monthly periods (10 periods)
+    for (var period in monthlyPeriods) {
+      temp = child.date_of_birth.toLocal();
 
-      if (temp.hour > 10) {
-        temp = DateTime(temp.year, temp.month + 2, temp.day + 1, 10);
+      if (temp.hour >= 10) {
+        temp = DateTime(
+            temp.year, temp.month + period.startingMonth, temp.day + 1, 10);
       } else {
-        temp = DateTime(temp.year, temp.month + 2, temp.day, 10);
+        temp = DateTime(
+            temp.year, temp.month + period.startingMonth, temp.day, 10);
       }
-      weeklyTemps.add(temp.add(const Duration(days: 14)));
-      weeklyTemps.add(temp.add(const Duration(days: 14)));
-      weeklyTemps.add(temp.add(const Duration(days: 14)));
-      weeklyTemps.add(temp.add(const Duration(days: 14)));
 
       String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
       String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
@@ -109,7 +105,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         opened: false,
         dismissed: false,
         route: Routes.milestone,
-        period: period,
+        period: period.id,
         childId: child.id,
       );
       DaoResponse<bool, int> response =
@@ -122,13 +118,57 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         scheduledDate: tz.TZDateTime.from(temp, tz.local),
       );
 
-      for (var weeklyTemp in weeklyTemps) {
-        _addWeeklyNotification(weeklyTemp, period, context, child);
+      for (var i = 1; i <= period.numWeeks; i++) {
+        _addWeeklyNotifications(
+            temp.add(Duration(days: 7 * i)), period.id, context, child);
+      }
+    }
+
+    // adding the yearly periods (2 periods)
+    for (var period in yearlyPeriods) {
+      temp = child.date_of_birth.toLocal();
+
+      if (temp.hour >= 10) {
+        temp = DateTime(
+            temp.year + period.startingYear, temp.month, temp.day + 1, 10);
+      } else {
+        temp =
+            DateTime(temp.year + period.startingYear, temp.month, temp.day, 10);
+      }
+
+      String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+      String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
+          child.name +
+          AppLocalizations.of(context)!.newPeriodNotificationBody2;
+
+      NotificationModel notification = NotificationModel(
+        title: title,
+        body: body,
+        issuedAt: temp,
+        opened: false,
+        dismissed: false,
+        route: Routes.milestone,
+        period: period.id,
+        childId: child.id,
+      );
+      DaoResponse<bool, int> response =
+          await notificationRepository.insertNotification(notification);
+      notification.id = response.item2;
+      await _notificationService.scheduleNotifications(
+        id: response.item2,
+        title: title,
+        body: body,
+        scheduledDate: tz.TZDateTime.from(temp, tz.local),
+      );
+
+      for (var i = 1; i <= period.numWeeks; i++) {
+        _addWeeklyNotifications(
+            temp.add(Duration(days: 7 * i)), period.id, context, child);
       }
     }
   }
 
-  Future _addWeeklyNotification(DateTime dateTime, int period,
+  Future _addWeeklyNotifications(DateTime dateTime, int period,
       BuildContext context, ChildModel child) async {
     // const AndroidNotificationDetails androidPlatformChannelSpecifics =
     //     AndroidNotificationDetails(

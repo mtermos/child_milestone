@@ -5,6 +5,7 @@ import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -130,45 +131,21 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   }
 
   Future stopWeeklyNotifications(int childId) async {
-    int period = await _computePeriod(childId);
-    List<NotificationModel> notifications = await notificationRepository
-        .getNotificationsByChildIdAndPeriod(childId, period);
-    NotificationService _notificationService = NotificationService();
-
-    for (var notification in notifications) {
-      if (notification.id != null) {
-        notificationRepository.deleteNotificationById(notification.id!);
-        _notificationService.cancelNotifications(notification.id!);
-      }
-    }
-    return true;
-  }
-
-  Future<int> _computePeriod(int childId) async {
     ChildModel? child = await childRepository.getChildByID(childId);
-    DateTime nowDate = DateTime.now();
     if (child != null) {
-      DateTime after2Years = DateTime(child.date_of_birth.year + 2,
-          child.date_of_birth.month, child.date_of_birth.day + 1);
+      int period = periodCalculator(child.date_of_birth);
+      List<NotificationModel> notifications = await notificationRepository
+          .getNotificationsByChildIdAndPeriod(childId, period);
+      NotificationService _notificationService = NotificationService();
 
-      DateTime temp = child.date_of_birth;
-      List<DateTime> weeklyTemps = [];
-
-      int period = 0;
-      while (temp.isBefore(after2Years)) {
-        period++;
-        temp = temp.toLocal();
-
-        if (temp.hour > 10) {
-          temp = DateTime(temp.year, temp.month + 2, temp.day + 1, 10);
-        } else {
-          temp = DateTime(temp.year, temp.month + 2, temp.day, 10);
+      for (var notification in notifications) {
+        if (notification.id != null) {
+          notificationRepository.deleteNotificationById(notification.id!);
+          _notificationService.cancelNotifications(notification.id!);
         }
-
-        if (temp.isAfter(nowDate)) break;
       }
-      return period;
+      return true;
     }
-    return 0;
+    return false;
   }
 }
