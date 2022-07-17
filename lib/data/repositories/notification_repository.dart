@@ -18,7 +18,7 @@ class NotificationRepository {
 
     return result.isNotEmpty
         ? result.map((item) => NotificationModel.fromMap(item)).toList()
-        : null;
+        : [];
   }
 
   Future getNotificationsBtwDates(DateTime startDate, DateTime endDate) async {
@@ -27,16 +27,17 @@ class NotificationRepository {
 
     return result.isNotEmpty
         ? result.map((item) => NotificationModel.fromMap(item)).toList()
-        : null;
+        : [];
   }
 
-  Future getNotificationsByChildIdAndPeriod(int childId, int period) async {
-    List<Map<String, dynamic>> result =
-        await notificationDao.getNotificationsByChildIdAndPeriod(childId, period);
+  Future<List<NotificationModel>> getNotificationsByChildIdAndPeriod(
+      int childId, int period) async {
+    List<Map<String, dynamic>> result = await notificationDao
+        .getNotificationsByChildIdAndPeriod(childId, period);
 
     return result.isNotEmpty
         ? result.map((item) => NotificationModel.fromMap(item)).toList()
-        : null;
+        : [];
   }
 
   Future<List<NotificationWithChildAndMilestone>?>

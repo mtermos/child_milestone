@@ -11,7 +11,7 @@ class MilestoneRepository {
 
     return result.isNotEmpty
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
-        : null;
+        : [];
   }
 
   Future insertMilestone(MilestoneItem milestone) =>

@@ -12,7 +12,7 @@ class DecisionRepository {
 
     return result.isNotEmpty
         ? result.map((item) => DecisionModel.fromMap(item)).toList()
-        : null;
+        : [];
   }
 
   Future insertDecision(DecisionModel decision) =>

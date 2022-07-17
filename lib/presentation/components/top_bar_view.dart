@@ -107,6 +107,18 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                             return Center(
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<ChildModel>(
+                                  selectedItemBuilder: (context) =>
+                                      childrenList!.map<Widget>((e) {
+                                    return Center(
+                                      child: AppText(
+                                        text: e.name,
+                                        fontSize: textScale * 24,
+                                        color: widget.light
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    );
+                                  }).toList(),
                                   value: selected_child,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
@@ -131,9 +143,9 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                       child: AppText(
                                         text: value.name,
                                         fontSize: textScale * 24,
-                                        color: widget.light
-                                            ? Colors.white
-                                            : Colors.black,
+                                        // color: widget.light
+                                        //     ? Colors.white
+                                        //     : Colors.black,
                                       ),
                                     );
                                   }).toList(),

@@ -34,13 +34,8 @@ class MilestoneDao {
   Future<List<Map<String, dynamic>>?> getMilestonesByAge(int period) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
-    result = await db.query(milestonesTABLE,
-        where: 'period = ?',
-        whereArgs: [period]);
-
-    if (result.isNotEmpty) return result;
-    return [];
+    return db
+        .query(milestonesTABLE, where: 'period = ?', whereArgs: [period]);
   }
 
   //Update Milestone record

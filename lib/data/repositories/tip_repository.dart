@@ -11,7 +11,7 @@ class TipRepository {
 
     return result.isNotEmpty
         ? result.map((item) => TipModel.fromMap(item)).toList()
-        : null;
+        : [];
   }
 
   Future insertTip(TipModel tip) => tipDao.createTip(tip);

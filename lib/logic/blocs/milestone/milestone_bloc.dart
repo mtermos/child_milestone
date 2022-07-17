@@ -6,6 +6,7 @@ import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -113,7 +114,9 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                     takenAt: DateTime.now())));
       }
 
-      emit(LoadedMilestonesWithDecisionsByChildState(items));
+      int period = periodCalculator(event.child.date_of_birth);
+
+      emit(LoadedMilestonesWithDecisionsByChildState(items, period));
     } else
       emit(ErrorLoadingMilestonesWithDecisionsByChildState());
   }

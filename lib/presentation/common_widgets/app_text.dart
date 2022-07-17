@@ -19,7 +19,7 @@ class AppText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      textAlign: textAlign == null ? null : TextAlign.center,
+      textAlign: textAlign ?? TextAlign.center,
       style: TextStyle(
         fontSize: fontSize,
         fontWeight: fontWeight,
