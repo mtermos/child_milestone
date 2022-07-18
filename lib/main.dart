@@ -19,6 +19,7 @@ import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/logic/blocs/internet/internet_bloc.dart';
@@ -31,6 +32,16 @@ void main() async {
   await NotificationService().init(); //
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String startLang = prefs.getString(SharedPrefKeys.langCode) ?? "ar";
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(Application(
+        appRouter: AppRouter(),
+        connectivity: Connectivity(),
+        startLang: Locale(startLang),
+      )));
+
   runApp(Application(
     appRouter: AppRouter(),
     connectivity: Connectivity(),
