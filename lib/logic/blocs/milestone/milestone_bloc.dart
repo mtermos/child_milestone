@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
@@ -43,10 +41,11 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
     // await milestoneRepository.deleteAllMilestones();
     List<MilestoneItem>? milestones =
         await milestoneRepository.getAllMilestones();
-    if (milestones != null)
+    if (milestones != null) {
       emit(AllMilestonesLoadedState(milestones));
-    else
+    } else {
       emit(AllMilestonesLoadingErrorState());
+    }
   }
 
   void deleteAllMilestones(
@@ -61,10 +60,11 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
     emit(MilestoneLoadingState());
     MilestoneItem? milestone =
         await milestoneRepository.getMilestoneByID(event.milestoneId);
-    if (milestone != null)
+    if (milestone != null) {
       emit(MilestoneLoadedState(milestone));
-    else
+    } else {
       emit(MilestoneLoadingErrorState());
+    }
   }
 
   void getByAge(GetMilestonesWithDecisionsByAgeEvent event,
@@ -72,7 +72,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
     emit(LoadingMilestonesWithDecisionsByAgeState());
     List<MilestoneWithDecision> items = [];
     List<MilestoneItem>? milestones =
-        await milestoneRepository.getMilestonesByAge(event.child.date_of_birth);
+        await milestoneRepository.getMilestonesByAge(event.child.dateOfBirth);
 
     if (milestones != null) {
       for (var milestone in milestones) {
@@ -89,8 +89,9 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
       }
 
       emit(LoadedMilestonesWithDecisionsByAgeState(items));
-    } else
+    } else {
       emit(ErrorLoadingMilestonesWithDecisionsByAgeState());
+    }
   }
 
   void getByChild(GetMilestonesWithDecisionsByChildEvent event,
@@ -114,10 +115,11 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                     takenAt: DateTime.now())));
       }
 
-      int period = periodCalculator(event.child.date_of_birth);
+      int period = periodCalculator(event.child.dateOfBirth);
 
       emit(LoadedMilestonesWithDecisionsByChildState(items, period));
-    } else
+    } else {
       emit(ErrorLoadingMilestonesWithDecisionsByChildState());
+    }
   }
 }

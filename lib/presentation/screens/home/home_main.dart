@@ -38,14 +38,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    tabIconsList.forEach((TabIconData tab) {
+    for (var tab in tabIconsList) {
       tab.isSelected = false;
-    });
+    }
     tabIconsList[0].isSelected = true;
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = HomeTab();
+    tabBody = const HomeTab();
     super.initState();
   }
 
@@ -65,6 +65,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             TopBarView(),
             Expanded(child: tabBody),
             bottomBar(),
+            SizedBox(width: size.width * 0.12)
           ],
         ),
       ),
@@ -84,7 +85,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               return;
             }
             setState(() {
-              tabBody = HomeTab();
+              tabBody = const HomeTab();
             });
           });
         } else if (index == 1) {
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               return;
             }
             setState(() {
-              tabBody = NotificationTab();
+              tabBody = const NotificationTab();
             });
           });
         } else if (index == 2) {
@@ -102,7 +103,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               return;
             }
             setState(() {
-              tabBody = TipsTab();
+              tabBody = const TipsTab();
             });
           });
         } else if (index == 3) {
@@ -111,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               return;
             }
             setState(() {
-              tabBody = AppRateTab();
+              tabBody = const AppRateTab();
             });
           });
         }

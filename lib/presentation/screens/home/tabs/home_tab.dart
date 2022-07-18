@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
@@ -52,16 +54,33 @@ class _HomeTabState extends State<HomeTab> {
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
         builder: (context, state) {
+          CircleAvatar circleAvatar = CircleAvatar(
+            backgroundColor: Colors.white,
+            radius: size.width * 0.16,
+          );
           if (state is CurrentChildChangedState) {
             currentChild = state.new_current_child;
-            age =
-                DateTime.now().difference(currentChild!.date_of_birth).inDays ~/
-                    30;
+            age = DateTime.now().difference(currentChild!.dateOfBirth).inDays ~/
+                30;
+            try {
+              circleAvatar = CircleAvatar(
+                radius: size.width * 0.15,
+                backgroundImage:
+                    Image.file(File(currentChild!.imagePath)).image,
+              );
+            } catch (e) {}
           }
+          // try {
+          //   childImage = Image.asset(currentChild!.imagePath).image;
+          // } catch (e) {
+          //   try {
+          //     childImage = Image.file(File(currentChild!.imagePath)).image;
+          //   } catch (e) {}
+          // }
           return Column(
             children: [
               SizedBox(
-                height: size.height * 0.3,
+                height: size.height * 0.35,
                 child: Stack(
                   alignment: Alignment.topCenter,
                   children: <Widget>[
@@ -86,21 +105,10 @@ class _HomeTabState extends State<HomeTab> {
                                 backgroundColor: Colors.white,
                                 radius: size.width * 0.16,
                               ),
-                              currentChild != null
-                                  ? CircleAvatar(
-                                      radius: size.width * 0.15,
-                                      backgroundImage:
-                                          Image.asset(currentChild!.image_path)
-                                              .image
-                                      // child_pic).image,
-                                      )
-                                  : CircleAvatar(
-                                      backgroundColor: Colors.white,
-                                      radius: size.width * 0.16,
-                                    ),
+                              circleAvatar,
                             ],
                           ),
-                          SizedBox(height: size.height * 0.01),
+                          SizedBox(height: textScale * 7),
                           AppText(
                             text: currentChild != null
                                 ? currentChild!.name
@@ -109,12 +117,12 @@ class _HomeTabState extends State<HomeTab> {
                             fontSize: size.height * 0.03,
                             fontWeight: FontWeight.bold,
                           ),
-                          SizedBox(height: size.height * 0.01),
+                          SizedBox(height: textScale * 7),
                           AppText(
                             text: age.toString() +
                                 AppLocalizations.of(context)!.monthsOld,
                             color: Colors.white,
-                            fontSize: size.height * 0.015,
+                            fontSize: textScale * 15,
                           ),
                         ],
                       ),
@@ -188,7 +196,7 @@ class _HomeTabState extends State<HomeTab> {
                     if (currentChild != null) {
                       BlocProvider.of<DecisionBloc>(context).add(
                           GetDecisionsByAgeEvent(
-                              dateOfBirth: currentChild!.date_of_birth,
+                              dateOfBirth: currentChild!.dateOfBirth,
                               childId: currentChild!.id));
                     }
                     return const CircularProgressIndicator();

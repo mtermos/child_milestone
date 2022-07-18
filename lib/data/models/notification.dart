@@ -7,6 +7,7 @@ class NotificationModel {
   String body;
   DateTime issuedAt;
   bool opened;
+  bool uploaded;
   bool dismissed;
   String route;
   int period;
@@ -23,6 +24,7 @@ class NotificationModel {
     required this.period,
     required this.childId,
     this.milestoneId,
+    this.uploaded = false,
   });
 
   NotificationModel copyWith({
@@ -32,6 +34,7 @@ class NotificationModel {
     DateTime? issuedAt,
     bool? opened,
     bool? dismissed,
+    bool? uploaded,
     String? route,
     int? period,
     int? childId,
@@ -44,6 +47,7 @@ class NotificationModel {
       issuedAt: issuedAt ?? this.issuedAt,
       opened: opened ?? this.opened,
       dismissed: dismissed ?? this.dismissed,
+      uploaded: uploaded ?? this.uploaded,
       route: route ?? this.route,
       period: period ?? this.period,
       childId: childId ?? this.childId,
@@ -59,6 +63,7 @@ class NotificationModel {
       'issuedAt': issuedAt.millisecondsSinceEpoch,
       'opened': opened ? 1 : 0,
       'dismissed': dismissed ? 1 : 0,
+      'uploaded': uploaded ? 1 : 0,
       'route': route,
       'period': period,
       'childId': childId,
@@ -74,6 +79,7 @@ class NotificationModel {
       issuedAt: DateTime.fromMillisecondsSinceEpoch(map['issuedAt'] as int),
       opened: map['opened'] == 1,
       dismissed: map['dismissed'] == 1,
+      uploaded: map['uploaded'] == 1,
       route: map['route'] as String,
       period: map['period'] as int,
       childId: map['childId'] as int,
@@ -103,6 +109,7 @@ class NotificationModel {
         other.issuedAt == issuedAt &&
         other.opened == opened &&
         other.dismissed == dismissed &&
+        other.uploaded == uploaded &&
         other.route == route &&
         other.period == period &&
         other.childId == childId &&
@@ -117,6 +124,7 @@ class NotificationModel {
         issuedAt.hashCode ^
         opened.hashCode ^
         dismissed.hashCode ^
+        uploaded.hashCode ^
         route.hashCode ^
         period.hashCode ^
         childId.hashCode ^

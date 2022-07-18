@@ -1,6 +1,7 @@
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:intl/intl.dart';
 
 class TipItemWidget extends StatefulWidget {
@@ -18,6 +19,19 @@ class _TipItemWidgetState extends State<TipItemWidget> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
+    YoutubePlayerController? _controller;
+    if (widget.item.videoURL != null) {
+      print(YoutubePlayer.convertUrlToId(widget.item.videoURL!));
+      _controller = YoutubePlayerController(
+        initialVideoId:
+            YoutubePlayer.convertUrlToId(widget.item.videoURL!) ?? "",
+        flags: const YoutubePlayerFlags(
+          autoPlay: false,
+          mute: false,
+          showLiveFullscreenButton: false,
+        ),
+      );
+    }
 
     return Container(
       margin: EdgeInsets.symmetric(
@@ -40,11 +54,25 @@ class _TipItemWidgetState extends State<TipItemWidget> {
         vertical: textScale * 15,
         horizontal: textScale * 20,
       ),
-      child: AppText(
-        text: widget.item.body,
-        color: Colors.black,
-        fontSize: textScale * 16,
-      ),
+      child: widget.item.videoURL != null
+          ? YoutubePlayer(
+              key: ObjectKey(_controller!),
+              controller: _controller,
+              actionsPadding: const EdgeInsets.only(left: 16.0),
+              bottomActions: [
+                CurrentPosition(),
+                const SizedBox(width: 10.0),
+                ProgressBar(isExpanded: true),
+                const SizedBox(width: 10.0),
+                RemainingDuration(),
+                FullScreenButton(),
+              ],
+            )
+          : AppText(
+              text: widget.item.body,
+              color: Colors.black,
+              fontSize: textScale * 16,
+            ),
       // RichText(
       //   text: TextSpan(
       //     style: TextStyle(

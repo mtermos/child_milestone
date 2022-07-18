@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/data_providers/tips_items_list.dart';
@@ -13,7 +14,11 @@ import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -26,9 +31,11 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    resetData();
     super.initState();
 
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      resetData();
+    });
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
   }
@@ -45,6 +52,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void checkUserIsLogged() async {
+    // await resetData();
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(SharedPrefKeys.selectedChildId, 1);
     if ((prefs.getBool(SharedPrefKeys.isLogged) != null) &&
@@ -55,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  void resetData() {
+  resetData() {
     final dbProvider = DatabaseProvider.dbProvider;
     dbProvider.deleteDatabase();
     dbProvider.createDatabase();
@@ -68,26 +76,48 @@ class _SplashScreenState extends State<SplashScreen> {
     addTempNotifications();
   }
 
-  addTempChild() {
+  addTempChild() async {
+    final appDir = await getApplicationDocumentsDirectory();
+
+    String imagePath1 = "assets/images/children/child1.png";
+    String imagePath2 = "assets/images/children/child2.png";
+
+    String fileName = path.basename(imagePath1);
+    String imagePath = '${appDir.path}/$fileName';
+
+    ByteData byteData = await rootBundle.load(imagePath1);
+    File file = File(imagePath);
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
     ChildModel newChild = ChildModel(
         id: 1,
         name: "رامي",
-        date_of_birth: DateTime.now().subtract(const Duration(days: 30)),
-        image_path: "assets/images/children/child1.png",
+        dateOfBirth: DateTime.now().subtract(const Duration(days: 30)),
+        imagePath: imagePath,
         gender: "male",
-        pregnancy_duration: 10);
+        pregnancyDuration: 10);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
         context: context,
         child: newChild,
         addNotifications: false,
         whenDone: () {}));
+
+    fileName = path.basename(imagePath2);
+    imagePath = '${appDir.path}/$fileName';
+
+    byteData = await rootBundle.load(imagePath2);
+    file = File(imagePath);
+    await file.writeAsBytes(byteData.buffer
+        .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+
     ChildModel newChild2 = ChildModel(
         id: 2,
         name: "سارة",
-        date_of_birth: DateTime.now().subtract(const Duration(days: 70)),
-        image_path: "assets/images/children/child2.png",
+        dateOfBirth: DateTime.now().subtract(const Duration(days: 70)),
+        imagePath: imagePath,
         gender: "female",
-        pregnancy_duration: 10);
+        pregnancyDuration: 10);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
         context: context,
         child: newChild2,

@@ -42,6 +42,11 @@
     "selectChild": "select a child",
     "childSummary": "Child Summary",
     "logout": "Log out",
-    "newPeriodNotificationTitle": "Log out",
+    "newPeriodNotificationTitle": "New Stage",
+    "newPeriodNotificationBody1": "The child ",
+    "newPeriodNotificationBody2": " is now in a new stage, please enter the answers of this new stage",
+    "weeklyNotificationTitle": "Remainder, answer all the questions",
+    "weeklyNotificationBody1": "The milestone checklist of the child ",
+    "weeklyNotificationBody2": " is not completed, please answer the remaining questions",
     "selectLanguage": "Select Language"
 }

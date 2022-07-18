@@ -1,13 +1,9 @@
 import 'package:child_milestone/constants/strings.dart';
-import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
-import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:path/path.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final String imagePath = "assets/images/welcome_image.png";
@@ -34,37 +30,33 @@ class WelcomeScreen extends StatelessWidget {
             backgtound3,
             alignment: Alignment.bottomCenter,
           ),
-          Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                alignment: Alignment.topCenter,
-                image: AssetImage(imagePath),
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  const Spacer(),
-                  icon(size),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  welcomeTextWidget(context, textScale),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  sloganText(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  getButton(context),
-                  const SizedBox(
-                    height: 100,
-                  )
-                ],
-              ),
+          Image.asset(
+            imagePath,
+            alignment: Alignment.topCenter,
+            fit: BoxFit.fitWidth,
+          ),
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const Spacer(),
+                icon(size),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                welcomeTextWidget(context, textScale),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
+                sloganText(),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
+                getButton(context),
+                SizedBox(
+                  height: size.height * 0.07,
+                )
+              ],
             ),
           ),
         ],
@@ -116,12 +108,13 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   Widget getButton(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+      padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
       child: AppButton(
         label: AppLocalizations.of(context)!.getStarted,
         fontWeight: FontWeight.w600,
-        padding: const EdgeInsets.symmetric(vertical: 25),
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
         onPressed: () {
           onGetStartedClicked(context);
         },

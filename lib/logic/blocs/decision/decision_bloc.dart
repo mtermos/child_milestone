@@ -133,7 +133,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   Future stopWeeklyNotifications(int childId) async {
     ChildModel? child = await childRepository.getChildByID(childId);
     if (child != null) {
-      int period = periodCalculator(child.date_of_birth);
+      int period = periodCalculator(child.dateOfBirth);
       List<NotificationModel> notifications = await notificationRepository
           .getNotificationsByChildIdAndPeriod(childId, period);
       NotificationService _notificationService = NotificationService();

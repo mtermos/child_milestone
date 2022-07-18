@@ -89,13 +89,13 @@ class _LoginScreenState extends State<LoginScreen> {
           children: <Widget>[
             SizedBox(height: size.height * 0.3),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
               child: loginTextWidget(),
             ),
             SizedBox(height: size.height * 0.03),
             Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.symmetric(horizontal: 40),
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
               child: TextField(
                 controller: usernameController,
                 decoration: InputDecoration(
@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
             SizedBox(height: size.height * 0.03),
             Container(
               alignment: Alignment.center,
-              margin: const EdgeInsets.symmetric(horizontal: 40),
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
               child: TextField(
                 controller: passController,
                 decoration: InputDecoration(
@@ -113,37 +113,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: true,
               ),
             ),
-            Container(
-              alignment: Alignment.centerRight,
-              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: Text(
-                AppLocalizations.of(context)!.forgotPassword,
-                style: TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.centerRight,
+            //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            //   child: Text(
+            //     AppLocalizations.of(context)!.forgotPassword,
+            //     style: const TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
+            //   ),
+            // ),
             SizedBox(height: size.height * 0.05),
             Container(
               alignment: Alignment.centerRight,
-              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              margin: EdgeInsets.symmetric(
+                  horizontal: size.width * 0.15, vertical: size.height * 0.02),
               child: loginButton(context),
             ),
-            Container(
-              alignment: Alignment.center,
-              margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              child: GestureDetector(
-                onTap: () => {
-                  // print("register")
-                  // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
-                },
-                child: Text(
-                  AppLocalizations.of(context)!.noAccount,
-                  style: TextStyle(
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF2661FA)),
-                ),
-              ),
-            )
+            // Container(
+            //   alignment: Alignment.center,
+            //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+            //   child: GestureDetector(
+            //     onTap: () => {
+            //       // print("register")
+            //       // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
+            //     },
+            //     child: Text(
+            //       AppLocalizations.of(context)!.noAccount,
+            //       style: const TextStyle(
+            //           fontSize: 12,
+            //           fontWeight: FontWeight.bold,
+            //           color: Color(0xFF2661FA)),
+            //     ),
+            //   ),
+            // )
           ],
         ),
       ),
@@ -151,22 +152,20 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Widget loginButton(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
-      child: AppButton(
-        label: AppLocalizations.of(context)!.loginLabel,
-        fontWeight: FontWeight.w600,
-        padding: const EdgeInsets.symmetric(vertical: 25),
-        onPressed: () {
-          BlocProvider.of<AuthBloc>(context).add(LoginEvent(
-            usernameController.text,
-            passController.text,
-            () {
-              Navigator.popAndPushNamed(context, Routes.home);
-            },
-          ));
-        },
-      ),
+    Size size = MediaQuery.of(context).size;
+    return AppButton(
+      label: AppLocalizations.of(context)!.loginLabel,
+      fontWeight: FontWeight.w600,
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+      onPressed: () {
+        BlocProvider.of<AuthBloc>(context).add(LoginEvent(
+          usernameController.text,
+          passController.text,
+          () {
+            Navigator.popAndPushNamed(context, Routes.home);
+          },
+        ));
+      },
     );
   }
 
@@ -176,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
       fontSize: 36,
       fontWeight: FontWeight.w600,
       // color: Colors.white,
-      color: Color.fromRGBO(78, 76, 76, 1),
+      color: const Color.fromRGBO(78, 76, 76, 1),
     );
   }
 

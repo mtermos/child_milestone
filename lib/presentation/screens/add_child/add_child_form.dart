@@ -217,11 +217,11 @@ class _AddChildFormState extends State<AddChildForm> {
                 await chosen_image!.saveTo(imagePath);
                 ChildModel newChild = ChildModel(
                   name: nameController.text,
-                  date_of_birth: _selected_date,
-                  image_path: imagePath,
+                  dateOfBirth: _selected_date,
+                  imagePath: imagePath,
                   id: int.parse(idController.text),
                   gender: selected_gender,
-                  pregnancy_duration: double.parse(durationController.text),
+                  pregnancyDuration: double.parse(durationController.text),
                 );
                 BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
                     context: context,
@@ -232,7 +232,7 @@ class _AddChildFormState extends State<AddChildForm> {
                           .changeCurrentChild(newChild, () {
                         BlocProvider.of<DecisionBloc>(context).add(
                             GetDecisionsByAgeEvent(
-                                dateOfBirth: newChild.date_of_birth,
+                                dateOfBirth: newChild.dateOfBirth,
                                 childId: newChild.id));
                       });
                       Navigator.popAndPushNamed(context, Routes.home);

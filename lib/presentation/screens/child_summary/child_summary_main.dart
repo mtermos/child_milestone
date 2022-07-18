@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
@@ -84,8 +86,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                       currentChild != null
                                           ? CircleAvatar(
                                               radius: size.width * 0.15,
-                                              backgroundImage: Image.asset(
-                                                      currentChild!.image_path)
+                                              backgroundImage: Image.file(File(
+                                                      currentChild!.imagePath))
                                                   .image)
                                           : CircleAvatar(
                                               backgroundColor: Colors.white,
@@ -272,7 +274,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                           label: AppLocalizations.of(context)!.goBack,
                           color: AppColors.primaryColorDarker,
                           fontWeight: FontWeight.w600,
-                          padding: const EdgeInsets.symmetric(vertical: 25),
+                          padding: EdgeInsets.symmetric(
+                              vertical: size.height * 0.02),
                           onPressed: () {
                             Navigator.pop(context);
                           },

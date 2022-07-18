@@ -36,18 +36,18 @@ class ChildRepository {
       ChildModel(
         id: 1,
         name: "Ahmad",
-        date_of_birth: DateTime(2022, 1, 1),
-        image_path: "assets/images/children/child1",
+        dateOfBirth: DateTime(2022, 1, 1),
+        imagePath: "assets/images/children/child1",
         gender: 'Male',
-        pregnancy_duration: 36,
+        pregnancyDuration: 36,
       ),
       ChildModel(
         id: 2,
         name: "Sara",
-        date_of_birth: DateTime(2022, 2, 2),
-        image_path: "assets/images/children/child2",
+        dateOfBirth: DateTime(2022, 2, 2),
+        imagePath: "assets/images/children/child2",
         gender: 'Female',
-        pregnancy_duration: 36,
+        pregnancyDuration: 36,
       ),
     ];
     return children;

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
@@ -38,7 +40,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                 CircleAvatar(
                   radius: size.width * 0.05,
                   backgroundImage:
-                      Image.asset(widget.item.child.image_path).image,
+                      Image.file(File(widget.item.child.imagePath)).image,
                 ),
                 SizedBox(width: size.width * 0.03),
                 Column(

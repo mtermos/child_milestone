@@ -160,7 +160,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                         BlocProvider.of<DecisionBloc>(context)
                                             .add(GetDecisionsByAgeEvent(
                                                 dateOfBirth:
-                                                    newValue.date_of_birth,
+                                                    newValue.dateOfBirth,
                                                 childId: newValue.id));
                                       });
                                     }

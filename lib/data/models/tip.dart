@@ -5,11 +5,15 @@ class TipModel {
   int id;
   String title;
   String body;
+  String? videoURL;
+  String? documentURL;
   int period;
   TipModel({
     required this.id,
     required this.title,
     required this.body,
+    this.videoURL,
+    this.documentURL,
     required this.period,
   });
 
@@ -17,12 +21,16 @@ class TipModel {
     int? id,
     String? title,
     String? body,
+    String? videoURL,
+    String? documentURL,
     int? period,
   }) {
     return TipModel(
       id: id ?? this.id,
       title: title ?? this.title,
       body: body ?? this.body,
+      videoURL: videoURL ?? this.videoURL,
+      documentURL: documentURL ?? this.documentURL,
       period: period ?? this.period,
     );
   }
@@ -32,6 +40,8 @@ class TipModel {
       'id': id,
       'title': title,
       'body': body,
+      'videoURL': videoURL,
+      'documentURL': documentURL,
       'period': period,
     };
   }
@@ -41,33 +51,41 @@ class TipModel {
       id: map['id'] as int,
       title: map['title'] as String,
       body: map['body'] as String,
+      videoURL: map['videoURL'] != null ? map['videoURL'] as String : null,
+      documentURL: map['documentURL'] != null ? map['documentURL'] as String : null,
       period: map['period'] as int,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory TipModel.fromJson(String source) =>
-      TipModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory TipModel.fromJson(String source) => TipModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'TipModel(id: $id, title: $title, body: $body, period: $period)';
+    return 'TipModel(id: $id, title: $title, body: $body, videoURL: $videoURL, documentURL: $documentURL, period: $period)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant TipModel other) {
     if (identical(this, other)) return true;
-
-    return other is TipModel &&
-        other.id == id &&
-        other.title == title &&
-        other.body == body &&
-        other.period == period;
+  
+    return 
+      other.id == id &&
+      other.title == title &&
+      other.body == body &&
+      other.videoURL == videoURL &&
+      other.documentURL == documentURL &&
+      other.period == period;
   }
 
   @override
   int get hashCode {
-    return id.hashCode ^ title.hashCode ^ body.hashCode ^ period.hashCode;
+    return id.hashCode ^
+      title.hashCode ^
+      body.hashCode ^
+      videoURL.hashCode ^
+      documentURL.hashCode ^
+      period.hashCode;
   }
 }

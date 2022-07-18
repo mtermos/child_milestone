@@ -14,7 +14,7 @@ class AppButton extends StatelessWidget {
     required this.label,
     this.roundness = 18,
     this.fontWeight = FontWeight.bold,
-    this.padding = const EdgeInsets.symmetric(vertical: 24),
+    this.padding = const EdgeInsets.symmetric(vertical: 18),
     this.trailingWidget,
     this.color = AppColors.primaryColor,
     this.onPressed,
@@ -22,17 +22,20 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.maxFinite,
-      child: RaisedButton(
-        visualDensity: VisualDensity.compact,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(roundness),
+      child: ElevatedButton(
+        style: ButtonStyle(
+          elevation: MaterialStateProperty.all(0.0),
+          foregroundColor: MaterialStateProperty.all(color),
+          backgroundColor: MaterialStateProperty.all(color),
+          padding: MaterialStateProperty.all(padding),
+          shape: MaterialStateProperty.all(
+            RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(roundness),
+            ),
+          ),
         ),
-        color: color,
-        textColor: Colors.white,
-        elevation: 0.0,
-        padding: padding,
         child: Stack(
           fit: StackFit.passthrough,
           children: <Widget>[
@@ -41,6 +44,7 @@ class AppButton extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
+                  color: Colors.white,
                   fontSize: 18,
                   fontWeight: fontWeight,
                 ),

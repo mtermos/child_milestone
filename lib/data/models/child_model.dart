@@ -9,35 +9,38 @@ String childModelToJson(ChildModel data) => json.encode(data.toJson());
 class ChildModel {
   int id;
   String name;
-  DateTime date_of_birth;
-  String image_path;
+  DateTime dateOfBirth;
+  String imagePath;
   String gender;
-  double pregnancy_duration;
-
+  double pregnancyDuration;
+  bool uploaded;
   ChildModel({
     required this.id,
     required this.name,
-    required this.date_of_birth,
-    required this.image_path,
+    required this.dateOfBirth,
+    required this.imagePath,
     required this.gender,
-    required this.pregnancy_duration,
+    required this.pregnancyDuration,
+    this.uploaded = false,
   });
 
   ChildModel copyWith({
     int? id,
     String? name,
-    DateTime? date_of_birth,
-    String? image_path,
+    DateTime? dateOfBirth,
+    String? imagePath,
     String? gender,
-    double? pregnancy_duration,
+    double? pregnancyDuration,
+    bool? uploaded,
   }) {
     return ChildModel(
       id: id ?? this.id,
       name: name ?? this.name,
-      date_of_birth: date_of_birth ?? this.date_of_birth,
-      image_path: image_path ?? this.image_path,
+      dateOfBirth: dateOfBirth ?? this.dateOfBirth,
+      imagePath: imagePath ?? this.imagePath,
       gender: gender ?? this.gender,
-      pregnancy_duration: pregnancy_duration ?? this.pregnancy_duration,
+      pregnancyDuration: pregnancyDuration ?? this.pregnancyDuration,
+      uploaded: uploaded ?? this.uploaded,
     );
   }
 
@@ -45,10 +48,11 @@ class ChildModel {
     return <String, dynamic>{
       'id': id,
       'name': name,
-      'date_of_birth': date_of_birth.millisecondsSinceEpoch,
-      'image_path': image_path,
+      'dateOfBirth': dateOfBirth.millisecondsSinceEpoch,
+      'imagePath': imagePath,
       'gender': gender,
-      'pregnancy_duration': pregnancy_duration,
+      'pregnancyDuration': pregnancyDuration,
+      'uploaded': uploaded ? 1 : 0,
     };
   }
 
@@ -56,11 +60,12 @@ class ChildModel {
     return ChildModel(
       id: map['id'] as int,
       name: map['name'] as String,
-      date_of_birth:
-          DateTime.fromMillisecondsSinceEpoch(map['date_of_birth'] as int),
-      image_path: map['image_path'] as String,
+      dateOfBirth:
+          DateTime.fromMillisecondsSinceEpoch(map['dateOfBirth'] as int),
+      imagePath: map['imagePath'] as String,
       gender: map['gender'] as String,
-      pregnancy_duration: map['pregnancy_duration'] as double,
+      pregnancyDuration: map['pregnancyDuration'] as double,
+      uploaded: map['uploaded'] == 1,
     );
   }
 
@@ -71,29 +76,30 @@ class ChildModel {
 
   @override
   String toString() {
-    return 'ChildModel(id: $id, name: $name, date_of_birth: $date_of_birth, image_path: $image_path, gender: $gender, pregnancy_duration: $pregnancy_duration)';
+    return 'ChildModel(id: $id, name: $name, dateOfBirth: $dateOfBirth, imagePath: $imagePath, gender: $gender, pregnancyDuration: $pregnancyDuration, uploaded: $uploaded)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant ChildModel other) {
     if (identical(this, other)) return true;
 
-    return other is ChildModel &&
-        other.id == id &&
+    return other.id == id &&
         other.name == name &&
-        other.date_of_birth == date_of_birth &&
-        other.image_path == image_path &&
+        other.dateOfBirth == dateOfBirth &&
+        other.imagePath == imagePath &&
         other.gender == gender &&
-        other.pregnancy_duration == pregnancy_duration;
+        other.pregnancyDuration == pregnancyDuration &&
+        other.uploaded == uploaded;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
         name.hashCode ^
-        date_of_birth.hashCode ^
-        image_path.hashCode ^
+        dateOfBirth.hashCode ^
+        imagePath.hashCode ^
         gender.hashCode ^
-        pregnancy_duration.hashCode;
+        pregnancyDuration.hashCode ^
+        uploaded.hashCode;
   }
 }

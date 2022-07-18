@@ -5,6 +5,8 @@ List<TipModel> tipsItems = [
     id: 1,
     title: "Temp Temp 1",
     body: "احمل لعبة فوق رأس طفلك وشجعه على الوصول إليها.",
+    videoURL:
+        "https://www.youtube.com/watch?v=BF6wh8Kz-RU&list=PLyPj1_Wge_0Tux6IfrqG2JBQQx9fZFPma&index=2&ab_channel=Pathways",
     // body: "Hold a toy above your baby’s head and encourge him to reach fot it.",
     period: 1,
   ),

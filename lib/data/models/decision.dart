@@ -6,6 +6,7 @@ class DecisionModel {
   int childId;
   int milestoneId;
   int decision;
+  bool uploaded;
   DateTime takenAt;
   DecisionModel({
     this.id,
@@ -13,6 +14,7 @@ class DecisionModel {
     required this.milestoneId,
     required this.decision,
     required this.takenAt,
+    this.uploaded = false,
   });
 
   DecisionModel copyWith({
@@ -20,6 +22,7 @@ class DecisionModel {
     int? childId,
     int? milestoneId,
     int? decision,
+    bool? uploaded,
     DateTime? takenAt,
   }) {
     return DecisionModel(
@@ -27,6 +30,7 @@ class DecisionModel {
       childId: childId ?? this.childId,
       milestoneId: milestoneId ?? this.milestoneId,
       decision: decision ?? this.decision,
+      uploaded: uploaded ?? this.uploaded,
       takenAt: takenAt ?? this.takenAt,
     );
   }
@@ -37,6 +41,7 @@ class DecisionModel {
       'childId': childId,
       'milestoneId': milestoneId,
       'decision': decision,
+      'uploaded': uploaded ? 1 : 0,
       'takenAt': takenAt.millisecondsSinceEpoch,
     };
   }
@@ -47,37 +52,40 @@ class DecisionModel {
       childId: map['childId'] as int,
       milestoneId: map['milestoneId'] as int,
       decision: map['decision'] as int,
+      uploaded: map['uploaded'] == 1,
       takenAt: DateTime.fromMillisecondsSinceEpoch(map['takenAt'] as int),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory DecisionModel.fromJson(String source) => DecisionModel.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory DecisionModel.fromJson(String source) =>
+      DecisionModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'DecisionModel(id: $id, childId: $childId, milestoneId: $milestoneId, decision: $decision, takenAt: $takenAt)';
+    return 'DecisionModel(id: $id, childId: $childId, milestoneId: $milestoneId, decision: $decision, uploaded: $uploaded, takenAt: $takenAt)';
   }
 
   @override
-  bool operator ==(Object other) {
+  bool operator ==(covariant DecisionModel other) {
     if (identical(this, other)) return true;
-  
-    return other is DecisionModel &&
-      other.id == id &&
-      other.childId == childId &&
-      other.milestoneId == milestoneId &&
-      other.decision == decision &&
-      other.takenAt == takenAt;
+
+    return other.id == id &&
+        other.childId == childId &&
+        other.milestoneId == milestoneId &&
+        other.decision == decision &&
+        other.uploaded == uploaded &&
+        other.takenAt == takenAt;
   }
 
   @override
   int get hashCode {
     return id.hashCode ^
-      childId.hashCode ^
-      milestoneId.hashCode ^
-      decision.hashCode ^
-      takenAt.hashCode;
+        childId.hashCode ^
+        milestoneId.hashCode ^
+        decision.hashCode ^
+        uploaded.hashCode ^
+        takenAt.hashCode;
   }
 }

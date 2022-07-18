@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path/path.dart';
@@ -46,9 +45,10 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY NOT NULL, "
         "name TEXT NOT NULL, "
         "gender TEXT NOT NULL, "
-        "image_path TEXT NOT NULL, "
-        "date_of_birth INTEGER NOT NULL, "
-        "pregnancy_duration REAL NOT NULL "
+        "imagePath TEXT NOT NULL, "
+        "dateOfBirth INTEGER NOT NULL, "
+        "uploaded INTEGER, "
+        "pregnancyDuration REAL NOT NULL "
         ")");
 
     await database.execute("CREATE TABLE $milestonesTABLE ("
@@ -57,6 +57,8 @@ class DatabaseProvider {
         "imagePath TEXT, "
         "videoPath TEXT, "
         "period INTEGER, "
+        "startingAge INTEGER, "
+        "endingAge INTEGER, "
         "category INTEGER "
         ")");
 
@@ -69,6 +71,7 @@ class DatabaseProvider {
         "milestoneId INTEGER, "
         "opened INTEGER, "
         "dismissed INTEGER, "
+        "uploaded INTEGER, "
         "issuedAt INTEGER, "
         "period INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
@@ -79,6 +82,8 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "title TEXT, "
         "body TEXT, "
+        "videoURL TEXT, "
+        "documentURL TEXT, "
         "period INTEGER "
         ")");
 
@@ -88,6 +93,7 @@ class DatabaseProvider {
         "milestoneId INTEGER, "
         "decision INTEGER, "
         "takenAt INTEGER, "
+        "uploaded INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
         "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
         ")");

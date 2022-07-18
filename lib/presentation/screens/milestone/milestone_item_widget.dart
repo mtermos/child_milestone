@@ -156,7 +156,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     ));
                     // BlocProvider.of<DecisionBloc>(context).add(
                     //     GetDecisionsByAgeEvent(
-                    //         dateOfBirth: selected_child!.date_of_birth));
+                    //         dateOfBirth: selected_child!.dateOfBirth));
                   }
                 },
                 child: Container(

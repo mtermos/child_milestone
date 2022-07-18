@@ -77,13 +77,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: AppButton(
                 label: AppLocalizations.of(context)!.logout,
                 fontWeight: FontWeight.w600,
-                padding: const EdgeInsets.symmetric(vertical: 25),
+                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                 onPressed: () {
                   _logout();
                 },
               ),
             ),
-            Spacer(),
+            const Spacer(),
             Container(
               alignment: Alignment.center,
               width: size.width * 0.8,
@@ -91,7 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: AppButton(
                 label: AppLocalizations.of(context)!.goBack,
                 fontWeight: FontWeight.w600,
-                padding: const EdgeInsets.symmetric(vertical: 25),
+                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                 onPressed: () {
                   Navigator.popAndPushNamed(context, Routes.home);
                 },

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
@@ -45,7 +47,7 @@ class _TipsState extends State<TipsTab> {
           if (state is CurrentChildChangedState) {
             current_child = state.new_current_child;
             BlocProvider.of<TipBloc>(context).add(
-                GetTipsByAgeEvent(dateOfBirth: current_child!.date_of_birth));
+                GetTipsByAgeEvent(dateOfBirth: current_child!.dateOfBirth));
           }
           return SingleChildScrollView(
             child: Column(
@@ -75,8 +77,8 @@ class _TipsState extends State<TipsTab> {
                                 current_child != null
                                     ? CircleAvatar(
                                         radius: size.width * 0.15,
-                                        backgroundImage: Image.asset(
-                                                current_child!.image_path)
+                                        backgroundImage: Image.file(
+                                                File(current_child!.imagePath))
                                             .image)
                                     : CircleAvatar(
                                         backgroundColor: Colors.white,

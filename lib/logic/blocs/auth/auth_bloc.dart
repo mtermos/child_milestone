@@ -20,21 +20,24 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _login(LoginEvent event, Emitter<AuthState> emit) async {
     emit(LoadingLoginState());
 
-    final response = await http.post(Uri.parse(Urls.backendUrl + Urls.loginUrl),
-        body: {"email": event.username, "password": event.password});
-    var responseBody = json.decode(response.body);
-    if (response.statusCode == 200) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setBool(SharedPrefKeys.isLogged, true);
-      await prefs.setString(SharedPrefKeys.accessToken, responseBody["token"]);
-      await storage.write(key: StorageKeys.username, value: event.username);
-      await storage.write(key: StorageKeys.password, value: event.password);
-      event.onSuccess();
+    event.onSuccess();
 
-      emit(LogedState());
-    } else {
-      emit(LoginErrorState(error: jsonDecode(response.body)["message"]));
-    }
+    emit(LogedState());
+    // final response = await http.post(Uri.parse(Urls.backendUrl + Urls.loginUrl),
+    //     body: {"email": event.username, "password": event.password});
+    // var responseBody = json.decode(response.body);
+    // if (response.statusCode == 200) {
+    //   SharedPreferences prefs = await SharedPreferences.getInstance();
+    //   await prefs.setBool(SharedPrefKeys.isLogged, true);
+    //   await prefs.setString(SharedPrefKeys.accessToken, responseBody["token"]);
+    //   await storage.write(key: StorageKeys.username, value: event.username);
+    //   await storage.write(key: StorageKeys.password, value: event.password);
+    //   event.onSuccess();
+
+    //   emit(LogedState());
+    // } else {
+    //   emit(LoginErrorState(error: jsonDecode(response.body)["message"]));
+    // }
   }
 
   void _logout(LogoutEvent event, Emitter<AuthState> emit) async {

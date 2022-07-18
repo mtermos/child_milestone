@@ -5,6 +5,8 @@ class MilestoneItem {
   int id;
   String description;
   int period;
+  int startingAge;
+  int endingAge;
   int category;
   String? imagePath;
   String? videoPath;
@@ -13,6 +15,8 @@ class MilestoneItem {
     required this.id,
     required this.description,
     required this.period,
+    required this.startingAge,
+    required this.endingAge,
     required this.category,
     this.imagePath,
     this.videoPath,
@@ -22,6 +26,8 @@ class MilestoneItem {
     int? id,
     String? description,
     int? period,
+    int? startingAge,
+    int? endingAge,
     int? category,
     String? imagePath,
     String? videoPath,
@@ -30,6 +36,8 @@ class MilestoneItem {
       id: id ?? this.id,
       description: description ?? this.description,
       period: period ?? this.period,
+      startingAge: startingAge ?? this.startingAge,
+      endingAge: endingAge ?? this.endingAge,
       category: category ?? this.category,
       imagePath: imagePath ?? this.imagePath,
       videoPath: videoPath ?? this.videoPath,
@@ -41,6 +49,8 @@ class MilestoneItem {
       'id': id,
       'description': description,
       'period': period,
+      'startingAge': startingAge,
+      'endingAge': endingAge,
       'category': category,
       'imagePath': imagePath,
       'videoPath': videoPath,
@@ -52,6 +62,8 @@ class MilestoneItem {
       id: map['id'] as int,
       description: map['description'] as String,
       period: map['period'] as int,
+      startingAge: map['startingAge'] as int,
+      endingAge: map['endingAge'] as int,
       category: map['category'] as int,
       imagePath: map['imagePath'] != null ? map['imagePath'] as String : null,
       videoPath: map['videoPath'] != null ? map['videoPath'] as String : null,
@@ -65,7 +77,7 @@ class MilestoneItem {
 
   @override
   String toString() {
-    return 'MilestoneItem(id: $id, description: $description, period: $period, category: $category, imagePath: $imagePath, videoPath: $videoPath)';
+    return 'MilestoneItem(id: $id, description: $description, period: $period, startingAge: $startingAge, endingAge: $endingAge, category: $category, imagePath: $imagePath, videoPath: $videoPath)';
   }
 
   @override
@@ -76,6 +88,8 @@ class MilestoneItem {
         other.id == id &&
         other.description == description &&
         other.period == period &&
+        other.startingAge == startingAge &&
+        other.endingAge == endingAge &&
         other.category == category &&
         other.imagePath == imagePath &&
         other.videoPath == videoPath;
@@ -86,6 +100,8 @@ class MilestoneItem {
     return id.hashCode ^
         description.hashCode ^
         period.hashCode ^
+        startingAge.hashCode ^
+        endingAge.hashCode ^
         category.hashCode ^
         imagePath.hashCode ^
         videoPath.hashCode;

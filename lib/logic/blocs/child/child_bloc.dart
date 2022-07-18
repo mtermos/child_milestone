@@ -83,7 +83,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
     // adding the monthly periods (10 periods)
     for (var period in monthlyPeriods) {
-      temp = child.date_of_birth.toLocal();
+      temp = child.dateOfBirth.toLocal();
 
       if (temp.hour >= 10) {
         temp = DateTime(
@@ -93,31 +93,32 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
             temp.year, temp.month + period.startingMonth, temp.day, 10);
       }
 
-      String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
-      String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
-          child.name +
-          AppLocalizations.of(context)!.newPeriodNotificationBody2;
+      if (temp.isAfter(DateTime.now())) {
+        String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+        String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
+            child.name +
+            AppLocalizations.of(context)!.newPeriodNotificationBody2;
 
-      NotificationModel notification = NotificationModel(
-        title: title,
-        body: body,
-        issuedAt: temp,
-        opened: false,
-        dismissed: false,
-        route: Routes.milestone,
-        period: period.id,
-        childId: child.id,
-      );
-      DaoResponse<bool, int> response =
-          await notificationRepository.insertNotification(notification);
-      notification.id = response.item2;
-      await _notificationService.scheduleNotifications(
-        id: response.item2,
-        title: title,
-        body: body,
-        scheduledDate: tz.TZDateTime.from(temp, tz.local),
-      );
-
+        NotificationModel notification = NotificationModel(
+          title: title,
+          body: body,
+          issuedAt: temp,
+          opened: false,
+          dismissed: false,
+          route: Routes.milestone,
+          period: period.id,
+          childId: child.id,
+        );
+        DaoResponse<bool, int> response =
+            await notificationRepository.insertNotification(notification);
+        notification.id = response.item2;
+        await _notificationService.scheduleNotifications(
+          id: response.item2,
+          title: title,
+          body: body,
+          scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        );
+      }
       for (var i = 1; i <= period.numWeeks; i++) {
         _addWeeklyNotifications(
             temp.add(Duration(days: 7 * i)), period.id, context, child);
@@ -126,7 +127,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
     // adding the yearly periods (2 periods)
     for (var period in yearlyPeriods) {
-      temp = child.date_of_birth.toLocal();
+      temp = child.dateOfBirth.toLocal();
 
       if (temp.hour >= 10) {
         temp = DateTime(
@@ -135,32 +136,32 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         temp =
             DateTime(temp.year + period.startingYear, temp.month, temp.day, 10);
       }
+      if (temp.isAfter(DateTime.now())) {
+        String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+        String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
+            child.name +
+            AppLocalizations.of(context)!.newPeriodNotificationBody2;
 
-      String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
-      String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
-          child.name +
-          AppLocalizations.of(context)!.newPeriodNotificationBody2;
-
-      NotificationModel notification = NotificationModel(
-        title: title,
-        body: body,
-        issuedAt: temp,
-        opened: false,
-        dismissed: false,
-        route: Routes.milestone,
-        period: period.id,
-        childId: child.id,
-      );
-      DaoResponse<bool, int> response =
-          await notificationRepository.insertNotification(notification);
-      notification.id = response.item2;
-      await _notificationService.scheduleNotifications(
-        id: response.item2,
-        title: title,
-        body: body,
-        scheduledDate: tz.TZDateTime.from(temp, tz.local),
-      );
-
+        NotificationModel notification = NotificationModel(
+          title: title,
+          body: body,
+          issuedAt: temp,
+          opened: false,
+          dismissed: false,
+          route: Routes.milestone,
+          period: period.id,
+          childId: child.id,
+        );
+        DaoResponse<bool, int> response =
+            await notificationRepository.insertNotification(notification);
+        notification.id = response.item2;
+        await _notificationService.scheduleNotifications(
+          id: response.item2,
+          title: title,
+          body: body,
+          scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        );
+      }
       for (var i = 1; i <= period.numWeeks; i++) {
         _addWeeklyNotifications(
             temp.add(Duration(days: 7 * i)), period.id, context, child);
@@ -170,6 +171,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   Future _addWeeklyNotifications(DateTime dateTime, int period,
       BuildContext context, ChildModel child) async {
+    if (dateTime.isAfter(DateTime.now())) return;
     // const AndroidNotificationDetails androidPlatformChannelSpecifics =
     //     AndroidNotificationDetails(
     //         'repeating channel id', 'repeating channel name',
