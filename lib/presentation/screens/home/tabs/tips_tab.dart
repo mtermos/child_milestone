@@ -112,7 +112,7 @@ class _TipsState extends State<TipsTab> {
                         padding: EdgeInsets.symmetric(
                           horizontal: size.width * 0.05,
                         ),
-                        width: double.maxFinite,
+                        width: size.width,
                         child: TipItemWidget(
                           item: e,
                         ),

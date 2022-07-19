@@ -42,6 +42,7 @@ dependencies:
   flutter_screenutil: ^5.5.3+2
   flutter_secure_storage: ^5.0.2
   flutter_svg: ^1.0.3
+  flutter_youtube_view: ^2.0.4
   get_it: ^7.2.0
   http: ^0.13.4
   image_picker: ^0.8.5+3
@@ -52,6 +53,7 @@ dependencies:
   shared_preferences: ^2.0.15
   sqflite: ^2.0.2+1
   test: null
+  url_launcher: ^6.1.5
   youtube_player_flutter: ^8.1.0
 
 dev_dependencies:

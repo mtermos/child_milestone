@@ -5,6 +5,7 @@ class AppText extends StatelessWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final Color color;
+  final bool? link;
   final TextAlign? textAlign;
 
   const AppText({
@@ -12,6 +13,7 @@ class AppText extends StatelessWidget {
     this.fontSize = 18,
     this.fontWeight = FontWeight.normal,
     this.color = Colors.black,
+    this.link = false,
     this.textAlign,
   }) : super();
 
@@ -23,7 +25,7 @@ class AppText extends StatelessWidget {
       style: TextStyle(
         fontSize: fontSize,
         fontWeight: fontWeight,
-        color: color,
+        color: link! ? Colors.blue : color,
       ),
     );
   }
