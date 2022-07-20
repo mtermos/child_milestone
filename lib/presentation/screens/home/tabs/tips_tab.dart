@@ -35,7 +35,7 @@ class _TipsState extends State<TipsTab> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
-    Image tips_bg = Image.asset(
+    Image tipsBg = Image.asset(
       "assets/images/tips_bg.png",
       alignment: Alignment.topCenter,
       width: size.width,
@@ -61,7 +61,7 @@ class _TipsState extends State<TipsTab> {
                       Positioned(
                         top: 0,
                         right: 0,
-                        child: tips_bg,
+                        child: tipsBg,
                       ),
                       Positioned(
                         top: size.height * 0.045,

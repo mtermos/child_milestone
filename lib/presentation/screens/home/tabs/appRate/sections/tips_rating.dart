@@ -12,8 +12,8 @@ class TipsRating extends StatefulWidget {
 class _TipsRatingState extends State<TipsRating> {
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    // Size size = MediaQuery.of(context).size;
+    // final textScale = MediaQuery.of(context).size.height * 0.001;
     return Container(
       child: AppText(text: AppLocalizations.of(context)!.tipsRate),
     );

@@ -3,7 +3,6 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter_youtube_view/flutter_youtube_view.dart';
-import 'package:intl/intl.dart';
 
 class TipItemWidget extends StatefulWidget {
   TipItemWidget({Key? key, required this.item}) : super(key: key);
@@ -14,7 +13,7 @@ class TipItemWidget extends StatefulWidget {
 }
 
 class _TipItemWidgetState extends State<TipItemWidget> {
-  final Color borderColor = Color(0xffE2E2E2);
+  final Color borderColor = const Color(0xffE2E2E2);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +42,7 @@ class _TipItemWidgetState extends State<TipItemWidget> {
       ),
       decoration: BoxDecoration(
         border: Border.all(),
-        borderRadius: BorderRadius.all(Radius.circular(6)),
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
         color: Colors.white,
         boxShadow: [
           BoxShadow(
@@ -66,7 +65,7 @@ class _TipItemWidgetState extends State<TipItemWidget> {
                   listener: _myYoutubePlayerState,
                   scaleMode:
                       YoutubeScaleMode.none, // <option> fitWidth, fitHeight
-                  params: YoutubeParam(
+                  params: const YoutubeParam(
                       videoId: 'gcj2RUWQZ60',
                       showUI: false,
                       startSeconds: 0.0, // <option>
@@ -122,23 +121,19 @@ class _MyYoutubePlayerState extends State<MyYoutubePlayer>
 
   @override
   void onCurrentSecond(double second) {
-    print("onCurrentSecond second = $second");
     _currentVideoSecond = second;
   }
 
   @override
   void onError(String error) {
-    print("onError error = $error");
   }
 
   @override
   void onReady() {
-    print("onReady");
   }
 
   @override
   void onStateChange(String state) {
-    print("onStateChange state = $state");
     setState(() {
       _playerState = state;
     });
@@ -146,7 +141,6 @@ class _MyYoutubePlayerState extends State<MyYoutubePlayer>
 
   @override
   void onVideoDuration(double duration) {
-    print("onVideoDuration duration = $duration");
   }
 
   void _onYoutubeCreated(FlutterYoutubeViewController controller) {

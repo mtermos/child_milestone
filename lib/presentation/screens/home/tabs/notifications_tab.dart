@@ -63,9 +63,7 @@ class _NotificationState extends State<NotificationTab> {
                           horizontal: size.width * 0.035,
                         ),
                         width: double.maxFinite,
-                        child: NotificationItemWidget(
-                          item: e
-                        ),
+                        child: NotificationItemWidget(item: e),
                       );
                     }).toList(),
                     seperator: const Divider(

@@ -12,7 +12,8 @@ import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationItemWidget extends StatefulWidget {
-  NotificationItemWidget({Key? key, required this.item}) : super(key: key);
+  const NotificationItemWidget({Key? key, required this.item})
+      : super(key: key);
   final NotificationWithChildAndMilestone item;
 
   @override
@@ -20,15 +21,15 @@ class NotificationItemWidget extends StatefulWidget {
 }
 
 class _NotificationItemWidgetState extends State<NotificationItemWidget> {
-  final Color borderColor = Color(0xffE2E2E2);
+  final Color borderColor = const Color(0xffE2E2E2);
 
   @override
   Widget build(BuildContext context) {
-    const String x_icon = "assets/icons/x-icon.png";
+    const String xIcon = "assets/icons/x-icon.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     return Container(
-      margin: EdgeInsets.symmetric(
+      margin: const EdgeInsets.symmetric(
         vertical: 10,
       ),
       child: Row(
@@ -46,7 +47,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Container(
+                    SizedBox(
                       width: size.width * 0.65,
                       child: RichText(
                         text: TextSpan(
@@ -57,7 +58,8 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                           children: <TextSpan>[
                             TextSpan(
                                 text: widget.item.child.name + " ",
-                                style: TextStyle(fontWeight: FontWeight.bold)),
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                             TextSpan(text: widget.item.notification.body),
                           ],
                         ),
@@ -79,12 +81,12 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                       : null);
             },
           ),
-          Spacer(),
+          const Spacer(),
           Column(
             children: [
               InkWell(
                 child: Image.asset(
-                  x_icon,
+                  xIcon,
                   width: size.width * 0.035,
                 ),
                 onTap: () {
@@ -104,7 +106,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
 
   String readable_date(DateTime dateTime) {
     DateTime now = DateTime.now();
-    DateTime justNow = DateTime.now().subtract(Duration(minutes: 1));
+    DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
     DateTime localDateTime = dateTime.toLocal();
 
     if (!localDateTime.difference(justNow).isNegative) {
@@ -118,7 +120,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
       return roughTimeString;
     }
 
-    DateTime yesterday = now.subtract(Duration(days: 1));
+    DateTime yesterday = now.subtract(const Duration(days: 1));
 
     if (localDateTime.day == yesterday.day &&
         localDateTime.month == yesterday.month &&

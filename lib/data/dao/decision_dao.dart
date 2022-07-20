@@ -25,7 +25,6 @@ class DecisionDao {
         result = DaoResponse(true, id);
       } catch (err) {
         if (err is DatabaseException) {
-          print('err: ${err}');
           result = DaoResponse(false, err.getResultCode() ?? 0);
         }
       }
@@ -94,7 +93,7 @@ class DecisionDao {
   Future<Map<String, dynamic>?> getDecisionByID(int decisionId) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
+    List<Map<String, dynamic>> result = [];
     result = await db
         .query(decisionsTABLE, where: 'id = ?', whereArgs: [decisionId]);
 

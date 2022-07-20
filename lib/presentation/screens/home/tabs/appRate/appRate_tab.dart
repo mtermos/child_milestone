@@ -1,13 +1,6 @@
-import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/data/models/tip.dart';
-import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
-import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
-import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/appRate/sections/tips_rating.dart';
-import 'package:child_milestone/presentation/widgets/tip_item_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppRateTab extends StatefulWidget {
@@ -57,7 +50,7 @@ class _AppRateState extends State<AppRateTab> {
               ),
               decoration: BoxDecoration(
                 border: Border.all(),
-                borderRadius: BorderRadius.all(Radius.circular(15)),
+                borderRadius: const BorderRadius.all(Radius.circular(15)),
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(

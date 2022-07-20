@@ -3,7 +3,6 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-import 'package:intl/intl.dart';
 
 class TipItemWidget extends StatefulWidget {
   TipItemWidget({Key? key, required this.item}) : super(key: key);
@@ -14,7 +13,7 @@ class TipItemWidget extends StatefulWidget {
 }
 
 class _TipItemWidgetState extends State<TipItemWidget> {
-  final Color borderColor = Color(0xffE2E2E2);
+  final Color borderColor = const Color(0xffE2E2E2);
 
   @override
   Widget build(BuildContext context) {

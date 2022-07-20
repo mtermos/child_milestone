@@ -35,7 +35,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
             Expanded(
               child: Stack(
                 children: [
-                  AddChildForm(),
+                  const AddChildForm(),
                   Positioned(
                     bottom: 0,
                     right: 0,
@@ -70,9 +70,9 @@ class _AddChildScreenState extends State<AddChildScreen> {
   }
 
   Widget _addChildBackground(BuildContext context, Size size) {
-    const String add_child_bg_item_1 = "assets/images/add_child_bg_item_1.svg";
+    const String addChildBgItem1 = "assets/images/add_child_bg_item_1.svg";
     return SvgPicture.asset(
-      add_child_bg_item_1,
+      addChildBgItem1,
       width: size.width * 0.5,
     );
   }

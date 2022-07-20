@@ -14,7 +14,7 @@ class MilestoneSummaryItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    // final textScale = MediaQuery.of(context).size.height * 0.001;
     const String editIcon = "assets/icons/edit_icon.svg";
     return Container(
       width: size.width * 0.75,

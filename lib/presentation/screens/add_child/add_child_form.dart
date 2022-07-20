@@ -27,15 +27,14 @@ class AddChildForm extends StatefulWidget {
 }
 
 class _AddChildFormState extends State<AddChildForm> {
-  static const String add_child_plus_icon =
-      "assets/icons/add_child_plus_icon.svg";
-  static const String steps_icon = "assets/icons/steps_icon.png";
+  static const String addChildPlusIcon = "assets/icons/add_child_plus_icon.svg";
+  // static const String stepsIcon = "assets/icons/steps_icon.png";
   final nameController = TextEditingController();
   final durationController = TextEditingController();
   final idController = TextEditingController();
-  DateTime _selected_date = DateTime.now();
+  DateTime _selectedDate = DateTime.now();
 
-  CircleAvatar? profile_picture_file;
+  CircleAvatar? profilePictureFile;
   XFile? chosen_image;
 
   List gender = ["Male", "Female"];
@@ -76,9 +75,9 @@ class _AddChildFormState extends State<AddChildForm> {
           ),
           SizedBox(height: size.height * 0.025),
           InkWell(
-            child: profile_picture_file ??
+            child: profilePictureFile ??
                 SvgPicture.asset(
-                  add_child_plus_icon,
+                  addChildPlusIcon,
                   width: size.width * 0.4,
                 ),
             onTap: () async {
@@ -88,7 +87,7 @@ class _AddChildFormState extends State<AddChildForm> {
               if (image != null) {
                 setState(() {
                   chosen_image = image;
-                  profile_picture_file = CircleAvatar(
+                  profilePictureFile = CircleAvatar(
                     radius: size.width * 0.2,
                     backgroundImage: Image.file(File(image.path)).image,
                   );
@@ -129,7 +128,7 @@ class _AddChildFormState extends State<AddChildForm> {
               },
               onChanged: (date) {
                 if (date != null) {
-                  _selected_date = date;
+                  _selectedDate = date;
                 }
               },
             ),
@@ -217,7 +216,7 @@ class _AddChildFormState extends State<AddChildForm> {
                 await chosen_image!.saveTo(imagePath);
                 ChildModel newChild = ChildModel(
                   name: nameController.text,
-                  dateOfBirth: _selected_date,
+                  dateOfBirth: _selectedDate,
                   imagePath: imagePath,
                   id: int.parse(idController.text),
                   gender: selected_gender,

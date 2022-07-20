@@ -62,7 +62,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                   width: size.width * 0.7,
                   decoration: BoxDecoration(
                     border: Border.all(),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
@@ -112,7 +112,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                   width: size.width * 0.15,
                   decoration: BoxDecoration(
                     border: Border.all(),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     color: widget.item.decision.decision == 1
                         ? Colors.green[200]
                         : Colors.white,
@@ -163,7 +163,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                   width: size.width * 0.15,
                   decoration: BoxDecoration(
                     border: Border.all(),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     color: widget.item.decision.decision == 2
                         ? Colors.red[200]
                         : Colors.white,
@@ -211,7 +211,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                   width: size.width * 0.15,
                   decoration: BoxDecoration(
                     border: Border.all(),
-                    borderRadius: BorderRadius.all(Radius.circular(6)),
+                    borderRadius: const BorderRadius.all(Radius.circular(6)),
                     color: widget.item.decision.decision == 3
                         ? Colors.blue[200]
                         : Colors.white,

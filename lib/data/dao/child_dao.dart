@@ -19,7 +19,6 @@ class ChildDao {
       if (err is DatabaseException) {
         result = DaoResponse(false, err.getResultCode() ?? 0);
       }
-      print(err.toString());
       result = const DaoResponse(false, -1);
     }
     return result;

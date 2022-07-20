@@ -86,13 +86,13 @@ class WelcomeScreen extends StatelessWidget {
           fontSize: textScale * 48,
           fontWeight: FontWeight.w600,
           // color: Colors.white,
-          color: Color.fromRGBO(78, 76, 76, 1),
+          color: const Color.fromRGBO(78, 76, 76, 1),
         ),
         AppText(
           text: AppLocalizations.of(context)!.toChildMilestone,
           fontSize: textScale * 28,
           fontWeight: FontWeight.w600,
-          color: Color.fromRGBO(78, 76, 76, 1),
+          color: const Color.fromRGBO(78, 76, 76, 1),
         ),
       ],
     );

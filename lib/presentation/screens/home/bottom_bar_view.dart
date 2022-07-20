@@ -34,7 +34,7 @@ class _BottomBarViewState extends State<BottomBarView>
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[

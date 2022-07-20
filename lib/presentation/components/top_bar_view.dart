@@ -5,14 +5,11 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:child_milestone/constants/strings.dart';
-import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
-import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TopBarView extends StatefulWidget {
@@ -29,18 +26,18 @@ class TopBarView extends StatefulWidget {
 }
 
 class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
-  static const String settings_icon =
+  static const String settingsIcon =
       "assets/icons/home_page/settings_icon.svg";
-  static const String side_nav_icon =
-      "assets/icons/home_page/side_nav_icon.svg";
+  // static const String sideNavIcon =
+  //     "assets/icons/home_page/side_nav_icon.svg";
 
   List<ChildModel>? childrenList;
-  ChildModel? selected_child;
+  ChildModel? selectedChild;
 
   @override
   void initState() {
     BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
-    check_child();
+    checkChild();
     super.initState();
   }
 
@@ -50,9 +47,9 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     final textScale = MediaQuery.of(context).size.height * 0.001;
 
     bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
-    String chevron_duo_left = "assets/icons/chevron_duo_left.svg";
+    String chevronDuoLeft = "assets/icons/chevron_duo_left.svg";
     if (isRTL) {
-      chevron_duo_left = "assets/icons/home_page/double_arrows.svg";
+      chevronDuoLeft = "assets/icons/home_page/double_arrows.svg";
     }
 
     return Stack(
@@ -75,14 +72,14 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         flex: 2,
                         child: Row(
                           children: [
-                            // SvgPicture.asset(side_nav_icon),
+                            // SvgPicture.asset(sideNavIcon),
                             // SizedBox(
                             //   width: size.width * 0.02,
                             // ),
                             widget.backRoute
                                 ? InkWell(
                                     child: SvgPicture.asset(
-                                      chevron_duo_left,
+                                      chevronDuoLeft,
                                       color: widget.light
                                           ? Colors.white
                                           : AppColors.primaryColor,
@@ -119,7 +116,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                       ),
                                     );
                                   }).toList(),
-                                  value: selected_child,
+                                  value: selectedChild,
                                   borderRadius: const BorderRadius.all(
                                       Radius.circular(10)),
                                   icon: Icon(
@@ -152,7 +149,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                   onChanged: (ChildModel? newValue) {
                                     if (newValue != null) {
                                       setState(() {
-                                        selected_child = newValue;
+                                        selectedChild = newValue;
                                       });
                                       BlocProvider.of<CurrentChildCubit>(
                                               context)
@@ -176,7 +173,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         child: Container(
                           child: InkWell(
                             child: SvgPicture.asset(
-                              settings_icon,
+                              settingsIcon,
                               color: widget.light
                                   ? Colors.white
                                   : AppColors.primaryColor,
@@ -200,12 +197,12 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     );
   }
 
-  check_child() async {
+  checkChild() async {
     ChildModel? child =
         await BlocProvider.of<CurrentChildCubit>(context).getCurrentChild();
     if (child != null) {
       setState(() {
-        selected_child = child;
+        selectedChild = child;
       });
     }
   }

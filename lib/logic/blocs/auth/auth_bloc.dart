@@ -1,10 +1,6 @@
-import 'dart:convert';
-
 import 'package:bloc/bloc.dart';
-import 'package:child_milestone/constants/strings.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 import 'auth_state.dart';
 import 'auth_event.dart';

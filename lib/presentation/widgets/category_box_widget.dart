@@ -1,9 +1,7 @@
 import 'package:child_milestone/data/models/milestone_category.dart';
-import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class CategoryBoxWidget extends StatefulWidget {
   CategoryBoxWidget({Key? key, required this.item, required this.selected})
@@ -16,7 +14,7 @@ class CategoryBoxWidget extends StatefulWidget {
 }
 
 class _CategoryBoxWidgetState extends State<CategoryBoxWidget> {
-  final Color borderColor = Color(0xffE2E2E2);
+  final Color borderColor = const Color(0xffE2E2E2);
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +28,7 @@ class _CategoryBoxWidgetState extends State<CategoryBoxWidget> {
       ),
       decoration: BoxDecoration(
         border: Border.all(),
-        borderRadius: BorderRadius.all(Radius.circular(6)),
+        borderRadius: const BorderRadius.all(Radius.circular(6)),
         color: widget.item.id == widget.selected
             ? AppColors.primaryColor
             : AppColors.unselectedColor,

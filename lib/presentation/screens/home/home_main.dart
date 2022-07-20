@@ -1,8 +1,4 @@
 import 'package:child_milestone/constants/strings.dart';
-import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
-import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
-import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/screens/home/bottom_bar_view.dart';
 import 'package:child_milestone/presentation/screens/home/tabIcon_data.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/appRate/appRate_tab.dart';
@@ -11,16 +7,6 @@ import 'package:child_milestone/presentation/screens/home/tabs/notifications_tab
 import 'package:child_milestone/presentation/screens/home/tabs/tips_tab.dart';
 import 'package:child_milestone/presentation/components/top_bar_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../logic/blocs/auth/auth_state.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_bloc.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_event.dart';
-// import 'package:flutter_bloc_login_example/bloc/auth/auth_state.dart';
-// import 'package:flutter_bloc_login_example/screens/login/main.dart';
-// import 'package:flutter_bloc_login_example/shared/colors.dart';
-// import 'package:flutter_bloc_login_example/shared/screen_transitions/fade.transition.dart';
-// import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
