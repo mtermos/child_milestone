@@ -22,7 +22,7 @@ class MilestoneDao {
   Future<Map<String, dynamic>?> getMilestoneByID(int milestoneId) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
+    List<Map<String, dynamic>> result = [];
     result = await db
         .query(milestonesTABLE, where: 'id = ?', whereArgs: [milestoneId]);
 
@@ -32,8 +32,7 @@ class MilestoneDao {
   Future<List<Map<String, dynamic>>?> getMilestonesByAge(int period) async {
     final db = await dbProvider.database;
 
-    return db
-        .query(milestonesTABLE, where: 'period = ?', whereArgs: [period]);
+    return db.query(milestonesTABLE, where: 'period = ?', whereArgs: [period]);
   }
 
   //Update Milestone record
@@ -62,6 +61,14 @@ class MilestoneDao {
       milestonesTABLE,
     );
 
+    return result;
+  }
+
+  Future<List<Map<String, dynamic>>> getMilestonesUntilPeriod(
+      int period) async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> result = await db
+        .query(milestonesTABLE, where: 'period < ?', whereArgs: [period + 1]);
     return result;
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
@@ -12,6 +13,7 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:collection/collection.dart';
 
 class ChildSummaryScreen extends StatefulWidget {
   const ChildSummaryScreen({Key? key}) : super(key: key);
@@ -43,8 +45,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
           if (state is CurrentChildChangedState) {
             currentChild = state.new_current_child;
             BlocProvider.of<MilestoneBloc>(context).add(
-                GetMilestonesWithDecisionsByChildEvent(
-                    child: state.new_current_child));
+                GetMilestonesForSummaryEvent(child: state.new_current_child));
           }
           return Column(
             mainAxisSize: MainAxisSize.max,
@@ -55,7 +56,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
               ),
               Container(
                 color: AppColors.primaryColorDarker,
-                child: TopBarView(backRoute: true, light: true),
+                child: TopBarView(
+                    hasBackBottun: true, backRoute: Routes.home, light: true),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -113,8 +115,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                       SizedBox(height: size.height * 0.05),
                       BlocBuilder<MilestoneBloc, MilestoneState>(
                         builder: (context, state) {
-                          if (state
-                              is LoadedMilestonesWithDecisionsByChildState) {
+                          if (state is LoadedMilestonesForSummaryState) {
                             List<MilestoneWithDecision> yesDecisions = state
                                 .items
                                 .where(
@@ -142,15 +143,17 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                 Container(
                                   width: size.width * 0.8,
                                   padding: EdgeInsets.symmetric(
-                                      vertical: size.height * 0.015),
+                                    vertical: size.height * 0.015,
+                                    horizontal: size.width * 0.05,
+                                  ),
                                   decoration: BoxDecoration(
                                       color: Colors.grey,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Center(
                                     child: AppText(
-                                      text: "UNANSWERED",
+                                      text: AppLocalizations.of(context)!
+                                          .unansweredTitle,
                                       textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.bold,
                                       fontSize: textScale * 24,
                                       color: Colors.white,
                                     ),
@@ -161,26 +164,34 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                   children: unansweredDecisions.isEmpty
                                       ? [SizedBox(height: size.height * 0.03)]
                                       : unansweredDecisions
-                                          .map((e) => MilestoneSummaryItem(
+                                          .mapIndexed(
+                                            (index, e) => MilestoneSummaryItem(
                                               milestoneItem: e.milestoneItem,
-                                              editable:
-                                                  e.milestoneItem.period ==
-                                                      state.period))
+                                              child: currentChild!,
+                                              redFlag: e.milestoneItem.period !=
+                                                  state.period,
+                                              decision: -1,
+                                              editable: true,
+                                              topBar: index != 0,
+                                            ),
+                                          )
                                           .toList(),
                                 ),
                                 SizedBox(height: size.height * 0.02),
                                 Container(
                                   width: size.width * 0.8,
                                   padding: EdgeInsets.symmetric(
-                                      vertical: size.height * 0.015),
+                                    vertical: size.height * 0.015,
+                                    horizontal: size.width * 0.05,
+                                  ),
                                   decoration: BoxDecoration(
                                       color: Colors.green,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Center(
                                     child: AppText(
-                                      text: "YES",
+                                      text: AppLocalizations.of(context)!
+                                          .yesTitle,
                                       textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.bold,
                                       fontSize: textScale * 24,
                                       color: Colors.white,
                                     ),
@@ -191,26 +202,34 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                   children: yesDecisions.isEmpty
                                       ? [SizedBox(height: size.height * 0.03)]
                                       : yesDecisions
-                                          .map((e) => MilestoneSummaryItem(
+                                          .mapIndexed(
+                                            (index, e) => MilestoneSummaryItem(
                                               milestoneItem: e.milestoneItem,
-                                              editable:
-                                                  e.milestoneItem.period ==
-                                                      state.period))
+                                              child: currentChild!,
+                                              redFlag: e.milestoneItem.period !=
+                                                  state.period,
+                                              decision: 1,
+                                              editable: true,
+                                              topBar: index != 0,
+                                            ),
+                                          )
                                           .toList(),
                                 ),
                                 SizedBox(height: size.height * 0.02),
                                 Container(
                                   width: size.width * 0.8,
                                   padding: EdgeInsets.symmetric(
-                                      vertical: size.height * 0.015),
+                                    vertical: size.height * 0.015,
+                                    horizontal: size.width * 0.05,
+                                  ),
                                   decoration: BoxDecoration(
                                       color: Colors.red[900],
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Center(
                                     child: AppText(
-                                      text: "NO",
+                                      text:
+                                          AppLocalizations.of(context)!.noTitle,
                                       textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.bold,
                                       fontSize: textScale * 24,
                                       color: Colors.white,
                                     ),
@@ -221,26 +240,34 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                   children: noDecisions.isEmpty
                                       ? [SizedBox(height: size.height * 0.03)]
                                       : noDecisions
-                                          .map((e) => MilestoneSummaryItem(
+                                          .mapIndexed(
+                                            (index, e) => MilestoneSummaryItem(
                                               milestoneItem: e.milestoneItem,
-                                              editable:
-                                                  e.milestoneItem.period ==
-                                                      state.period))
+                                              child: currentChild!,
+                                              redFlag: e.milestoneItem.period !=
+                                                  state.period,
+                                              decision: 2,
+                                              editable: true,
+                                              topBar: index != 0,
+                                            ),
+                                          )
                                           .toList(),
                                 ),
                                 SizedBox(height: size.height * 0.02),
                                 Container(
                                   width: size.width * 0.8,
                                   padding: EdgeInsets.symmetric(
-                                      vertical: size.height * 0.015),
+                                    vertical: size.height * 0.015,
+                                    horizontal: size.width * 0.05,
+                                  ),
                                   decoration: BoxDecoration(
                                       color: Colors.orange,
                                       borderRadius: BorderRadius.circular(10)),
                                   child: Center(
                                     child: AppText(
-                                      text: "MAYBE",
+                                      text: AppLocalizations.of(context)!
+                                          .maybeTitle,
                                       textAlign: TextAlign.center,
-                                      fontWeight: FontWeight.bold,
                                       fontSize: textScale * 24,
                                       color: Colors.white,
                                     ),
@@ -251,11 +278,17 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                   children: maybeDecisions.isEmpty
                                       ? [SizedBox(height: size.height * 0.03)]
                                       : maybeDecisions
-                                          .map((e) => MilestoneSummaryItem(
+                                          .mapIndexed(
+                                            (index, e) => MilestoneSummaryItem(
                                               milestoneItem: e.milestoneItem,
-                                              editable:
-                                                  e.milestoneItem.period ==
-                                                      state.period))
+                                              child: currentChild!,
+                                              redFlag: e.milestoneItem.period !=
+                                                  state.period,
+                                              decision: 3,
+                                              editable: true,
+                                              topBar: index != 0,
+                                            ),
+                                          )
                                           .toList(),
                                 ),
                               ],
@@ -271,13 +304,13 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                         margin:
                             EdgeInsets.symmetric(horizontal: size.width * 0.25),
                         child: AppButton(
-                          label: AppLocalizations.of(context)!.goBack,
+                          label: AppLocalizations.of(context)!.homePage,
                           color: AppColors.primaryColorDarker,
                           fontWeight: FontWeight.w600,
                           padding: EdgeInsets.symmetric(
                               vertical: size.height * 0.02),
                           onPressed: () {
-                            Navigator.pop(context);
+                            Navigator.popAndPushNamed(context, Routes.home);
                           },
                         ),
                       ),

@@ -14,8 +14,6 @@ class CategoryBoxWidget extends StatefulWidget {
 }
 
 class _CategoryBoxWidgetState extends State<CategoryBoxWidget> {
-  final Color borderColor = const Color(0xffE2E2E2);
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -54,8 +52,8 @@ class _CategoryBoxWidgetState extends State<CategoryBoxWidget> {
           SizedBox(height: textScale * 10),
           AppText(
             text: widget.item.name,
-            fontSize: textScale * 14,
-            color: Colors.white,
+            fontSize: textScale * 18,
+            color: Colors.black,
           ),
         ],
       ),

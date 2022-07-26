@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
+import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -13,11 +14,13 @@ import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.d
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TopBarView extends StatefulWidget {
-  bool backRoute;
+  bool hasBackBottun;
+  String? backRoute;
   bool light;
   TopBarView({
     Key? key,
-    this.backRoute = false,
+    this.hasBackBottun = false,
+    this.backRoute,
     this.light = false,
   }) : super(key: key);
 
@@ -26,8 +29,7 @@ class TopBarView extends StatefulWidget {
 }
 
 class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
-  static const String settingsIcon =
-      "assets/icons/home_page/settings_icon.svg";
+  static const String settingsIcon = "assets/icons/home_page/settings_icon.svg";
   // static const String sideNavIcon =
   //     "assets/icons/home_page/side_nav_icon.svg";
 
@@ -76,7 +78,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                             // SizedBox(
                             //   width: size.width * 0.02,
                             // ),
-                            widget.backRoute
+                            widget.hasBackBottun
                                 ? InkWell(
                                     child: SvgPicture.asset(
                                       chevronDuoLeft,
@@ -85,7 +87,12 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                           : AppColors.primaryColor,
                                     ),
                                     onTap: () {
-                                      Navigator.pop(context);
+                                      if (widget.backRoute != null) {
+                                        Navigator.popAndPushNamed(
+                                            context, widget.backRoute!);
+                                      } else {
+                                        Navigator.pop(context);
+                                      }
                                     },
                                   )
                                 : Container(),
@@ -159,6 +166,11 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                                 dateOfBirth:
                                                     newValue.dateOfBirth,
                                                 childId: newValue.id));
+
+                                        BlocProvider.of<
+                                                    AllPreviousDecisionTakenCubit>(
+                                                context)
+                                            .checkIfAllTaken(newValue);
                                       });
                                     }
                                   },
@@ -201,6 +213,8 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     ChildModel? child =
         await BlocProvider.of<CurrentChildCubit>(context).getCurrentChild();
     if (child != null) {
+      BlocProvider.of<AllPreviousDecisionTakenCubit>(context)
+          .checkIfAllTaken(child);
       setState(() {
         selectedChild = child;
       });

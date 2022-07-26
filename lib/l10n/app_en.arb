@@ -48,5 +48,9 @@
     "weeklyNotificationTitle": "Remainder, answer all the questions",
     "weeklyNotificationBody1": "The milestone checklist of the child ",
     "weeklyNotificationBody2": " is not completed, please answer the remaining questions",
+    "homePage": "Home Page",
+    "enterDecision": "Enter your answer to this milestone",
+    "updateDecision": "Change your answer to this milestone",
+    "unansweredTitle": "The unanswered milestones, from this stage and previous stages",
     "selectLanguage": "Select Language"
 }

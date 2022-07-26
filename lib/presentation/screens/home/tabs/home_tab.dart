@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
+import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
@@ -80,7 +81,7 @@ class _HomeTabState extends State<HomeTab> {
           return Column(
             children: [
               SizedBox(
-                height: size.height * 0.35,
+                height: size.width * 0.65,
                 child: Stack(
                   alignment: Alignment.topCenter,
                   children: <Widget>[
@@ -131,7 +132,7 @@ class _HomeTabState extends State<HomeTab> {
                 ),
               ),
               SizedBox(
-                height: size.height * 0.05,
+                height: size.height * 0.01,
               ),
               BlocBuilder<DecisionBloc, DecisionState>(
                 builder: (context, state) {
@@ -207,15 +208,48 @@ class _HomeTabState extends State<HomeTab> {
               Row(
                 children: [
                   SizedBox(width: size.width * 0.075),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      summary,
-                      width: size.width * 0.4,
-                    ),
-                    onTap: () {
-                      Navigator.pushNamed(context, Routes.childSummary);
-                    },
+                  Stack(
+                    children: [
+                      InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          summary,
+                          width: size.width * 0.4,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.childSummary);
+                        },
+                      ),
+                      BlocBuilder<AllPreviousDecisionTakenCubit,
+                          Map<int, bool>>(
+                        builder: (context, state) {
+                          if (currentChild != null &&
+                              state[currentChild!.id] != null &&
+                              !state[currentChild!.id]!) {
+                            return Positioned(
+                              right: 0,
+                              child: Container(
+                                padding: EdgeInsets.all(2),
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                constraints: BoxConstraints(
+                                  minWidth: 12,
+                                  minHeight: 12,
+                                ),
+                                child: Icon(
+                                  Icons.crisis_alert,
+                                  color: Colors.white,
+                                  size: textScale * 20,
+                                ),
+                              ),
+                            );
+                          }
+                          return SizedBox.shrink();
+                        },
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   InkWell(
@@ -237,6 +271,25 @@ class _HomeTabState extends State<HomeTab> {
                   ),
                   SizedBox(width: size.width * 0.075),
                 ],
+              ),
+              SizedBox(height: size.height * 0.01),
+              BlocBuilder<AllPreviousDecisionTakenCubit, Map<int, bool>>(
+                builder: (context, state) {
+                  if (currentChild != null &&
+                      state[currentChild!.id] != null &&
+                      !state[currentChild!.id]!) {
+                    return Padding(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                      child: AppText(
+                        text:
+                            "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
+                        color: Colors.red,
+                      ),
+                    );
+                  }
+                  return SizedBox.shrink();
+                },
               ),
               // Container(
               //   width: size.width * 0.5,

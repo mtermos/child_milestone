@@ -26,6 +26,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
     on<GetMilestoneEvent>(getMilestone);
     on<GetMilestonesWithDecisionsByAgeEvent>(getByAge);
     on<GetMilestonesWithDecisionsByChildEvent>(getByChild);
+    on<GetMilestonesForSummaryEvent>(getForSummary);
   }
 
   void addMilestone(
@@ -120,6 +121,36 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
       emit(LoadedMilestonesWithDecisionsByChildState(items, period));
     } else {
       emit(ErrorLoadingMilestonesWithDecisionsByChildState());
+    }
+  }
+
+  void getForSummary(
+      GetMilestonesForSummaryEvent event, Emitter<MilestoneState> emit) async {
+    emit(LoadingMilestonesForSummaryState());
+    List<MilestoneWithDecision> items = [];
+    int period = periodCalculator(event.child.dateOfBirth);
+    List<MilestoneItem>? milestones =
+        await milestoneRepository.getMilestonesUntilPeriod(period);
+
+    if (milestones != null) {
+      for (var milestone in milestones) {
+        DecisionModel? decision = await decisionRepository
+            .getDecisionByChildAndMilestone(event.child.id, milestone.id);
+        items.add(MilestoneWithDecision(
+            milestoneItem: milestone,
+            decision: decision ??
+                DecisionModel(
+                    childId: event.child.id,
+                    milestoneId: milestone.id,
+                    decision: -1,
+                    takenAt: DateTime.now())));
+      }
+
+      int period = periodCalculator(event.child.dateOfBirth);
+
+      emit(LoadedMilestonesForSummaryState(items, period));
+    } else {
+      emit(ErrorLoadingMilestonesForSummaryState());
     }
   }
 }

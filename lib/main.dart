@@ -14,6 +14,7 @@ import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
+import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
@@ -128,6 +129,14 @@ class Application extends StatelessWidget {
           ),
           BlocProvider<LanguageCubit>(
             create: (context) => LanguageCubit(startLang),
+          ),
+          BlocProvider<AllPreviousDecisionTakenCubit>(
+            create: (context) => AllPreviousDecisionTakenCubit(
+              milestoneRepository:
+                  RepositoryProvider.of<MilestoneRepository>(context),
+              decisionRepository:
+                  RepositoryProvider.of<DecisionRepository>(context),
+            ),
           ),
         ],
         child: BlocBuilder<LanguageCubit, Locale>(

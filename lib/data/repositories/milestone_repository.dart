@@ -43,12 +43,22 @@ class MilestoneRepository {
         : [];
   }
 
-  Future<List<MilestoneItem>?> getMilestonesByChild(DateTime dateOfBirth) async {
+  Future<List<MilestoneItem>?> getMilestonesByChild(
+      DateTime dateOfBirth) async {
     List<Map<String, dynamic>> result =
         await milestoneDao.getMilestonesByChild();
 
     return result.isNotEmpty
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
         : [];
+  }
+
+  Future getMilestonesUntilPeriod(int period) async {
+    List<Map<String, dynamic>> result =
+        await milestoneDao.getMilestonesUntilPeriod(period);
+
+    return result.isNotEmpty
+        ? result.map((item) => MilestoneItem.fromMap(item)).toList()
+        : List<MilestoneItem>.empty();
   }
 }

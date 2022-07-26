@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/data/data_providers/milestone_categories_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -49,28 +51,6 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
 //   2: perception
 //   3: communication
 //   4: interaction
-    List<MilestoneCategoryModel> cagtegories = [
-      MilestoneCategoryModel(
-        id: 1,
-        name: AppLocalizations.of(context)!.movement,
-        icon_path: "assets/icons/milestone_page/movement_category.png",
-      ),
-      MilestoneCategoryModel(
-        id: 2,
-        name: AppLocalizations.of(context)!.perception,
-        icon_path: "assets/icons/milestone_page/cognitive_category.png",
-      ),
-      MilestoneCategoryModel(
-        id: 3,
-        name: AppLocalizations.of(context)!.communication,
-        icon_path: "assets/icons/milestone_page/language_category.png",
-      ),
-      MilestoneCategoryModel(
-        id: 4,
-        name: AppLocalizations.of(context)!.interaction,
-        icon_path: "assets/icons/milestone_page/social_category.png",
-      ),
-    ];
 
     return Scaffold(
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
@@ -85,7 +65,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               SizedBox(
                 height: MediaQuery.of(context).padding.top,
               ),
-              TopBarView(backRoute: true),
+              TopBarView(hasBackBottun: true, backRoute: Routes.home),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -106,7 +86,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                         padding:
                             EdgeInsets.symmetric(horizontal: size.width * 0.02),
                         child: Row(
-                          children: cagtegories.map((e) {
+                          children: categories.map((e) {
                             return Expanded(
                               flex: 1,
                               child: InkWell(

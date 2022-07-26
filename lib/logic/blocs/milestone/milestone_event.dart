@@ -30,8 +30,12 @@ class GetMilestonesWithDecisionsByAgeEvent extends MilestoneEvent {
   const GetMilestonesWithDecisionsByAgeEvent({required this.child});
 }
 
-
 class GetMilestonesWithDecisionsByChildEvent extends MilestoneEvent {
   final ChildModel child;
   const GetMilestonesWithDecisionsByChildEvent({required this.child});
+}
+
+class GetMilestonesForSummaryEvent extends MilestoneEvent {
+  final ChildModel child;
+  const GetMilestonesForSummaryEvent({required this.child});
 }
