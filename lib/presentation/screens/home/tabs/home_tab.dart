@@ -39,8 +39,8 @@ class _HomeTabState extends State<HomeTab> {
   @override
   Widget build(BuildContext context) {
     const String profilePicBg = "assets/images/profile_pic_bg.svg";
-    const String summary = "assets/images/summary.png";
-    const String tips = "assets/images/tips.png";
+    String summary = "assets/images/summary.png";
+    String tips = "assets/images/tips.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     NotificationService _notificationService = NotificationService();
@@ -49,8 +49,12 @@ class _HomeTabState extends State<HomeTab> {
 
     if (isRTL) {
       doubleArrowIcon = "assets/icons/home_page/double_arrows_to_left.png";
+      summary = "assets/images/summary_ar.png";
+      tips = "assets/images/tips_ar.png";
     } else {
       doubleArrowIcon = "assets/icons/home_page/double_arrows.png";
+      summary = "assets/images/summary.png";
+      tips = "assets/images/tips.png";
     }
 
     return Scaffold(
