@@ -11,7 +11,7 @@ class MilestoneRepository {
 
     return result.isNotEmpty
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
-        : [];
+        : List<MilestoneItem>.empty();
   }
 
   Future insertMilestone(MilestoneItem milestone) =>
@@ -40,7 +40,7 @@ class MilestoneRepository {
 
     return result.isNotEmpty
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
-        : [];
+        : List<MilestoneItem>.empty();
   }
 
   Future<List<MilestoneItem>?> getMilestonesByChild(
@@ -50,7 +50,7 @@ class MilestoneRepository {
 
     return result.isNotEmpty
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
-        : [];
+        : List<MilestoneItem>.empty();
   }
 
   Future getMilestonesUntilPeriod(int period) async {

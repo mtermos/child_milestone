@@ -73,9 +73,6 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         await notificationRepository.getAllNotificationsWithChildren();
 
     if (notifications != null) {
-      for (var not in notifications) {
-        print('notification: ${not.notification}');
-      }
       notifications = notifications
           .where((element) =>
               !element.notification.opened &&

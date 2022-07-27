@@ -11,21 +11,21 @@ class TipBloc extends Bloc<TipEvent, TipState> {
   final TipRepository tipRepository;
 
   TipBloc({required this.tipRepository}) : super(InitialTipState()) {
-    on<AddTipEvent>(add_tip);
-    on<GetAllTipsEvent>(get_all_tips);
-    on<DeleteAllTipsEvent>(delete_all_tips);
+    on<AddTipEvent>(addTip);
+    on<GetAllTipsEvent>(getAllTips);
+    on<DeleteAllTipsEvent>(deleteAllTips);
 
-    on<GetTipEvent>(get_tip);
-    on<GetTipsByAgeEvent>(get_by_age);
+    on<GetTipEvent>(getTip);
+    on<GetTipsByAgeEvent>(getByAge);
   }
 
-  void add_tip(AddTipEvent event, Emitter<TipState> emit) async {
+  void addTip(AddTipEvent event, Emitter<TipState> emit) async {
     emit(AddingTipState());
     await tipRepository.insertTip(event.tip);
     emit(AddedTipState());
   }
 
-  void get_all_tips(GetAllTipsEvent event, Emitter<TipState> emit) async {
+  void getAllTips(GetAllTipsEvent event, Emitter<TipState> emit) async {
     emit(AllTipsLoadingState());
     // await tipRepository.deleteAllTips();
     List<TipModel>? tips = await tipRepository.getAllTips();
@@ -36,15 +36,15 @@ class TipBloc extends Bloc<TipEvent, TipState> {
     }
   }
 
-  void delete_all_tips(DeleteAllTipsEvent event, Emitter<TipState> emit) async {
+  void deleteAllTips(DeleteAllTipsEvent event, Emitter<TipState> emit) async {
     emit(DeleteingAllTipsState());
     await tipRepository.deleteAllTips();
     emit(DeletedAllTipsState());
   }
 
-  void get_tip(GetTipEvent event, Emitter<TipState> emit) async {
+  void getTip(GetTipEvent event, Emitter<TipState> emit) async {
     emit(TipLoadingState());
-    TipModel? tip = await tipRepository.getTipByID(event.tip_id);
+    TipModel? tip = await tipRepository.getTipByID(event.tipId);
     if (tip != null) {
       emit(TipLoadedState(tip));
     } else {
@@ -52,7 +52,7 @@ class TipBloc extends Bloc<TipEvent, TipState> {
     }
   }
 
-  void get_by_age(GetTipsByAgeEvent event, Emitter<TipState> emit) async {
+  void getByAge(GetTipsByAgeEvent event, Emitter<TipState> emit) async {
     emit(LoadingTipsByAgeState());
     List<TipModel>? tips = await tipRepository.getTipsByAge(event.dateOfBirth);
     if (tips != null) {

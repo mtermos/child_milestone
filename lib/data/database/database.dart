@@ -9,6 +9,7 @@ const notificationsTABLE = 'Notifications';
 const milestonesTABLE = 'Milestones';
 const tipsTABLE = 'Tips';
 const decisionsTABLE = 'Decisions';
+const ratingsTABLE = 'Ratings';
 
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
@@ -96,6 +97,14 @@ class DatabaseProvider {
         "uploaded INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
         "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
+        ")");
+
+    await database.execute("CREATE TABLE $ratingsTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "ratingId INTEGER, "
+        "rating REAL, "
+        "takenAt INTEGER, "
+        "uploaded INTEGER "
         ")");
   }
 }

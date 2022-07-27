@@ -1,7 +1,7 @@
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/presentation/screens/home/bottom_bar_view.dart';
 import 'package:child_milestone/presentation/screens/home/tabIcon_data.dart';
-import 'package:child_milestone/presentation/screens/home/tabs/appRate/appRate_tab.dart';
+import 'package:child_milestone/presentation/screens/home/tabs/appRate_tab.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/home_tab.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/notifications_tab.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/tips_tab.dart';

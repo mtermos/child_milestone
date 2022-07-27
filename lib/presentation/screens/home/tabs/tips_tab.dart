@@ -42,6 +42,7 @@ class _TipsState extends State<TipsTab> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
         builder: (context, state) {
           if (state is CurrentChildChangedState) {

@@ -12,7 +12,7 @@ class DecisionRepository {
 
     return result.isNotEmpty
         ? result.map((item) => DecisionModel.fromMap(item)).toList()
-        : [];
+        : List<DecisionModel>.empty();
   }
 
   Future insertDecision(DecisionModel decision) =>
@@ -39,7 +39,7 @@ class DecisionRepository {
 
     return response.isNotEmpty
         ? response.map((item) => DecisionModel.fromMap(item)).toList()
-        : [];
+        : List<DecisionModel>.empty();
   }
 
   Future<DaoResponse<List<DecisionModel>, int>> getDecisionsByAge(
@@ -53,7 +53,7 @@ class DecisionRepository {
             ? daoResponse.item1
                 .map((item) => DecisionModel.fromMap(item))
                 .toList()
-            : [],
+            : List<DecisionModel>.empty(),
         daoResponse.item2);
   }
 

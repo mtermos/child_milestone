@@ -21,7 +21,7 @@ class ForgotPasswordEvent extends AuthEvent {}
 
 class ResendCodeEvent extends AuthEvent {
   final email;
-  ResendCodeEvent({this.email});
+  ResendCodeEvent({required this.email});
 }
 
 class ResetStateEvent extends AuthEvent {}

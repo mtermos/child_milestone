@@ -35,6 +35,7 @@ class _NotificationState extends State<NotificationTab> {
         .add(GetAllUnopenedNotificationsEvent());
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [

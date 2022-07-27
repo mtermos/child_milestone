@@ -52,5 +52,8 @@
     "enterDecision": "Enter your answer to this milestone",
     "updateDecision": "Change your answer to this milestone",
     "unansweredTitle": "The unanswered milestones, from this stage and previous stages",
+    "rate": "Rate",
+    "ratingSuccessTitle": "Thank you for rating the app",
+    "ratingSuccessDesc": "Your rating of this application helps us to make it even better and encourages us to provide the best",
     "selectLanguage": "Select Language"
 }

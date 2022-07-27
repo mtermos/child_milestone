@@ -53,6 +53,7 @@ class _HomeTabState extends State<HomeTab> {
     }
 
     return Scaffold(
+      backgroundColor: Colors.white,
       body: BlocBuilder<CurrentChildCubit, CurrentChildState>(
         builder: (context, state) {
           CircleAvatar circleAvatar = CircleAvatar(
@@ -229,12 +230,12 @@ class _HomeTabState extends State<HomeTab> {
                             return Positioned(
                               right: 0,
                               child: Container(
-                                padding: EdgeInsets.all(2),
+                                padding: const EdgeInsets.all(2),
                                 decoration: BoxDecoration(
                                   color: Colors.red,
                                   borderRadius: BorderRadius.circular(6),
                                 ),
-                                constraints: BoxConstraints(
+                                constraints: const BoxConstraints(
                                   minWidth: 12,
                                   minHeight: 12,
                                 ),
@@ -246,7 +247,7 @@ class _HomeTabState extends State<HomeTab> {
                               ),
                             );
                           }
-                          return SizedBox.shrink();
+                          return const SizedBox.shrink();
                         },
                       ),
                     ],
@@ -281,14 +282,14 @@ class _HomeTabState extends State<HomeTab> {
                     return Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: size.width * 0.15),
-                      child: AppText(
+                      child: const AppText(
                         text:
                             "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
                         color: Colors.red,
                       ),
                     );
                   }
-                  return SizedBox.shrink();
+                  return const SizedBox.shrink();
                 },
               ),
               // Container(

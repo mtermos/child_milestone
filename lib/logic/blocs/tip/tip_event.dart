@@ -9,9 +9,9 @@ abstract class TipEvent extends Equatable {
 }
 
 class AddTipEvent extends TipEvent {
-  TipModel tip;
+  final TipModel tip;
 
-  AddTipEvent({
+  const AddTipEvent({
     required this.tip,
   });
 }
@@ -21,8 +21,8 @@ class GetAllTipsEvent extends TipEvent {}
 class DeleteAllTipsEvent extends TipEvent {}
 
 class GetTipEvent extends TipEvent {
-  int tip_id;
-  GetTipEvent({required this.tip_id});
+  final int tipId;
+  const GetTipEvent({required this.tipId});
 }
 
 class GetTipsByAgeEvent extends TipEvent {

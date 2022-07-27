@@ -71,7 +71,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   void getDecision(GetDecisionEvent event, Emitter<DecisionState> emit) async {
     emit(DecisionLoadingState());
     DecisionModel? decision =
-        await decisionRepository.getDecisionByID(event.decision_id);
+        await decisionRepository.getDecisionByID(event.decisionId);
     if (decision != null) {
       emit(DecisionLoadedState(decision));
     } else {

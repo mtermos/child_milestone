@@ -9,10 +9,10 @@ abstract class DecisionEvent extends Equatable {
 }
 
 class AddDecisionEvent extends DecisionEvent {
-  DecisionModel decision;
-  Function onSuccess;
+  final DecisionModel decision;
+  final Function onSuccess;
 
-  AddDecisionEvent({
+  const AddDecisionEvent({
     required this.decision,
     required this.onSuccess,
   });
@@ -23,24 +23,24 @@ class GetAllDecisionsEvent extends DecisionEvent {}
 class DeleteAllDecisionsEvent extends DecisionEvent {}
 
 class GetDecisionEvent extends DecisionEvent {
-  int decision_id;
-  GetDecisionEvent({required this.decision_id});
+  final int decisionId;
+  const GetDecisionEvent({required this.decisionId});
 }
 
 class GetDecisionsByChild extends DecisionEvent {
-  int childId;
-  GetDecisionsByChild({required this.childId});
+  final int childId;
+  const GetDecisionsByChild({required this.childId});
 }
 
 class GetDecisionsByAgeEvent extends DecisionEvent {
-  DateTime dateOfBirth;
-  int childId;
-  GetDecisionsByAgeEvent({required this.dateOfBirth, required this.childId});
+  final DateTime dateOfBirth;
+  final int childId;
+  const GetDecisionsByAgeEvent({required this.dateOfBirth, required this.childId});
 }
 
 class GetDecisionByChildAndMilestoneEvent extends DecisionEvent {
-  int childId;
-  int milestoneId;
-  GetDecisionByChildAndMilestoneEvent(
+  final int childId;
+  final int milestoneId;
+  const GetDecisionByChildAndMilestoneEvent(
       {required this.childId, required this.milestoneId});
 }

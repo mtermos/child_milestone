@@ -66,7 +66,7 @@ class DeletedAllNotificationsState extends NotificationState {}
 class DismissingNotificationState extends NotificationState {}
 
 class DismissedNotificationsState extends NotificationState {
-  int notificationId;
+  final int notificationId;
   DismissedNotificationsState({
     required this.notificationId,
   });

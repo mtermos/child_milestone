@@ -3,16 +3,19 @@ import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/dao/decision_dao.dart';
 import 'package:child_milestone/data/dao/milestone_dao.dart';
 import 'package:child_milestone/data/dao/notification_dao.dart';
+import 'package:child_milestone/data/dao/rating_dao.dart';
 import 'package:child_milestone/data/dao/tip_dao.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
+import 'package:child_milestone/data/repositories/rating_repository.dart';
 import 'package:child_milestone/data/repositories/tip_repository.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
+import 'package:child_milestone/logic/blocs/rating/rating_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
@@ -77,6 +80,8 @@ class Application extends StatelessWidget {
         RepositoryProvider<NotificationRepository>(
             create: (context) => NotificationRepository(
                 NotificationDao(), ChildDao(), MilestoneDao())),
+        RepositoryProvider<RatingRepository>(
+            create: (context) => RatingRepository(RatingDao())),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -120,6 +125,12 @@ class Application extends StatelessWidget {
             create: (context) => NotificationBloc(
               notificationRepository:
                   RepositoryProvider.of<NotificationRepository>(context),
+            ),
+          ),
+          BlocProvider<RatingBloc>(
+            create: (context) => RatingBloc(
+              ratingRepository:
+                  RepositoryProvider.of<RatingRepository>(context),
             ),
           ),
           BlocProvider<CurrentChildCubit>(

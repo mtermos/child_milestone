@@ -9,9 +9,9 @@ abstract class NotificationEvent extends Equatable {
 }
 
 class AddNotificationEvent extends NotificationEvent {
-  NotificationModel notification;
+  final NotificationModel notification;
 
-  AddNotificationEvent({
+  const AddNotificationEvent({
     required this.notification,
   });
 }
@@ -23,11 +23,11 @@ class GetAllUnopenedNotificationsEvent extends NotificationEvent {}
 class DeleteAllNotificationsEvent extends NotificationEvent {}
 
 class GetNotificationEvent extends NotificationEvent {
-  int notificationId;
-  GetNotificationEvent({required this.notificationId});
+  final int notificationId;
+  const GetNotificationEvent({required this.notificationId});
 }
 
 class DismissNotificationEvent extends NotificationEvent {
-  NotificationModel notification;
-  DismissNotificationEvent({required this.notification});
+  final NotificationModel notification;
+  const DismissNotificationEvent({required this.notification});
 }

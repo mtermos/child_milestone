@@ -11,7 +11,7 @@ class ChildRepository {
 
     return result.isNotEmpty
         ? result.map((item) => ChildModel.fromMap(item)).toList()
-        : [];
+        : List<ChildModel>.empty();
   }
 
   Future<DaoResponse<bool, int>> insertChild(ChildModel child) =>
