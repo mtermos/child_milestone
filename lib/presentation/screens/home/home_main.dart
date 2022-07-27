@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 
     animationController = AnimationController(
         duration: const Duration(milliseconds: 600), vsync: this);
-    tabBody = const HomeTab();
+    tabBody = HomeTab(changeIndex: changeIndex);
     super.initState();
   }
 
@@ -58,51 +58,69 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     );
   }
 
+  void changeIndex(int index) {
+    if (index == 0) {
+      animationController?.reverse().then<dynamic>((data) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          tabIconsList[0].isSelected = true;
+          tabIconsList[1].isSelected = false;
+          tabIconsList[2].isSelected = false;
+          tabIconsList[3].isSelected = false;
+          tabBody = HomeTab(changeIndex: changeIndex);
+        });
+      });
+    } else if (index == 1) {
+      animationController?.reverse().then<dynamic>((data) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          tabIconsList[0].isSelected = false;
+          tabIconsList[1].isSelected = true;
+          tabIconsList[2].isSelected = false;
+          tabIconsList[3].isSelected = false;
+          tabBody = const NotificationTab();
+        });
+      });
+    } else if (index == 2) {
+      animationController?.reverse().then<dynamic>((data) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          tabIconsList[0].isSelected = false;
+          tabIconsList[1].isSelected = false;
+          tabIconsList[2].isSelected = true;
+          tabIconsList[3].isSelected = false;
+          tabBody = const TipsTab();
+        });
+      });
+    } else if (index == 3) {
+      animationController?.reverse().then<dynamic>((data) {
+        if (!mounted) {
+          return;
+        }
+        setState(() {
+          tabIconsList[0].isSelected = false;
+          tabIconsList[1].isSelected = false;
+          tabIconsList[2].isSelected = false;
+          tabIconsList[3].isSelected = true;
+          tabBody = const AppRateTab();
+        });
+      });
+    }
+  }
+
   Widget bottomBar() {
     return BottomBarView(
       tabIconsList: tabIconsList,
       addClick: () {
         Navigator.pushNamed(context, Routes.addChild);
       },
-      changeIndex: (int index) {
-        if (index == 0) {
-          animationController?.reverse().then<dynamic>((data) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              tabBody = const HomeTab();
-            });
-          });
-        } else if (index == 1) {
-          animationController?.reverse().then<dynamic>((data) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              tabBody = const NotificationTab();
-            });
-          });
-        } else if (index == 2) {
-          animationController?.reverse().then<dynamic>((data) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              tabBody = const TipsTab();
-            });
-          });
-        } else if (index == 3) {
-          animationController?.reverse().then<dynamic>((data) {
-            if (!mounted) {
-              return;
-            }
-            setState(() {
-              tabBody = const AppRateTab();
-            });
-          });
-        }
-      },
+      changeIndex: changeIndex,
     );
   }
 

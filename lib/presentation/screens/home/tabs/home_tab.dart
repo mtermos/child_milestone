@@ -16,7 +16,8 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeTab extends StatefulWidget {
-  const HomeTab({Key? key}) : super(key: key);
+  Function changeIndex;
+  HomeTab({Key? key, required this.changeIndex}) : super(key: key);
 
   @override
   _HomeTabState createState() => _HomeTabState();
@@ -260,13 +261,7 @@ class _HomeTabState extends State<HomeTab> {
                       width: size.width * 0.4,
                     ),
                     onTap: () async {
-                      await _notificationService.scheduleNotifications(
-                        id: 1,
-                        title: "title",
-                        body: "body",
-                        scheduledDate: tz.TZDateTime.now(tz.local)
-                            .add(const Duration(seconds: 5)),
-                      );
+                      widget.changeIndex(2);
                       // _logout();
                     },
                   ),
