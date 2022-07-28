@@ -32,9 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      resetData();
-    });
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
   }
@@ -57,21 +54,29 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.getBool(SharedPrefKeys.isLogged)!) {
       Navigator.popAndPushNamed(context, Routes.home);
     } else {
+      await resetData();
       Navigator.popAndPushNamed(context, Routes.welcome);
     }
   }
 
-  resetData() {
+  resetData() async {
     final dbProvider = DatabaseProvider.dbProvider;
-    dbProvider.deleteDatabase();
-    dbProvider.createDatabase();
+    // await dbProvider.deleteDatabase();
+    await dbProvider.createDatabase();
+    final db = await dbProvider.database;
+    await db.delete(childrenTABLE);
+    await db.delete(milestonesTABLE);
+    await db.delete(tipsTABLE);
+    await db.delete(notificationsTABLE);
+    await db.delete(decisionsTABLE);
+    await db.delete(ratingsTABLE);
     NotificationService _notificationService = NotificationService();
-    _notificationService.cancelAllNotifications();
+    await _notificationService.cancelAllNotifications();
     // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    addTempChild();
-    addTempMilestones();
-    addTempTips();
-    addTempNotifications();
+    await addTempChild();
+    await addTempMilestones();
+    await addTempTips();
+    await addTempNotifications();
   }
 
   addTempChild() async {

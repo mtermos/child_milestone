@@ -119,7 +119,8 @@ class _HomeTabState extends State<HomeTab> {
                           AppText(
                             text: currentChild != null
                                 ? currentChild!.name
-                                : "child's name",
+                                : AppLocalizations.of(context)!
+                                      .childsName,
                             color: Colors.white,
                             fontSize: size.height * 0.03,
                             fontWeight: FontWeight.bold,
@@ -196,7 +197,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       onTap: () {
-                        Navigator.pushNamed(context, Routes.milestone);
+                        Navigator.popAndPushNamed(context, Routes.milestone);
                       },
                     );
                   } else {
@@ -223,7 +224,8 @@ class _HomeTabState extends State<HomeTab> {
                           width: size.width * 0.4,
                         ),
                         onTap: () {
-                          Navigator.pushNamed(context, Routes.childSummary);
+                          Navigator.popAndPushNamed(
+                              context, Routes.childSummary);
                         },
                       ),
                       BlocBuilder<AllPreviousDecisionTakenCubit,

@@ -13,6 +13,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 
 class TopBarView extends StatefulWidget {
   final bool hasBackBottun;
@@ -107,6 +108,13 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                           builder: (context, state) {
                             if (state is AllChildrenLoadedState) {
                               childrenList = state.children;
+                            } else if (state is AllChildrenLoadingState) {
+                              return const LoadingIndicator(
+                                  indicatorType: Indicator.ballPulse,
+                                  colors: [Colors.white],
+                                  strokeWidth: 2,
+                                  backgroundColor: Colors.black,
+                                  pathBackgroundColor: Colors.black);
                             } else {
                               childrenList = [];
                               selectedChild = null;
@@ -249,7 +257,8 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                   : AppColors.primaryColor,
                             ),
                             onTap: () {
-                              Navigator.pushNamed(context, Routes.settings);
+                              Navigator.popAndPushNamed(
+                                  context, Routes.settings);
                             },
                           ),
                           alignment: AlignmentDirectional.centerEnd,
@@ -270,12 +279,14 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
   checkChild() async {
     ChildModel? child =
         await BlocProvider.of<CurrentChildCubit>(context).getCurrentChild();
+    setState(() {
+      selectedChild = child;
+    });
     if (child != null) {
       BlocProvider.of<AllPreviousDecisionTakenCubit>(context)
           .checkIfAllTaken(child);
-      setState(() {
-        selectedChild = child;
-      });
+      BlocProvider.of<DecisionBloc>(context).add(GetDecisionsByAgeEvent(
+          dateOfBirth: child.dateOfBirth, childId: child.id));
     }
   }
 

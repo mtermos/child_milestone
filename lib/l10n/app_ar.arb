@@ -65,5 +65,6 @@
     "educationalContentRating": "ما هو تقييمكم للمحتوى التعليمي للتطبيق؟",
     "areYouSureDelete": "هل أنت متأكد من الحذف؟",
     "deleteForever": "بعد حذف سجل هذا الطفل، لا يمكن استعادة المعلومات.",
+    "childsName": "اسم الطفل",
     "selectLanguage": "اختار اللغة"
 }

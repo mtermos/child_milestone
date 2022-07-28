@@ -35,14 +35,14 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
     return Stack(
       children: <Widget>[
         Container(
-          padding:
-              EdgeInsets.only(left: 20, top: 45 + 20, right: 20, bottom: 20),
-          margin: EdgeInsets.only(top: 45),
+          padding: const EdgeInsets.only(
+              left: 20, top: 45 + 20, right: 20, bottom: 20),
+          margin: const EdgeInsets.only(top: 45),
           decoration: BoxDecoration(
               shape: BoxShape.rectangle,
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: [
+              boxShadow: const [
                 BoxShadow(
                     color: Colors.black, offset: Offset(0, 10), blurRadius: 10),
               ]),
@@ -51,17 +51,18 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             children: <Widget>[
               Text(
                 widget.title,
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                style:
+                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Text(
                 widget.descriptions,
-                style: TextStyle(fontSize: 14),
+                style: const TextStyle(fontSize: 14),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 22,
               ),
               Align(
@@ -72,7 +73,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                     },
                     child: Text(
                       widget.text,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     )),
               ),
             ],
@@ -85,7 +86,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
             backgroundColor: Colors.transparent,
             radius: 45,
             child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(45)),
+                borderRadius: const BorderRadius.all(Radius.circular(45)),
                 child: widget.img),
           ),
         ),

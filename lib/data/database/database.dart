@@ -36,9 +36,18 @@ class DatabaseProvider {
     if (newVersion > oldVersion) {}
   }
 
-  void deleteDatabase() async {
+  deleteDatabase() async {
     String path = join(await getDatabasesPath(), 'child_vaccine_tracker.db');
     databaseFactory.deleteDatabase(path);
+  }
+
+  clearDatabase(List<String> tables) async {
+    if (_database != null) return _database!;
+    _database = await createDatabase();
+    for (var table in tables) {
+      print(table);
+      await _database!.delete(table);
+    }
   }
 
   void initDB(Database database, int version) async {

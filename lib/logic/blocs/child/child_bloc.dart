@@ -38,11 +38,11 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     emit(AddingChildState());
     DaoResponse result = await childRepository.insertChild(event.child);
     if (result.item1) {
-      emit(AddedChildState(event.child));
       if (event.addNotifications) {
         await _addPeriodsNotifications(event.context, event.child);
       }
       event.whenDone();
+      emit(AddedChildState(event.child));
     } else if (result.item2 == 2067) {
       emit(ErrorAddingChildUniqueIDState());
     } else {
@@ -55,7 +55,6 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     DaoResponse result = await childRepository.updateChild(event.child);
     if (result.item1) {
       emit(EditedChildState(event.child));
-
       if (event.addNotifications) {
         await _deleteAllNotifications(event.child.id);
         await _addPeriodsNotifications(event.context, event.child);
