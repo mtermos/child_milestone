@@ -40,6 +40,15 @@ class NotificationRepository {
         : List<NotificationModel>.empty();
   }
 
+  Future<List<NotificationModel>> getNotificationsByChildId(int childId) async {
+    List<Map<String, dynamic>> result =
+        await notificationDao.getNotificationsByChildId(childId);
+
+    return result.isNotEmpty
+        ? result.map((item) => NotificationModel.fromMap(item)).toList()
+        : List<NotificationModel>.empty();
+  }
+
   Future<List<NotificationWithChildAndMilestone>?>
       getAllNotificationsWithChildren() async {
     List<Map<String, dynamic>> notifications =
@@ -88,6 +97,9 @@ class NotificationRepository {
       notificationDao.deleteNotification(id);
 
   Future deleteAllNotifications() => notificationDao.deleteAllNotifications();
+
+  Future deleteAllNotificationsByChildId(int childId) =>
+      notificationDao.deleteAllNotificationsByChildId(childId);
 
   Future<NotificationModel?> getNotificationByID(int notificationId) async {
     Map<String, dynamic>? result =

@@ -40,11 +40,20 @@ class ChildDao {
   }
 
   //Update Child record
-  Future<int> updateChild(ChildModel child) async {
+  Future<DaoResponse<bool, int>> updateChild(ChildModel child) async {
     final db = await dbProvider.database;
+    DaoResponse<bool, int> result;
 
-    var result = await db.update(childrenTABLE, child.toMap(),
-        where: "id = ?", whereArgs: [child.id]);
+    try {
+      var id = await db.update(childrenTABLE, child.toMap(),
+          where: "id = ?", whereArgs: [child.id]);
+      result = DaoResponse(true, id);
+    } catch (err) {
+      if (err is DatabaseException) {
+        result = DaoResponse(false, err.getResultCode() ?? 0);
+      }
+      result = const DaoResponse(false, -1);
+    }
 
     return result;
   }

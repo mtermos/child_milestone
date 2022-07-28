@@ -23,6 +23,19 @@ class AddedChildState extends ChildState {
   List<Object?> get props => [child];
 }
 
+class EditingChildState extends ChildState {}
+
+class ErrorEditingChildState extends ChildState {}
+
+class EditedChildState extends ChildState {
+  final ChildModel child;
+
+  EditedChildState(this.child);
+
+  @override
+  List<Object?> get props => [child];
+}
+
 class ChildLoadingState extends ChildState {}
 
 class ChildLoadingErrorState extends ChildState {}
@@ -61,3 +74,9 @@ class ChildErrorState extends ChildState {
   @override
   List<Object?> get props => [error];
 }
+
+class DeletingChildState extends ChildState {}
+
+class ErrorDeletingChildState extends ChildState {}
+
+class DeletedChildState extends ChildState {}

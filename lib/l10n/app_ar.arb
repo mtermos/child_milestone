@@ -4,6 +4,7 @@
     "toChildMilestone": "إلى تطبيق متابعة الأطفال",
     "getStarted": "إبدأ الآن",
     "addChild": "إضافة طفل",
+    "editChild": "تعديل طفل",
     "addPhoto": "إضافة صورة",
     "childsNameField": "اسم الطفل",
     "dateOfBirthField": "تاريخ الميلاد",
@@ -62,5 +63,7 @@
     "appInterfaceRating": "ما هو تقييمكم لشكل التطبيق؟",
     "contentRating": "ما هو تقييمكم لمحتوى التطبيق؟",
     "educationalContentRating": "ما هو تقييمكم للمحتوى التعليمي للتطبيق؟",
+    "areYouSureDelete": "هل أنت متأكد من الحذف؟",
+    "deleteForever": "بعد حذف سجل هذا الطفل، لا يمكن استعادة المعلومات.",
     "selectLanguage": "اختار اللغة"
 }

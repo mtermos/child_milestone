@@ -58,6 +58,17 @@ class NotificationDao {
     return result;
   }
 
+  Future<List<Map<String, dynamic>>> getNotificationsByChildId(
+      int childId) async {
+    final db = await dbProvider.database;
+
+    List<Map<String, dynamic>> result = [];
+    result = await db
+        .query(notificationsTABLE, where: 'childId = ?', whereArgs: [childId]);
+
+    return result;
+  }
+
   Future<Map<String, dynamic>?> getNotificationByID(int notificationId) async {
     final db = await dbProvider.database;
 
@@ -94,6 +105,15 @@ class NotificationDao {
     var result = await db.delete(
       notificationsTABLE,
     );
+
+    return result;
+  }
+
+  //We are not going to use this in the demo
+  Future deleteAllNotificationsByChildId(int childId) async {
+    final db = await dbProvider.database;
+    var result = await db
+        .delete(notificationsTABLE, where: 'childId = ?', whereArgs: [childId]);
 
     return result;
   }

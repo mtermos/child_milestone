@@ -6,6 +6,7 @@ class Routes {
   static const String milestone = "/milestone";
   static const String childSummary = "/childSummaryRoute";
   static const String addChild = "/add_child";
+  static const String editChild = "/edit_child";
   static const String settings = "/settings";
 }
 

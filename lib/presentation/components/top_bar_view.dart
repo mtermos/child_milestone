@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
+import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,10 +15,10 @@ import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.d
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TopBarView extends StatefulWidget {
-  bool hasBackBottun;
-  String? backRoute;
-  bool light;
-  TopBarView({
+  final bool hasBackBottun;
+  final String? backRoute;
+  final bool light;
+  const TopBarView({
     Key? key,
     this.hasBackBottun = false,
     this.backRoute,
@@ -35,6 +36,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
 
   List<ChildModel>? childrenList;
   ChildModel? selectedChild;
+  GlobalKey dropDownKey = GlobalKey();
 
   @override
   void initState() {
@@ -100,17 +102,19 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                         ),
                       ),
                       Expanded(
-                        flex: 4,
+                        flex: 6,
                         child: BlocBuilder<ChildBloc, ChildState>(
                           builder: (context, state) {
                             if (state is AllChildrenLoadedState) {
                               childrenList = state.children;
                             } else {
                               childrenList = [];
+                              selectedChild = null;
                             }
                             return Center(
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<ChildModel>(
+                                  key: dropDownKey,
                                   selectedItemBuilder: (context) =>
                                       childrenList!.map<Widget>((e) {
                                     return Center(
@@ -138,18 +142,72 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                         .selectChild,
                                     fontSize: textScale * 20,
                                   ),
+                                  isExpanded: true,
                                   items: childrenList!
                                       .map<DropdownMenuItem<ChildModel>>(
                                           (ChildModel value) {
                                     return DropdownMenuItem<ChildModel>(
                                       value: value,
                                       alignment: AlignmentDirectional.center,
-                                      child: AppText(
-                                        text: value.name,
-                                        fontSize: textScale * 24,
-                                        // color: widget.light
-                                        //     ? Colors.white
-                                        //     : Colors.black,
+                                      child: Row(
+                                        children: [
+                                          AppText(
+                                            text: value.name,
+                                            fontSize: textScale * 24,
+                                            // color: widget.light
+                                            //     ? Colors.white
+                                            //     : Colors.black,
+                                          ),
+                                          const Spacer(),
+                                          // SizedBox(width: size.width * 0.1),
+                                          InkWell(
+                                            child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical:
+                                                        size.height * 0.005,
+                                                    horizontal:
+                                                        size.width * 0.02),
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.green,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                8))),
+                                                child: const AppText(
+                                                  text: "edit",
+                                                  color: Colors.white,
+                                                )),
+                                            onTap: () {
+                                              Navigator.popAndPushNamed(
+                                                  context, Routes.editChild,
+                                                  arguments: value.id);
+                                            },
+                                          ),
+                                          SizedBox(width: size.width * 0.015),
+                                          InkWell(
+                                            child: Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical:
+                                                        size.height * 0.005,
+                                                    horizontal:
+                                                        size.width * 0.02),
+                                                decoration: const BoxDecoration(
+                                                    color: Colors.red,
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                8))),
+                                                child: const AppText(
+                                                  text: "delete",
+                                                  color: Colors.white,
+                                                )),
+                                            onTap: () {
+                                              showDeleteConfirmationDialog(
+                                                  value.id);
+                                            },
+                                          ),
+                                          // AppButton(label: "delete"),
+                                        ],
                                       ),
                                     );
                                   }).toList(),
@@ -219,5 +277,99 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
         selectedChild = child;
       });
     }
+  }
+
+  showDeleteConfirmationDialog(int id) {
+    Size size = MediaQuery.of(context).size;
+    final textScale = MediaQuery.of(context).size.height * 0.001;
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              // title:
+              //     AppText(text: widget.milestoneItem.description),
+              title: Row(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(
+                      Icons.close,
+                      size: textScale * 28,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: AppText(
+                        text: AppLocalizations.of(context)!.areYouSureDelete,
+                        fontSize: textScale * 28,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    Icons.close,
+                    size: textScale * 28,
+                    color: Colors.white,
+                  ),
+                ],
+              ),
+              titlePadding: const EdgeInsets.all(0),
+              content: Padding(
+                padding: EdgeInsets.only(
+                    left: size.width * 0.05,
+                    right: size.width * 0.05,
+                    bottom: size.height * 0.01),
+                child: AppText(
+                  text: AppLocalizations.of(context)!.deleteForever,
+                  fontSize: textScale * 20,
+                  color: AppColors.primaryColorDarker,
+                ),
+              ),
+              actionsAlignment: MainAxisAlignment.center,
+              actionsPadding: EdgeInsets.only(bottom: size.height * 0.05),
+              actions: [
+                InkWell(
+                  onTap: () {
+                    BlocProvider.of<ChildBloc>(context)
+                        .add(DeleteChildEvent(id: id));
+                    BlocProvider.of<ChildBloc>(context)
+                        .add(GetAllChildrenEvent());
+                    Navigator.pop(context);
+                    Navigator.pop(dropDownKey.currentContext!);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      borderRadius: const BorderRadius.all(Radius.circular(6)),
+                      color: Colors.red[400],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black54,
+                          offset: Offset(textScale * 2, textScale * 4),
+                          blurRadius: textScale * 8,
+                        ),
+                      ],
+                    ),
+                    padding: EdgeInsets.symmetric(
+                      vertical: textScale * 10,
+                      horizontal: textScale * 30,
+                    ),
+                    child: AppText(
+                      text: AppLocalizations.of(context)!.yes,
+                      textAlign: TextAlign.right,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 }

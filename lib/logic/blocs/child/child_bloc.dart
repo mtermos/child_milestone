@@ -26,8 +26,10 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       {required this.childRepository, required this.notificationRepository})
       : super(InitialChildState()) {
     on<AddChildEvent>(addChild);
+    on<EditChildEvent>(editChild);
     on<GetAllChildrenEvent>(getAllChildren);
     on<DeleteAllChildrenEvent>(deleteAllChildren);
+    on<DeleteChildEvent>(deleteChild);
 
     on<GetChildEvent>(getChild);
   }
@@ -48,6 +50,22 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     }
   }
 
+  void editChild(EditChildEvent event, Emitter<ChildState> emit) async {
+    emit(EditingChildState());
+    DaoResponse result = await childRepository.updateChild(event.child);
+    if (result.item1) {
+      emit(EditedChildState(event.child));
+
+      if (event.addNotifications) {
+        await _deleteAllNotifications(event.child.id);
+        await _addPeriodsNotifications(event.context, event.child);
+      }
+      event.whenDone();
+    } else {
+      emit(ErrorEditingChildState());
+    }
+  }
+
   void getAllChildren(
       GetAllChildrenEvent event, Emitter<ChildState> emit) async {
     emit(AllChildrenLoadingState());
@@ -64,6 +82,13 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     emit(DeleteingAllChildrenState());
     await childRepository.deleteAllChildren();
     emit(DeletedAllChildrenState());
+  }
+
+  void deleteChild(DeleteChildEvent event, Emitter<ChildState> emit) async {
+    emit(DeletingChildState());
+    _deleteAllNotifications(event.id);
+    await childRepository.deleteChildById(event.id);
+    emit(DeletedChildState());
   }
 
   void getChild(GetChildEvent event, Emitter<ChildState> emit) async {
@@ -170,7 +195,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   Future _addWeeklyNotifications(DateTime dateTime, int period,
       BuildContext context, ChildModel child) async {
-    if (dateTime.isAfter(DateTime.now())) return;
+    if (dateTime.isBefore(DateTime.now())) return;
     // const AndroidNotificationDetails androidPlatformChannelSpecifics =
     //     AndroidNotificationDetails(
     //         'repeating channel id', 'repeating channel name',
@@ -207,5 +232,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       body: body,
       scheduledDate: tz.TZDateTime.from(dateTime, tz.local),
     );
+  }
+
+  _deleteAllNotifications(int childId) async {
+    List<NotificationModel> notifications =
+        await notificationRepository.getNotificationsByChildId(childId);
+    NotificationService _notificationService = NotificationService();
+    for (var notification in notifications) {
+      if (notification.id != null) {
+        _notificationService.cancelNotifications(notification.id!);
+      }
+    }
+    await notificationRepository.deleteAllNotificationsByChildId(childId);
   }
 }

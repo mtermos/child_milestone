@@ -93,7 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
         name: "رامي",
         dateOfBirth: DateTime.now().subtract(const Duration(days: 30)),
         imagePath: imagePath,
-        gender: "male",
+        gender: "Male",
         pregnancyDuration: 10);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
         context: context,
@@ -114,7 +114,7 @@ class _SplashScreenState extends State<SplashScreen> {
         name: "سارة",
         dateOfBirth: DateTime.now().subtract(const Duration(days: 70)),
         imagePath: imagePath,
-        gender: "female",
+        gender: "Female",
         pregnancyDuration: 10);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
         context: context,
