@@ -70,6 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ],
               ),
             ),
+            SizedBox(height: size.height * 0.05),
             Container(
               alignment: Alignment.center,
               width: size.width * 0.8,

@@ -3,10 +3,11 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TipItemWidget extends StatefulWidget {
-  TipItemWidget({Key? key, required this.item}) : super(key: key);
   final TipModel item;
+  const TipItemWidget({Key? key, required this.item}) : super(key: key);
 
   @override
   _TipItemWidgetState createState() => _TipItemWidgetState();
@@ -14,6 +15,7 @@ class TipItemWidget extends StatefulWidget {
 
 class _TipItemWidgetState extends State<TipItemWidget> {
   final Color borderColor = const Color(0xffE2E2E2);
+  final String youtubeLogo = "assets/icons/youtube.png";
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +50,27 @@ class _TipItemWidgetState extends State<TipItemWidget> {
           ),
           SizedBox(height: size.height * 0.01),
           InkWell(
-            child: AppText(
-              text: widget.item.body,
-              color: Colors.black,
-              fontSize: textScale * 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                AppText(
+                  text: AppLocalizations.of(context)!.clickToWatchOn,
+                  fontSize: textScale * 18,
+                ),
+                SizedBox(width: size.width * 0.015),
+                Image.asset(
+                  youtubeLogo,
+                  width: size.width * 0.2,
+                ),
+              ],
             ),
+
+            // child: AppText(
+            //   text: widget.item.body,
+            //   color: Colors.black,
+            //   fontSize: textScale * 16,
+            // ),
             onTap: () => launchUrl(Uri.parse(widget.item.videoURL!)),
           )
         ],
