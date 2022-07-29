@@ -15,6 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -68,7 +69,18 @@ class _EditChildFormState extends State<EditChildForm> {
     return BlocBuilder<ChildBloc, ChildState>(
       builder: (context, state) {
         if (state is EditingChildState) {
-          return AppText(text: "text");
+          return Center(
+            child: SizedBox(
+              width: size.width * 0.3,
+              child: const LoadingIndicator(
+                indicatorType: Indicator.ballPulse,
+                colors: [AppColors.primaryColor],
+                strokeWidth: 1,
+                backgroundColor: Colors.white,
+                pathBackgroundColor: Colors.white,
+              ),
+            ),
+          );
         } else {
           return SingleChildScrollView(
             child: Column(

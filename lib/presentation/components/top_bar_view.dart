@@ -109,12 +109,18 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                             if (state is AllChildrenLoadedState) {
                               childrenList = state.children;
                             } else if (state is AllChildrenLoadingState) {
-                              return const LoadingIndicator(
-                                  indicatorType: Indicator.ballPulse,
-                                  colors: [Colors.white],
-                                  strokeWidth: 2,
-                                  backgroundColor: Colors.black,
-                                  pathBackgroundColor: Colors.black);
+                              return Center(
+                                child: SizedBox(
+                                  width: size.width * 0.3,
+                                  child: const LoadingIndicator(
+                                    indicatorType: Indicator.ballPulse,
+                                    colors: [AppColors.primaryColor],
+                                    strokeWidth: 1,
+                                    backgroundColor: Colors.white,
+                                    pathBackgroundColor: Colors.white,
+                                  ),
+                                ),
+                              );
                             } else {
                               childrenList = [];
                               selectedChild = null;

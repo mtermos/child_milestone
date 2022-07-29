@@ -11,6 +11,7 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -119,8 +120,7 @@ class _HomeTabState extends State<HomeTab> {
                           AppText(
                             text: currentChild != null
                                 ? currentChild!.name
-                                : AppLocalizations.of(context)!
-                                      .childsName,
+                                : AppLocalizations.of(context)!.childsName,
                             color: Colors.white,
                             fontSize: size.height * 0.03,
                             fontWeight: FontWeight.bold,
@@ -207,7 +207,18 @@ class _HomeTabState extends State<HomeTab> {
                               dateOfBirth: currentChild!.dateOfBirth,
                               childId: currentChild!.id));
                     }
-                    return const CircularProgressIndicator();
+                    return Center(
+                      child: SizedBox(
+                        width: size.width * 0.3,
+                        child: const LoadingIndicator(
+                          indicatorType: Indicator.ballPulse,
+                          colors: [AppColors.primaryColor],
+                          strokeWidth: 1,
+                          backgroundColor: Colors.white,
+                          pathBackgroundColor: Colors.white,
+                        ),
+                      ),
+                    );
                   }
                 },
               ),

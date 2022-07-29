@@ -67,25 +67,16 @@ class _AddChildFormState extends State<AddChildForm> {
     return BlocBuilder<ChildBloc, ChildState>(
       builder: (context, state) {
         if (state is AddingChildState) {
-          print("object");
-          return SizedBox(
-            width: size.width * 0.5,
-            child: const LoadingIndicator(
-              indicatorType: Indicator.ballPulse,
-
-              /// Required, The loading type of the widget
-              colors: [AppColors.primaryColor],
-
-              /// Optional, The color collections
-              strokeWidth: 2,
-
-              /// Optional, The stroke of the line, only applicable to widget which contains line
-              backgroundColor: Colors.white,
-
-              /// Optional, Background of the widget
-              pathBackgroundColor: Colors.white,
-
-              /// Optional, the stroke backgroundColor
+          return Center(
+            child: SizedBox(
+              width: size.width * 0.5,
+              child: const LoadingIndicator(
+                indicatorType: Indicator.ballPulse,
+                colors: [AppColors.primaryColor],
+                strokeWidth: 2,
+                backgroundColor: Colors.white,
+                pathBackgroundColor: Colors.white,
+              ),
             ),
           );
         }
