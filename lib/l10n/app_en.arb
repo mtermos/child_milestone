@@ -60,5 +60,7 @@
     "deleteForever": "After deleting the information, it can't be restored.",
     "childsName": "Child's Name",
     "clickToWatchOn": "Click here to watch in",
+    "clickToWatchVideo": "Click to watch assistative video",
+    "clickToOpenDocument": "Click to read document",
     "selectLanguage": "Select Language"
 }

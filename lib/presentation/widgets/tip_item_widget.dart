@@ -1,6 +1,7 @@
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,6 +17,8 @@ class TipItemWidget extends StatefulWidget {
 class _TipItemWidgetState extends State<TipItemWidget> {
   final Color borderColor = const Color(0xffE2E2E2);
   final String youtubeLogo = "assets/icons/youtube.png";
+  final String videoSVG = "assets/images/video.svg";
+  final String documentSVG = "assets/images/document.svg";
 
   @override
   Widget build(BuildContext context) {
@@ -24,66 +27,97 @@ class _TipItemWidgetState extends State<TipItemWidget> {
     Widget body;
     YoutubePlayerController? _controller;
     if (widget.item.videoURL != null) {
-      _controller = YoutubePlayerController(
-        initialVideoId:
-            YoutubePlayer.convertUrlToId(widget.item.videoURL!) ?? "",
-        flags: const YoutubePlayerFlags(
-          autoPlay: false,
-          mute: false,
-          showLiveFullscreenButton: false,
-        ),
-      );
-      body = Column(
-        children: [
-          YoutubePlayer(
-            key: ObjectKey(_controller),
-            controller: _controller,
-            // actionsPadding: const EdgeInsets.only(left: 16.0),
-            bottomActions: [
-              CurrentPosition(),
-              const SizedBox(width: 10.0),
-              ProgressBar(isExpanded: true),
-              const SizedBox(width: 10.0),
-              // RemainingDuration(),
-              // FullScreenButton(),
+      if (widget.item.videoURL!.contains("/shorts/") ||
+          widget.item.videoURL!.contains("raisingchildren.net.au")) {
+        body = InkWell(
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                videoSVG,
+                width: size.width * 0.25,
+                alignment: Alignment.center,
+              ),
+              SizedBox(height: size.height * 0.01),
+              AppText(
+                text: AppLocalizations.of(context)!.clickToWatchVideo,
+                color: Colors.black,
+                fontSize: textScale * 16,
+              ),
             ],
           ),
-          SizedBox(height: size.height * 0.01),
-          InkWell(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AppText(
-                  text: AppLocalizations.of(context)!.clickToWatchOn,
-                  fontSize: textScale * 18,
-                ),
-                SizedBox(width: size.width * 0.015),
-                Image.asset(
-                  youtubeLogo,
-                  width: size.width * 0.2,
-                ),
+          onTap: () => launchUrl(Uri.parse(widget.item.videoURL!)),
+        );
+      } else {
+        _controller = YoutubePlayerController(
+          initialVideoId:
+              YoutubePlayer.convertUrlToId(widget.item.videoURL!) ?? "",
+          flags: const YoutubePlayerFlags(
+            autoPlay: false,
+            mute: false,
+            showLiveFullscreenButton: false,
+          ),
+        );
+        body = Column(
+          children: [
+            YoutubePlayer(
+              key: ObjectKey(_controller),
+              controller: _controller,
+              // actionsPadding: const EdgeInsets.only(left: 16.0),
+              bottomActions: [
+                CurrentPosition(),
+                const SizedBox(width: 10.0),
+                ProgressBar(isExpanded: true),
+                const SizedBox(width: 10.0),
+                // RemainingDuration(),
+                // FullScreenButton(),
               ],
             ),
+            SizedBox(height: size.height * 0.01),
+            InkWell(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AppText(
+                    text: AppLocalizations.of(context)!.clickToWatchOn,
+                    fontSize: textScale * 18,
+                  ),
+                  SizedBox(width: size.width * 0.015),
+                  Image.asset(
+                    youtubeLogo,
+                    width: size.width * 0.2,
+                  ),
+                ],
+              ),
 
-            // child: AppText(
-            //   text: widget.item.body,
-            //   color: Colors.black,
-            //   fontSize: textScale * 16,
-            // ),
-            onTap: () => launchUrl(Uri.parse(widget.item.videoURL!)),
-          )
-        ],
-      );
+              // child: AppText(
+              //   text: widget.item.body,
+              //   color: Colors.black,
+              //   fontSize: textScale * 16,
+              // ),
+              onTap: () => launchUrl(Uri.parse(widget.item.videoURL!)),
+            )
+          ],
+        );
+      }
     } else if (widget.item.documentURL != null) {
       body = InkWell(
-        child: AppText(
-          text: widget.item.body,
-          color: Colors.black,
-          fontSize: textScale * 16,
-          link: true,
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              documentSVG,
+              width: size.width * 0.25,
+              alignment: Alignment.center,
+            ),
+            SizedBox(height: size.height * 0.01),
+            AppText(
+              text: AppLocalizations.of(context)!.clickToOpenDocument,
+              color: Colors.black,
+              fontSize: textScale * 16,
+            ),
+          ],
         ),
-        onTap: () => launchUrl(Uri.parse(widget.item.videoURL!)),
+        onTap: () => launchUrl(Uri.parse(widget.item.documentURL!)),
       );
     } else {
       body = AppText(

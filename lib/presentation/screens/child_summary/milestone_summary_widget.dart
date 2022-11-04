@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 class MilestoneSummaryItem extends StatefulWidget {
   final MilestoneItem milestoneItem;
@@ -36,6 +38,7 @@ class MilestoneSummaryItem extends StatefulWidget {
 class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
   int decision = 1;
   String category = "";
+  final String youtubeLogo = "assets/icons/youtube.png";
 
   @override
   void initState() {
@@ -49,6 +52,84 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
     const String editIcon = "assets/icons/edit_icon.svg";
+    const String videoSVG = "assets/images/video.svg";
+    Widget? youtubeWidget;
+
+    YoutubePlayerController? _controller;
+    if (widget.decision == -1 &&
+        widget.redFlag &&
+        widget.milestoneItem.videoPath != null) {
+      if (widget.milestoneItem.videoPath!.contains("/shorts/") ||
+          widget.milestoneItem.videoPath!.contains("raisingchildren.net.au")) {
+        youtubeWidget = InkWell(
+          child: Column(
+            children: [
+              SvgPicture.asset(
+                videoSVG,
+                width: size.width * 0.25,
+                alignment: Alignment.center,
+              ),
+              SizedBox(height: size.height * 0.01),
+              AppText(
+                text: AppLocalizations.of(context)!.clickToWatchVideo,
+                color: Colors.black,
+                fontSize: textScale * 16,
+              ),
+            ],
+          ),
+          onTap: () => launchUrl(Uri.parse(widget.milestoneItem.videoPath!)),
+        );
+      } else {
+        _controller = YoutubePlayerController(
+          initialVideoId:
+              YoutubePlayer.convertUrlToId(widget.milestoneItem.videoPath!) ??
+                  "",
+          flags: const YoutubePlayerFlags(
+            autoPlay: false,
+            mute: false,
+            showLiveFullscreenButton: false,
+          ),
+        );
+        youtubeWidget = Column(
+          children: [
+            YoutubePlayer(
+              key: ObjectKey(_controller),
+              controller: _controller,
+              // actionsPadding: const EdgeInsets.only(left: 16.0),
+              bottomActions: [
+                CurrentPosition(),
+                const SizedBox(width: 10.0),
+                ProgressBar(isExpanded: true),
+                const SizedBox(width: 10.0),
+                // RemainingDuration(),
+                // FullScreenButton(),
+              ],
+            ),
+            SizedBox(height: size.height * 0.01),
+            InkWell(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    youtubeLogo,
+                    width: size.width * 0.2,
+                  ),
+                ],
+              ),
+
+              // child: AppText(
+              //   text: widget.item.body,
+              //   color: Colors.black,
+              //   fontSize: textScale * 16,
+              // ),
+              onTap: () =>
+                  launchUrl(Uri.parse(widget.milestoneItem.videoPath!)),
+            )
+          ],
+        );
+      }
+    }
     return Container(
       width: size.width * 0.75,
       padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
@@ -79,7 +160,6 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                         showDialog(
                           context: context,
                           builder: (context) {
-                            String contentText = "Content of Dialog";
                             return StatefulBuilder(
                               builder: (context, setState) {
                                 return AlertDialog(
@@ -121,10 +201,19 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                         left: size.width * 0.05,
                                         right: size.width * 0.05,
                                         bottom: size.height * 0.04),
-                                    child: AppText(
-                                      text: widget.milestoneItem.description,
-                                      fontSize: textScale * 26,
-                                      color: AppColors.primaryColorDarker,
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        AppText(
+                                          text:
+                                              widget.milestoneItem.description,
+                                          fontSize: textScale * 26,
+                                          color: AppColors.primaryColorDarker,
+                                        ),
+                                        widget.decision == -1 && widget.redFlag
+                                            ? youtubeWidget!
+                                            : const SizedBox.shrink(),
+                                      ],
                                     ),
                                   ),
                                   actionsAlignment: MainAxisAlignment.center,

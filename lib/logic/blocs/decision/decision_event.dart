@@ -35,7 +35,8 @@ class GetDecisionsByChild extends DecisionEvent {
 class GetDecisionsByAgeEvent extends DecisionEvent {
   final DateTime dateOfBirth;
   final int childId;
-  const GetDecisionsByAgeEvent({required this.dateOfBirth, required this.childId});
+  const GetDecisionsByAgeEvent(
+      {required this.dateOfBirth, required this.childId});
 }
 
 class GetDecisionByChildAndMilestoneEvent extends DecisionEvent {
@@ -43,4 +44,8 @@ class GetDecisionByChildAndMilestoneEvent extends DecisionEvent {
   final int milestoneId;
   const GetDecisionByChildAndMilestoneEvent(
       {required this.childId, required this.milestoneId});
+}
+
+class UploadDecisionsEvent extends DecisionEvent {
+  const UploadDecisionsEvent();
 }

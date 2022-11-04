@@ -97,3 +97,14 @@ class LoadedDecisionByChildAndMilestoneState extends DecisionState {
   @override
   List<Object?> get props => [decision];
 }
+
+class UploadingDecisionState extends DecisionState {}
+
+class ErrorUploadingDecisionState extends DecisionState {
+  final String error;
+  ErrorUploadingDecisionState({
+    required this.error,
+  });
+}
+
+class UploadedDecisionState extends DecisionState {}

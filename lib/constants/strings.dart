@@ -11,7 +11,8 @@ class Routes {
 }
 
 class Urls {
-  static const String backendUrl = "http://localhost:3000/api";
+  // static const String backendUrl = "http://localhost:3000/api";
+  static const String backendUrl = "http://127.0.0.1:8000/api/";
   static const String loginUrl = "/user/login";
 }
 
@@ -27,6 +28,4 @@ class SharedPrefKeys {
   static const String langCode = "lang";
 }
 
-List<String> Categories = [
-  ""
-];
+List<String> Categories = [""];

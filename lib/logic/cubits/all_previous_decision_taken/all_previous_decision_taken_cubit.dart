@@ -26,7 +26,7 @@ class AllPreviousDecisionTakenCubit extends Cubit<Map<int, bool>> {
         await milestoneRepository.getMilestonesUntilPeriod(period - 1);
 
     if (milestones != null) {
-      Map<int, bool> newState = state;
+      Map<int, bool> newState = Map.from(state);
       for (var milestone in milestones) {
         DecisionModel? decision = await decisionRepository
             .getDecisionByChildAndMilestone(child.id, milestone.id);

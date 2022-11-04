@@ -19,6 +19,7 @@ import 'package:child_milestone/logic/blocs/rating/rating_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/cubits/internet_connectivity/internet_cubit.dart';
 import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -26,7 +27,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
-import 'package:child_milestone/logic/blocs/internet/internet_bloc.dart';
 import 'package:child_milestone/presentation/router/app_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -85,9 +85,9 @@ class Application extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<InternetBloc>(
+          BlocProvider<InternetCubit>(
             create: (internetBlocContext) =>
-                InternetBloc(connectivity: connectivity),
+                InternetCubit(connectivity: connectivity),
           ),
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(),
@@ -152,6 +152,13 @@ class Application extends StatelessWidget {
         ],
         child: BlocBuilder<LanguageCubit, Locale>(
           builder: (context, lang) {
+            final internetState = context.watch<InternetCubit>().state;
+            if (internetState is InternetConnected) {
+              print('InternetConnected:');
+              // BlocProvider.of<DecisionBloc>(context)
+              //     .add(const UploadDecisionsEvent());
+            }
+
             return MaterialApp(
               theme: ThemeData(
                 // accentColor: Colors.blue,

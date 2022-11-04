@@ -7,6 +7,9 @@ import 'package:child_milestone/presentation/screens/home/tabs/notifications_tab
 import 'package:child_milestone/presentation/screens/home/tabs/tips_tab.dart';
 import 'package:child_milestone/presentation/components/top_bar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../logic/cubits/internet_connectivity/internet_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
   @override

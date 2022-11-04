@@ -7,7 +7,7 @@ class DecisionRepository {
 
   DecisionRepository(this.decisionDao);
 
-  Future getAllDecisions() async {
+  Future<List<DecisionModel>> getAllDecisions() async {
     List<Map<String, dynamic>> result = await decisionDao.getAllDecisions();
 
     return result.isNotEmpty

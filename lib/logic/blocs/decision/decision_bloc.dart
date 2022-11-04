@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
@@ -10,6 +12,8 @@ import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:http/http.dart' as http;
+import 'package:child_milestone/constants/strings.dart';
 
 part 'decision_event.dart';
 part 'decision_state.dart';
@@ -32,6 +36,8 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     on<GetDecisionsByChild>(getByChild);
     on<GetDecisionsByAgeEvent>(getByAge);
     on<GetDecisionByChildAndMilestoneEvent>(getByChildAndMilestone);
+
+    on<UploadDecisionsEvent>(uploadDecisionsEvent);
   }
 
   void addDecision(AddDecisionEvent event, Emitter<DecisionState> emit) async {
@@ -147,5 +153,34 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
       return true;
     }
     return false;
+  }
+
+  void uploadDecisionsEvent(
+      UploadDecisionsEvent event, Emitter<DecisionState> emit) async {
+    emit(UploadingDecisionState());
+    List<DecisionModel> newDecisions =
+        (await decisionRepository.getAllDecisions())
+            .where((element) => !element.uploaded)
+            .toList();
+
+    if (newDecisions.isNotEmpty) {
+      final response = await http.post(Uri.parse(Urls.backendUrl + "test/"),
+          body: {
+            "decisions":
+                newDecisions.map((item) => item.toJson()).toList().toString()
+          });
+
+      if (response.statusCode == 200) {
+        for (var decision in newDecisions) {
+          if (decision.uploaded) {
+            continue;
+          }
+          decision.uploaded = true;
+          decisionRepository.updateDecision(decision);
+        }
+      }
+    } else {
+      emit(ErrorUploadingDecisionState(error: "response not 200"));
+    }
   }
 }

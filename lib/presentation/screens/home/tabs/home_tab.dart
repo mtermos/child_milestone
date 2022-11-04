@@ -15,6 +15,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomeTab extends StatefulWidget {
   Function changeIndex;
@@ -278,7 +279,11 @@ class _HomeTabState extends State<HomeTab> {
                       width: size.width * 0.4,
                     ),
                     onTap: () async {
-                      widget.changeIndex(2);
+                      // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
+                      // widget.changeIndex(2);
+
+                      BlocProvider.of<DecisionBloc>(context)
+                          .add(const UploadDecisionsEvent());
                       // _logout();
                     },
                   ),

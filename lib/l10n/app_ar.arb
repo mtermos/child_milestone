@@ -48,8 +48,8 @@
     "newPeriodNotificationBody1": " الطفل",
     "newPeriodNotificationBody2": " دخل في مرحلة عمرية جديدة نرجو منكم الاجابة على الأسئلة الجديدة لهذه المرحلة",
     "weeklyNotificationTitle": "تذكير، اكمل جميع المتابعات",
-    "weeklyNotificationBody1": " لم يتم إكمال المتابعات للطفل",
-    "weeklyNotificationBody2": ". نرجوإكمال المتبقي منها",
+    "weeklyNotificationBody1": " لم يتم إكمال المتابعات للطفل ",
+    "weeklyNotificationBody2": ". نرجو إكمال المتبقي منها",
     "homePage": "الصفحة الرئيسية",
     "enterDecision": "إجابة جديدة",
     "updateDecision": "غير إجابتك",
@@ -67,5 +67,7 @@
     "deleteForever": "بعد حذف سجل هذا الطفل، لا يمكن استعادة المعلومات.",
     "childsName": "اسم الطفل",
     "clickToWatchOn": "اضغط هنا لمشاهدة الفيديو عبر",
+    "clickToWatchVideo": "اضغط لمشاهدة الفيديو المساعد",
+    "clickToOpenDocument": "اضغط لقراءة المستند المساعد",
     "selectLanguage": "اختار اللغة"
 }

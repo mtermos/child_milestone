@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
+    resetData();
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
   }
@@ -124,6 +124,32 @@ class _SplashScreenState extends State<SplashScreen> {
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
         context: context,
         child: newChild2,
+        addNotifications: false,
+        whenDone: () {}));
+
+    ChildModel newChild3 = ChildModel(
+        id: 3,
+        name: "الثالث",
+        dateOfBirth: DateTime.now().subtract(const Duration(days: 144)),
+        imagePath: imagePath,
+        gender: "Male",
+        pregnancyDuration: 10);
+    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
+        context: context,
+        child: newChild3,
+        addNotifications: false,
+        whenDone: () {}));
+
+    ChildModel newChild4 = ChildModel(
+        id: 4,
+        name: "الرابع",
+        dateOfBirth: DateTime.now().subtract(const Duration(days: 244)),
+        imagePath: imagePath,
+        gender: "Male",
+        pregnancyDuration: 10);
+    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
+        context: context,
+        child: newChild4,
         addNotifications: false,
         whenDone: () {}));
   }
