@@ -2,7 +2,7 @@
     package="com.example.child_milestone">
     <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="child_milestone"
+        android:label="Neonatal Prepare App"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity

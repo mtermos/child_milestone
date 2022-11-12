@@ -118,9 +118,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
       if (temp.isAfter(DateTime.now())) {
         String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
-        String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
-            child.name +
-            AppLocalizations.of(context)!.newPeriodNotificationBody2;
+        String body = "";
+        if (child.gender == "Male") {
+          body = AppLocalizations.of(context)!.newPeriodNotificationBody1male +
+              child.name +
+              AppLocalizations.of(context)!.newPeriodNotificationBody2male;
+        } else {
+          body = AppLocalizations.of(context)!
+                  .newPeriodNotificationBody1female +
+              child.name +
+              AppLocalizations.of(context)!.newPeriodNotificationBody2female;
+        }
 
         NotificationModel notification = NotificationModel(
           title: title,
@@ -161,9 +169,18 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       }
       if (temp.isAfter(DateTime.now())) {
         String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
-        String body = AppLocalizations.of(context)!.newPeriodNotificationBody1 +
-            child.name +
-            AppLocalizations.of(context)!.newPeriodNotificationBody2;
+
+        String body = "";
+        if (child.gender == "Male") {
+          body = AppLocalizations.of(context)!.newPeriodNotificationBody1male +
+              child.name +
+              AppLocalizations.of(context)!.newPeriodNotificationBody2male;
+        } else {
+          body = AppLocalizations.of(context)!
+                  .newPeriodNotificationBody1female +
+              child.name +
+              AppLocalizations.of(context)!.newPeriodNotificationBody2female;
+        }
 
         NotificationModel notification = NotificationModel(
           title: title,
@@ -208,9 +225,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     //     androidAllowWhileIdle: true);
 
     String title = AppLocalizations.of(context)!.weeklyNotificationTitle;
-    String body = AppLocalizations.of(context)!.weeklyNotificationBody1 +
-        child.name +
-        AppLocalizations.of(context)!.weeklyNotificationBody2;
+    String body = "";
+
+    if (child.gender == "Male") {
+      body = AppLocalizations.of(context)!.weeklyNotificationBody1male +
+          child.name +
+          AppLocalizations.of(context)!.weeklyNotificationBody2;
+    } else {
+      body = AppLocalizations.of(context)!.weeklyNotificationBody1female +
+          child.name +
+          AppLocalizations.of(context)!.weeklyNotificationBody2;
+    }
 
     NotificationModel notification = NotificationModel(
       title: title,

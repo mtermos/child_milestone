@@ -213,7 +213,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     border: Border.all(),
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     color: widget.item.decision.decision == 3
-                        ? Colors.blue[200]
+                        ? Colors.yellow[200]
                         : Colors.white,
                     boxShadow: [
                       BoxShadow(

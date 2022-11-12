@@ -356,7 +356,7 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                           borderRadius: const BorderRadius.all(
                                               Radius.circular(6)),
                                           color: decision == 3
-                                              ? Colors.blue[200]
+                                              ? Colors.yellow[200]
                                               : Colors.white,
                                           boxShadow: [
                                             BoxShadow(

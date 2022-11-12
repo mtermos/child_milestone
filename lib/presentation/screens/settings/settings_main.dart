@@ -42,34 +42,34 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: size.width * 0.8,
               margin: const EdgeInsets.symmetric(horizontal: 40),
             ),
-            SizedBox(height: size.height * 0.02),
-            Container(
-              alignment: Alignment.center,
-              width: size.width * 0.8,
-              margin: const EdgeInsets.symmetric(horizontal: 40),
-              child: Row(
-                children: [
-                  AppText(
-                    text: AppLocalizations.of(context)!.selectLanguage,
-                    fontSize: textScale * 24,
-                  ),
-                  const Spacer(),
-                  DropdownButton(
-                    value: BlocProvider.of<LanguageCubit>(context).state,
-                    onChanged: (Locale? val) {
-                      BlocProvider.of<LanguageCubit>(context)
-                          .changeLang(val!.languageCode);
-                    },
-                    items: AppLocalizations.supportedLocales
-                        .map((e) => DropdownMenuItem(
-                              value: e,
-                              child: Text(languageName(e.languageCode)),
-                            ))
-                        .toList(),
-                  ),
-                ],
-              ),
-            ),
+            // SizedBox(height: size.height * 0.02),
+            // Container(
+            //   alignment: Alignment.center,
+            //   width: size.width * 0.8,
+            //   margin: const EdgeInsets.symmetric(horizontal: 40),
+            //   child: Row(
+            //     children: [
+            //       AppText(
+            //         text: AppLocalizations.of(context)!.selectLanguage,
+            //         fontSize: textScale * 24,
+            //       ),
+            //       const Spacer(),
+            //       DropdownButton(
+            //         value: BlocProvider.of<LanguageCubit>(context).state,
+            //         onChanged: (Locale? val) {
+            //           BlocProvider.of<LanguageCubit>(context)
+            //               .changeLang(val!.languageCode);
+            //         },
+            //         items: AppLocalizations.supportedLocales
+            //             .map((e) => DropdownMenuItem(
+            //                   value: e,
+            //                   child: Text(languageName(e.languageCode)),
+            //                 ))
+            //             .toList(),
+            //       ),
+            //     ],
+            //   ),
+            // ),
             SizedBox(height: size.height * 0.05),
             Container(
               alignment: Alignment.center,
