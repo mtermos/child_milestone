@@ -34,7 +34,16 @@ class MilestoneRepository {
   }
 
   Future<List<MilestoneItem>?> getMilestonesByAge(DateTime dateOfBirth) async {
-    int period = periodCalculator(dateOfBirth);
+    int period = periodCalculator(dateOfBirth).id;
+    List<Map<String, dynamic>> result =
+        await milestoneDao.getMilestonesByAge(period);
+
+    return result.isNotEmpty
+        ? result.map((item) => MilestoneItem.fromMap(item)).toList()
+        : List<MilestoneItem>.empty();
+  }
+
+  Future<List<MilestoneItem>?> getMilestonesByPeriod(int period) async {
     List<Map<String, dynamic>> result =
         await milestoneDao.getMilestonesByAge(period);
 

@@ -32,7 +32,7 @@ class RatingRepository {
   }
 
   Future<List<RatingModel>?> getRatingsByAge(DateTime dateOfBirth) async {
-    int period = periodCalculator(dateOfBirth);
+    int period = periodCalculator(dateOfBirth).id;
 
     List<Map<String, dynamic>> result = await ratingDao.getRatingsByAge(period);
 

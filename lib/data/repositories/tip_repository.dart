@@ -31,7 +31,7 @@ class TipRepository {
   }
 
   Future<List<TipModel>?> getTipsByAge(DateTime dateOfBirth) async {
-    int period = periodCalculator(dateOfBirth);
+    int period = periodCalculator(dateOfBirth).id;
 
     List<Map<String, dynamic>> result = await tipDao.getTipsByAge(period);
 

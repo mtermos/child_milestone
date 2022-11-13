@@ -44,7 +44,7 @@ class DecisionRepository {
 
   Future<DaoResponse<List<DecisionModel>, int>> getDecisionsByAge(
       DateTime dateOfBirth, int childId) async {
-    int period = periodCalculator(dateOfBirth);
+    int period = periodCalculator(dateOfBirth).id;
     DaoResponse<List, int> daoResponse =
         await decisionDao.getDecisionsByAge(period, childId);
 

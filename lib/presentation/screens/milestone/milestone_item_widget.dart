@@ -11,8 +11,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MilestoneItemWidget extends StatefulWidget {
-  const MilestoneItemWidget({Key? key, required this.item}) : super(key: key);
+  const MilestoneItemWidget(
+      {Key? key, required this.item, required this.selectedPeriod})
+      : super(key: key);
   final MilestoneWithDecision item;
+  final Period selectedPeriod;
 
   @override
   _MilestoneItemWidgetState createState() => _MilestoneItemWidgetState();
@@ -102,8 +105,9 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                       ),
                       onSuccess: () {
                         BlocProvider.of<MilestoneBloc>(context).add(
-                            GetMilestonesWithDecisionsByAgeEvent(
-                                child: selected_child!));
+                            GetMilestonesWithDecisionsByPeriodEvent(
+                                child: selected_child!,
+                                periodId: widget.selectedPeriod.id));
                       },
                     ));
                   }
@@ -150,8 +154,9 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                       ),
                       onSuccess: () {
                         BlocProvider.of<MilestoneBloc>(context).add(
-                            GetMilestonesWithDecisionsByAgeEvent(
-                                child: selected_child!));
+                            GetMilestonesWithDecisionsByPeriodEvent(
+                                child: selected_child!,
+                                periodId: widget.selectedPeriod.id));
                       },
                     ));
                     // BlocProvider.of<DecisionBloc>(context).add(
@@ -201,8 +206,9 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                       ),
                       onSuccess: () {
                         BlocProvider.of<MilestoneBloc>(context).add(
-                            GetMilestonesWithDecisionsByAgeEvent(
-                                child: selected_child!));
+                            GetMilestonesWithDecisionsByPeriodEvent(
+                                child: selected_child!,
+                                periodId: widget.selectedPeriod.id));
                       },
                     ));
                   }

@@ -23,3 +23,12 @@ class NotificationWithChildAndMilestone {
     this.milestone,
   });
 }
+
+class Period {
+  int id;
+  String arabicName;
+  Period( {
+    required this.id,
+    required this.arabicName,
+  });
+}

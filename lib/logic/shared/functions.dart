@@ -1,7 +1,8 @@
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 
-int periodCalculator(DateTime dateOfBirth) {
+Period periodCalculator(DateTime dateOfBirth) {
   DateTime tempStart, tempEnd;
   DateTime nowDate = DateTime.now();
   for (var period in monthlyPeriods) {
@@ -10,7 +11,7 @@ int periodCalculator(DateTime dateOfBirth) {
     tempEnd = DateTime(dateOfBirth.year, dateOfBirth.month + period.endingMonth,
         dateOfBirth.day);
     if (tempStart.isBefore(nowDate) && tempEnd.isAfter(nowDate)) {
-      return period.id;
+      return period;
     }
   }
   for (var period in yearlyPeriods) {
@@ -19,8 +20,8 @@ int periodCalculator(DateTime dateOfBirth) {
     tempEnd = DateTime(dateOfBirth.year + period.endingYear, dateOfBirth.month,
         dateOfBirth.day);
     if (tempStart.isBefore(nowDate) && tempEnd.isAfter(nowDate)) {
-      return period.id;
+      return period;
     }
   }
-  return 0;
+  return Period(id: 0, arabicName: "null");
 }
