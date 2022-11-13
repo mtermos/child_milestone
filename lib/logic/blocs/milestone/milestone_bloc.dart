@@ -156,9 +156,8 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
       GetMilestonesForSummaryEvent event, Emitter<MilestoneState> emit) async {
     emit(LoadingMilestonesForSummaryState());
     List<MilestoneWithDecision> items = [];
-    int period = periodCalculator(event.child.dateOfBirth).id;
     List<MilestoneItem>? milestones =
-        await milestoneRepository.getMilestonesUntilPeriod(period);
+        await milestoneRepository.getMilestonesByPeriod(event.periodId);
 
     if (milestones != null) {
       for (var milestone in milestones) {

@@ -63,7 +63,10 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
           if (state is CurrentChildChangedState) {
             current_child = state.new_current_child;
             currentPeriod = periodCalculator(current_child!.dateOfBirth);
-            selectedPeriod ??= currentPeriod;
+            if (selectedPeriod == null ||
+                currentPeriod!.id < selectedPeriod!.id) {
+              selectedPeriod = currentPeriod;
+            }
             BlocProvider.of<MilestoneBloc>(context).add(
                 GetMilestonesWithDecisionsByPeriodEvent(
                     child: current_child!, periodId: selectedPeriod!.id));

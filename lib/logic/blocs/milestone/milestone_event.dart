@@ -44,5 +44,7 @@ class GetMilestonesWithDecisionsByChildEvent extends MilestoneEvent {
 
 class GetMilestonesForSummaryEvent extends MilestoneEvent {
   final ChildModel child;
-  const GetMilestonesForSummaryEvent({required this.child});
+  final int periodId;
+  const GetMilestonesForSummaryEvent(
+      {required this.child, required this.periodId});
 }

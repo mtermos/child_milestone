@@ -239,7 +239,11 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                                     context)
                                                 .add(
                                                     GetMilestonesForSummaryEvent(
-                                                        child: widget.child));
+                                                        child: widget.child,
+                                                        periodId: widget
+                                                            .milestoneItem
+                                                            .period));
+                                            Navigator.pop(context);
                                           },
                                         ));
                                       },
@@ -290,7 +294,11 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                                     context)
                                                 .add(
                                                     GetMilestonesForSummaryEvent(
-                                                        child: widget.child));
+                                                        child: widget.child,
+                                                        periodId: widget
+                                                            .milestoneItem
+                                                            .period));
+                                            Navigator.pop(context);
                                           },
                                         ));
                                         // BlocProvider.of<DecisionBloc>(context).add(
@@ -345,8 +353,12 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                                           context)
                                                       .add(
                                                           GetMilestonesForSummaryEvent(
-                                                              child: widget
-                                                                  .child));
+                                                              child:
+                                                                  widget.child,
+                                                              periodId: widget
+                                                                  .milestoneItem
+                                                                  .period));
+                                                  Navigator.pop(context);
                                                 }));
                                       },
                                       child: Container(

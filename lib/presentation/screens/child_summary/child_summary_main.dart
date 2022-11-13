@@ -1,10 +1,13 @@
 import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
+import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/components/top_bar_view.dart';
@@ -24,6 +27,8 @@ class ChildSummaryScreen extends StatefulWidget {
 
 class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
   ChildModel? currentChild;
+  Period? currentPeriod;
+  Period? selectedPeriod;
   @override
   void initState() {
     super.initState();
@@ -44,8 +49,16 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
             currentChild = state.new_current_child;
+            currentPeriod = periodCalculator(currentChild!.dateOfBirth);
+            if (selectedPeriod == null ||
+                currentPeriod!.id < selectedPeriod!.id) {
+              print("selectedPeriod changed");
+              selectedPeriod = currentPeriod;
+            }
             BlocProvider.of<MilestoneBloc>(context).add(
-                GetMilestonesForSummaryEvent(child: state.new_current_child));
+                GetMilestonesForSummaryEvent(
+                    child: state.new_current_child,
+                    periodId: selectedPeriod!.id));
           }
           return Column(
             mainAxisSize: MainAxisSize.max,
@@ -56,7 +69,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
               ),
               Container(
                 color: AppColors.primaryColorDarker,
-                child: TopBarView(
+                child: const TopBarView(
                     hasBackBottun: true, backRoute: Routes.home, light: true),
               ),
               Expanded(
@@ -113,6 +126,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                         ),
                       ),
                       SizedBox(height: size.height * 0.05),
+                      periodDropDownList(currentPeriod!.id, size, textScale),
+                      SizedBox(height: size.height * 0.02),
                       BlocBuilder<MilestoneBloc, MilestoneState>(
                         builder: (context, state) {
                           if (state is LoadedMilestonesForSummaryState) {
@@ -322,6 +337,70 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
             ],
           );
         },
+      ),
+    );
+  }
+
+  Widget periodDropDownList(int maxPeriod, Size size, double textScale) {
+    List<Period> periods = [];
+    if (maxPeriod <= 10) {
+      periods = monthlyPeriods.sublist(0, maxPeriod);
+    } else if (maxPeriod == 11) {
+      periods.addAll(monthlyPeriods);
+      periods.add(yearlyPeriods[0]);
+    } else if (maxPeriod == 12) {
+      periods.addAll(monthlyPeriods);
+      periods.addAll(yearlyPeriods);
+    }
+    return Center(
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<Period>(
+          selectedItemBuilder: (context) => periods.map<Widget>((e) {
+            return Center(
+              child: AppText(
+                text: e.arabicName,
+                fontSize: textScale * 24,
+                color: Colors.black,
+              ),
+            );
+          }).toList(),
+          value: selectedPeriod,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.black,
+          ),
+          alignment: AlignmentDirectional.center,
+          hint: AppText(
+            text: AppLocalizations.of(context)!.selectChild,
+            fontSize: textScale * 20,
+          ),
+          isExpanded: true,
+          items: periods.map<DropdownMenuItem<Period>>((Period value) {
+            return DropdownMenuItem<Period>(
+              value: value,
+              alignment: AlignmentDirectional.center,
+              child: Row(
+                children: [
+                  AppText(
+                    text: value.arabicName,
+                    fontSize: textScale * 24,
+                    // color: widget.light
+                    //     ? Colors.white
+                    //     : Colors.black,
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
+          onChanged: (Period? newValue) {
+            if (newValue != null) {
+              setState(() {
+                selectedPeriod = newValue;
+              });
+            }
+          },
+        ),
       ),
     );
   }
