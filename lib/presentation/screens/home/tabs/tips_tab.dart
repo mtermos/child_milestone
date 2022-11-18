@@ -4,6 +4,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/widgets/tip_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -78,9 +79,17 @@ class _TipsState extends State<TipsTab> {
                                 current_child != null
                                     ? CircleAvatar(
                                         radius: size.width * 0.15,
-                                        backgroundImage: Image.file(
-                                                File(current_child!.imagePath))
-                                            .image)
+                                        backgroundColor: Colors.white,
+                                        backgroundImage: current_child!
+                                                    .imagePath !=
+                                                ""
+                                            ? Image.file(File(
+                                                    current_child!.imagePath))
+                                                .image
+                                            : Image.asset(noImageAsset(
+                                                    current_child!))
+                                                .image,
+                                      )
                                     : CircleAvatar(
                                         backgroundColor: Colors.white,
                                         radius: size.width * 0.16,

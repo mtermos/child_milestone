@@ -5,6 +5,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
@@ -74,8 +75,10 @@ class _HomeTabState extends State<HomeTab> {
             try {
               circleAvatar = CircleAvatar(
                 radius: size.width * 0.15,
-                backgroundImage:
-                    Image.file(File(currentChild!.imagePath)).image,
+                backgroundColor: Colors.white,
+                backgroundImage: currentChild!.imagePath != ""
+                    ? Image.file(File(currentChild!.imagePath)).image
+                    : Image.asset(noImageAsset(currentChild!)).image,
               );
             } catch (e) {}
           }
@@ -198,7 +201,7 @@ class _HomeTabState extends State<HomeTab> {
                         ),
                       ),
                       onTap: () {
-                        Navigator.popAndPushNamed(context, Routes.milestone);
+                        Navigator.pushNamed(context, Routes.milestone);
                       },
                     );
                   } else {
@@ -224,29 +227,29 @@ class _HomeTabState extends State<HomeTab> {
                 },
               ),
               const Spacer(),
-              Row(
-                children: [
-                  SizedBox(width: size.width * 0.075),
-                  Stack(
-                    children: [
-                      InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          summary,
-                          width: size.width * 0.4,
-                        ),
-                        onTap: () {
-                          Navigator.popAndPushNamed(
-                              context, Routes.childSummary);
-                        },
-                      ),
-                      BlocBuilder<AllPreviousDecisionTakenCubit,
-                          Map<int, bool>>(
-                        builder: (context, state) {
-                          if (currentChild != null &&
-                              state[currentChild!.id] != null &&
-                              !state[currentChild!.id]!) {
-                            return Positioned(
+
+              BlocBuilder<AllPreviousDecisionTakenCubit, Map<int, bool>>(
+                  builder: (context, state) {
+                if (currentChild != null) {
+                  if (state[currentChild!.id] != null &&
+                      !state[currentChild!.id]!) {
+                    return Row(
+                      children: [
+                        SizedBox(width: size.width * 0.035),
+                        Stack(
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.asset(
+                                summary,
+                                width: size.width * 0.45,
+                              ),
+                              onTap: () {
+                                Navigator.pushNamed(
+                                    context, Routes.childSummary);
+                              },
+                            ),
+                            Positioned(
                               right: 0,
                               child: Container(
                                 padding: const EdgeInsets.all(2),
@@ -264,51 +267,59 @@ class _HomeTabState extends State<HomeTab> {
                                   size: textScale * 20,
                                 ),
                               ),
-                            );
-                          }
-                          return const SizedBox.shrink();
-                        },
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Image.asset(
-                      tips,
-                      width: size.width * 0.4,
-                    ),
-                    onTap: () async {
-                      // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
-                      // widget.changeIndex(2);
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: size.width * 0.03),
+                        SizedBox(
+                          width: size.width * 0.45,
+                          child: Center(
+                            child: AppText(
+                              text:
+                                  "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
+                              color: Colors.red,
+                              fontSize: textScale * 18,
+                            ),
+                          ),
+                        ),
+                        // const Spacer(),
+                        // InkWell(
+                        //   borderRadius: BorderRadius.circular(12),
+                        //   child: Image.asset(
+                        //     tips,
+                        //     width: size.width * 0.4,
+                        //   ),
+                        //   onTap: () async {
+                        //     // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
+                        //     // widget.changeIndex(2);
 
-                      BlocProvider.of<DecisionBloc>(context)
-                          .add(const UploadDecisionsEvent());
-                      // _logout();
-                    },
-                  ),
-                  SizedBox(width: size.width * 0.075),
-                ],
-              ),
-              SizedBox(height: size.height * 0.01),
-              BlocBuilder<AllPreviousDecisionTakenCubit, Map<int, bool>>(
-                builder: (context, state) {
-                  if (currentChild != null &&
-                      state[currentChild!.id] != null &&
-                      !state[currentChild!.id]!) {
-                    return Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: size.width * 0.15),
-                      child: const AppText(
-                        text:
-                            "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
-                        color: Colors.red,
+                        //     BlocProvider.of<DecisionBloc>(context)
+                        //         .add(const UploadDecisionsEvent());
+                        //     // _logout();
+                        //   },
+                        // ),
+                        SizedBox(width: size.width * 0.035),
+                      ],
+                    );
+                  } else {
+                    return Center(
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.asset(
+                          summary,
+                          width: size.width * 0.45,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.childSummary);
+                        },
                       ),
                     );
                   }
                   return const SizedBox.shrink();
-                },
-              ),
+                }
+                return const SizedBox.shrink();
+              }),
+              SizedBox(height: size.height * 0.01),
               // Container(
               //   width: size.width * 0.5,
               //   child: AppButton(

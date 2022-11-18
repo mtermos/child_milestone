@@ -70,7 +70,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
               Container(
                 color: AppColors.primaryColorDarker,
                 child: const TopBarView(
-                    hasBackBottun: true, backRoute: Routes.home, light: true),
+                    hasBackBottun: true, hasDropDown: false, light: true),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -188,6 +188,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                               decision: -1,
                                               editable: true,
                                               topBar: index != 0,
+                                              key: ValueKey(e.milestoneItem.id
+                                                  .toString()),
                                             ),
                                           )
                                           .toList(),
@@ -226,6 +228,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                               decision: 1,
                                               editable: true,
                                               topBar: index != 0,
+                                              key: ValueKey(e.milestoneItem.id
+                                                  .toString()),
                                             ),
                                           )
                                           .toList(),
@@ -264,6 +268,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                               decision: 2,
                                               editable: true,
                                               topBar: index != 0,
+                                              key: ValueKey(e.milestoneItem.id
+                                                  .toString()),
                                             ),
                                           )
                                           .toList(),
@@ -302,6 +308,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                               decision: 3,
                                               editable: true,
                                               topBar: index != 0,
+                                              key: ValueKey(e.milestoneItem.id
+                                                  .toString()),
                                             ),
                                           )
                                           .toList(),
@@ -325,7 +333,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                           padding: EdgeInsets.symmetric(
                               vertical: size.height * 0.02),
                           onPressed: () {
-                            Navigator.popAndPushNamed(context, Routes.home);
+                            Navigator.pop(context);
+                            // Navigator.popAndPushNamed(context, Routes.home);
                           },
                         ),
                       ),

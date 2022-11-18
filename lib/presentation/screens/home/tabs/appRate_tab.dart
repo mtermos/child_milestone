@@ -27,11 +27,11 @@ class _AppRateState extends State<AppRateTab> {
 
   List<RatingModel> ratingsList = [
     RatingModel(
-        ratingId: 1, rating: 5, uploaded: false, takenAt: DateTime.now()),
+        ratingId: 1, rating: 0, uploaded: false, takenAt: DateTime.now()),
     RatingModel(
-        ratingId: 2, rating: 5, uploaded: false, takenAt: DateTime.now()),
+        ratingId: 2, rating: 0, uploaded: false, takenAt: DateTime.now()),
     RatingModel(
-        ratingId: 3, rating: 5, uploaded: false, takenAt: DateTime.now()),
+        ratingId: 3, rating: 0, uploaded: false, takenAt: DateTime.now()),
   ];
 
   @override

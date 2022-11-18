@@ -159,7 +159,7 @@ class _AddChildFormState extends State<AddChildForm> {
                   controller: durationController,
                   keyboardType: TextInputType.number,
                   inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly
+                    FilteringTextInputFormatter.digitsOnly,
                   ],
                   decoration: InputDecoration(
                       labelText:
@@ -216,22 +216,25 @@ class _AddChildFormState extends State<AddChildForm> {
                       content: Text(
                           AppLocalizations.of(context)!.enterAllFieldsSnackBar),
                     );
-                    if (chosen_image == null ||
-                        nameController.text == "" ||
+                    if (nameController.text == "" ||
                         durationController.text == "" ||
                         idController.text == "" ||
                         selected_gender == "") {
                       ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       return;
                     }
-
-                    final appDir = await getApplicationDocumentsDirectory();
-                    // final List<String> strings = chosen_image!.path.split(".");
-                    // final fileName =
-                    //     basename(strings[strings.length - 2] + "." + strings.last);
-                    final fileName = basename(chosen_image!.path);
-                    String imagePath = '${appDir.path}/$fileName';
-                    await chosen_image!.saveTo(imagePath);
+                    String imagePath = "";
+                    if (chosen_image != null) {
+                      final appDir = await getApplicationDocumentsDirectory();
+                      // final List<String> strings = chosen_image!.path.split(".");
+                      // final fileName =
+                      //     basename(strings[strings.length - 2] + "." + strings.last);
+                      final fileName = basename(chosen_image!.path);
+                      imagePath = '${appDir.path}/$fileName';
+                      await chosen_image!.saveTo(imagePath);
+                    } else {
+                      imagePath = "";
+                    }
                     ChildModel newChild = ChildModel(
                       name: nameController.text,
                       dateOfBirth: _selectedDate,

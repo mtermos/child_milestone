@@ -17,11 +17,13 @@ import 'package:loading_indicator/loading_indicator.dart';
 
 class TopBarView extends StatefulWidget {
   final bool hasBackBottun;
+  final bool hasDropDown;
   final String? backRoute;
   final bool light;
   const TopBarView({
     Key? key,
     this.hasBackBottun = false,
+    this.hasDropDown = true,
     this.backRoute,
     this.light = false,
   }) : super(key: key);
@@ -102,156 +104,177 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                           ],
                         ),
                       ),
-                      Expanded(
-                        flex: 6,
-                        child: BlocBuilder<ChildBloc, ChildState>(
-                          builder: (context, state) {
-                            if (state is AllChildrenLoadedState) {
-                              childrenList = state.children;
-                            } else if (state is AllChildrenLoadingState) {
-                              return Center(
-                                child: SizedBox(
-                                  width: size.width * 0.3,
-                                  child: const LoadingIndicator(
-                                    indicatorType: Indicator.ballPulse,
-                                    colors: [AppColors.primaryColor],
-                                    strokeWidth: 1,
-                                    backgroundColor: Colors.white,
-                                    pathBackgroundColor: Colors.white,
-                                  ),
-                                ),
-                              );
-                            } else {
-                              childrenList = [];
-                              selectedChild = null;
-                            }
-                            return Center(
-                              child: DropdownButtonHideUnderline(
-                                child: DropdownButton<ChildModel>(
-                                  key: dropDownKey,
-                                  selectedItemBuilder: (context) =>
-                                      childrenList!.map<Widget>((e) {
+                      widget.hasDropDown
+                          ? Expanded(
+                              flex: 6,
+                              child: BlocBuilder<ChildBloc, ChildState>(
+                                builder: (context, state) {
+                                  if (state is AllChildrenLoadedState) {
+                                    childrenList = state.children;
+                                  } else if (state is AllChildrenLoadingState) {
                                     return Center(
-                                      child: AppText(
-                                        text: e.name,
-                                        fontSize: textScale * 24,
-                                        color: widget.light
-                                            ? Colors.white
-                                            : Colors.black,
+                                      child: SizedBox(
+                                        width: size.width * 0.3,
+                                        child: const LoadingIndicator(
+                                          indicatorType: Indicator.ballPulse,
+                                          colors: [AppColors.primaryColor],
+                                          strokeWidth: 1,
+                                          backgroundColor: Colors.white,
+                                          pathBackgroundColor: Colors.white,
+                                        ),
                                       ),
                                     );
-                                  }).toList(),
-                                  value: selectedChild,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10)),
-                                  icon: Icon(
-                                    Icons.arrow_drop_down,
-                                    color: widget.light
-                                        ? Colors.white
-                                        : Colors.black,
-                                  ),
-                                  alignment: AlignmentDirectional.center,
-                                  hint: AppText(
-                                    text: AppLocalizations.of(context)!
-                                        .selectChild,
-                                    fontSize: textScale * 20,
-                                  ),
-                                  isExpanded: true,
-                                  items: childrenList!
-                                      .map<DropdownMenuItem<ChildModel>>(
-                                          (ChildModel value) {
-                                    return DropdownMenuItem<ChildModel>(
-                                      value: value,
-                                      alignment: AlignmentDirectional.center,
-                                      child: Row(
-                                        children: [
-                                          AppText(
-                                            text: value.name,
-                                            fontSize: textScale * 24,
-                                            // color: widget.light
-                                            //     ? Colors.white
-                                            //     : Colors.black,
-                                          ),
-                                          const Spacer(),
-                                          // SizedBox(width: size.width * 0.1),
-                                          InkWell(
-                                            child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical:
-                                                        size.height * 0.005,
-                                                    horizontal:
-                                                        size.width * 0.02),
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.green,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                8))),
-                                                child: const AppText(
-                                                  text: "edit",
-                                                  color: Colors.white,
-                                                )),
-                                            onTap: () {
-                                              Navigator.popAndPushNamed(
-                                                  context, Routes.editChild,
-                                                  arguments: value.id);
-                                            },
-                                          ),
-                                          SizedBox(width: size.width * 0.015),
-                                          InkWell(
-                                            child: Container(
-                                                padding: EdgeInsets.symmetric(
-                                                    vertical:
-                                                        size.height * 0.005,
-                                                    horizontal:
-                                                        size.width * 0.02),
-                                                decoration: const BoxDecoration(
-                                                    color: Colors.red,
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                8))),
-                                                child: const AppText(
-                                                  text: "delete",
-                                                  color: Colors.white,
-                                                )),
-                                            onTap: () {
-                                              showDeleteConfirmationDialog(
-                                                  value.id);
-                                            },
-                                          ),
-                                          // AppButton(label: "delete"),
-                                        ],
-                                      ),
-                                    );
-                                  }).toList(),
-                                  onChanged: (ChildModel? newValue) {
-                                    if (newValue != null) {
-                                      setState(() {
-                                        selectedChild = newValue;
-                                      });
-                                      BlocProvider.of<CurrentChildCubit>(
-                                              context)
-                                          .changeCurrentChild(newValue, () {
-                                        BlocProvider.of<DecisionBloc>(context)
-                                            .add(GetDecisionsByAgeEvent(
-                                                dateOfBirth:
-                                                    newValue.dateOfBirth,
-                                                childId: newValue.id));
+                                  } else {
+                                    childrenList = [];
+                                    selectedChild = null;
+                                  }
+                                  return Center(
+                                    child: DropdownButtonHideUnderline(
+                                      child: DropdownButton<ChildModel>(
+                                        key: dropDownKey,
+                                        selectedItemBuilder: (context) =>
+                                            childrenList!.map<Widget>((e) {
+                                          return Center(
+                                            child: AppText(
+                                              text: e.name,
+                                              fontSize: textScale * 24,
+                                              color: widget.light
+                                                  ? Colors.white
+                                                  : Colors.black,
+                                            ),
+                                          );
+                                        }).toList(),
+                                        value: selectedChild,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(10)),
+                                        icon: Icon(
+                                          Icons.arrow_drop_down,
+                                          color: widget.light
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                        alignment: AlignmentDirectional.center,
+                                        hint: AppText(
+                                          text: AppLocalizations.of(context)!
+                                              .selectChild,
+                                          fontSize: textScale * 20,
+                                        ),
+                                        isExpanded: true,
+                                        items: childrenList!
+                                            .map<DropdownMenuItem<ChildModel>>(
+                                                (ChildModel value) {
+                                          return DropdownMenuItem<ChildModel>(
+                                            value: value,
+                                            alignment:
+                                                AlignmentDirectional.center,
+                                            child: Row(
+                                              children: [
+                                                AppText(
+                                                  text: value.name,
+                                                  fontSize: textScale * 24,
+                                                  // color: widget.light
+                                                  //     ? Colors.white
+                                                  //     : Colors.black,
+                                                ),
+                                                const Spacer(),
+                                                // SizedBox(width: size.width * 0.1),
+                                                InkWell(
+                                                  child: Container(
+                                                      padding: EdgeInsets
+                                                          .symmetric(
+                                                              vertical:
+                                                                  size.height *
+                                                                      0.005,
+                                                              horizontal:
+                                                                  size.width *
+                                                                      0.02),
+                                                      decoration: const BoxDecoration(
+                                                          color: Colors.green,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          8))),
+                                                      child: const AppText(
+                                                        text: "edit",
+                                                        color: Colors.white,
+                                                      )),
+                                                  onTap: () {
+                                                    Navigator.popAndPushNamed(
+                                                        context,
+                                                        Routes.editChild,
+                                                        arguments: value.id);
+                                                  },
+                                                ),
+                                                SizedBox(
+                                                    width: size.width * 0.015),
+                                                InkWell(
+                                                  child: Container(
+                                                      padding: EdgeInsets
+                                                          .symmetric(
+                                                              vertical:
+                                                                  size.height *
+                                                                      0.005,
+                                                              horizontal:
+                                                                  size.width *
+                                                                      0.02),
+                                                      decoration: const BoxDecoration(
+                                                          color: Colors.red,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          8))),
+                                                      child: const AppText(
+                                                        text: "delete",
+                                                        color: Colors.white,
+                                                      )),
+                                                  onTap: () {
+                                                    showDeleteConfirmationDialog(
+                                                        value.id);
+                                                  },
+                                                ),
+                                                // AppButton(label: "delete"),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList(),
+                                        onChanged: (ChildModel? newValue) {
+                                          if (newValue != null) {
+                                            setState(() {
+                                              selectedChild = newValue;
+                                            });
+                                            BlocProvider.of<CurrentChildCubit>(
+                                                    context)
+                                                .changeCurrentChild(newValue,
+                                                    () {
+                                              BlocProvider.of<DecisionBloc>(
+                                                      context)
+                                                  .add(GetDecisionsByAgeEvent(
+                                                      dateOfBirth:
+                                                          newValue.dateOfBirth,
+                                                      childId: newValue.id));
 
-                                        BlocProvider.of<
-                                                    AllPreviousDecisionTakenCubit>(
-                                                context)
-                                            .checkIfAllTaken(newValue);
-                                      });
-                                    }
-                                  },
-                                ),
+                                              BlocProvider.of<
+                                                          AllPreviousDecisionTakenCubit>(
+                                                      context)
+                                                  .checkIfAllTaken(newValue);
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                            )
+                          : Expanded(
+                              child: Center(
+                              child: AppText(
+                                  text: selectedChild != null
+                                      ? selectedChild!.name
+                                      : ""),
+                            )),
                       Expanded(
                         flex: 2,
                         child: Container(
@@ -263,8 +286,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                   : AppColors.primaryColor,
                             ),
                             onTap: () {
-                              Navigator.popAndPushNamed(
-                                  context, Routes.settings);
+                              Navigator.pushNamed(context, Routes.settings);
                             },
                           ),
                           alignment: AlignmentDirectional.centerEnd,

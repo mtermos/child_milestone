@@ -76,7 +76,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               SizedBox(
                 height: MediaQuery.of(context).padding.top,
               ),
-              TopBarView(hasBackBottun: true, backRoute: Routes.home),
+              TopBarView(hasBackBottun: true, hasDropDown: false),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -131,7 +131,11 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                                 .where((element) =>
                                     element.milestoneItem.category == _selected)
                                 .map((e) => MilestoneItemWidget(
-                                    item: e, selectedPeriod: selectedPeriod!))
+                                      item: e,
+                                      selectedPeriod: selectedPeriod!,
+                                      key: ValueKey(
+                                          e.milestoneItem.id.toString()),
+                                    ))
                                 .toList(),
                           );
                         },

@@ -144,270 +144,259 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
           SizedBox(
             height: size.height * 0.02,
           ),
-          Row(
-            children: [
-              SizedBox(
-                width: size.width * 0.65,
-                child: AppText(
-                  text: widget.milestoneItem.description,
-                  textAlign: TextAlign.start,
-                ),
-              ),
-              const Spacer(),
-              widget.editable
-                  ? InkWell(
-                      onTap: () => {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return StatefulBuilder(
-                              builder: (context, setState) {
-                                return AlertDialog(
-                                  // title:
-                                  //     AppText(text: widget.milestoneItem.description),
-                                  title: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      IconButton(
-                                        icon: Icon(
-                                          Icons.close,
-                                          size: textScale * 28,
-                                        ),
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                      Expanded(
-                                        child: Center(
-                                          child: AppText(
-                                            text: widget.decision == -1
-                                                ? AppLocalizations.of(context)!
-                                                    .enterDecision
-                                                : AppLocalizations.of(context)!
-                                                    .updateDecision,
-                                          ),
-                                        ),
-                                      ),
-                                      Icon(
-                                        Icons.close,
-                                        size: textScale * 28,
-                                        color: Colors.white,
-                                      ),
-                                    ],
+          widget.editable
+              ? InkWell(
+                  onTap: () => {
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return StatefulBuilder(
+                          builder: (context, setState) {
+                            return AlertDialog(
+                              // title:
+                              //     AppText(text: widget.milestoneItem.description),
+                              title: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                children: <Widget>[
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.close,
+                                      size: textScale * 28,
+                                    ),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
                                   ),
-                                  titlePadding: EdgeInsets.all(0),
-                                  content: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: size.width * 0.05,
-                                        right: size.width * 0.05,
-                                        bottom: size.height * 0.04),
-                                    child: Column(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        AppText(
-                                          text:
-                                              widget.milestoneItem.description,
-                                          fontSize: textScale * 26,
-                                          color: AppColors.primaryColorDarker,
+                                  Expanded(
+                                    child: Center(
+                                      child: AppText(
+                                        text: widget.decision == -1
+                                            ? AppLocalizations.of(context)!
+                                                .enterDecision
+                                            : AppLocalizations.of(context)!
+                                                .updateDecision,
+                                      ),
+                                    ),
+                                  ),
+                                  Icon(
+                                    Icons.close,
+                                    size: textScale * 28,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
+                              titlePadding: EdgeInsets.all(0),
+                              content: Padding(
+                                padding: EdgeInsets.only(
+                                    left: size.width * 0.05,
+                                    right: size.width * 0.05,
+                                    bottom: size.height * 0.04),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    AppText(
+                                      text: widget.milestoneItem.description,
+                                      fontSize: textScale * 26,
+                                      color: AppColors.primaryColorDarker,
+                                    ),
+                                    widget.decision == -1 && widget.redFlag
+                                        ? youtubeWidget!
+                                        : const SizedBox.shrink(),
+                                  ],
+                                ),
+                              ),
+                              actionsAlignment: MainAxisAlignment.center,
+                              actionsPadding:
+                                  EdgeInsets.only(bottom: size.height * 0.05),
+                              actions: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      decision = 1;
+                                    });
+                                    BlocProvider.of<DecisionBloc>(context)
+                                        .add(AddDecisionEvent(
+                                      decision: DecisionModel(
+                                        childId: widget.child.id,
+                                        milestoneId: widget.milestoneItem.id,
+                                        decision: 1,
+                                        takenAt: DateTime.now(),
+                                      ),
+                                      onSuccess: () {
+                                        BlocProvider.of<MilestoneBloc>(context)
+                                            .add(GetMilestonesForSummaryEvent(
+                                                child: widget.child,
+                                                periodId: widget
+                                                    .milestoneItem.period));
+                                        Navigator.pop(context);
+                                      },
+                                    ));
+                                  },
+                                  child: Container(
+                                    width: size.width * 0.15,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(6)),
+                                      color: decision == 1
+                                          ? Colors.green[200]
+                                          : Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black54,
+                                          offset: Offset(
+                                              textScale * 2, textScale * 4),
+                                          blurRadius: textScale * 8,
                                         ),
-                                        widget.decision == -1 && widget.redFlag
-                                            ? youtubeWidget!
-                                            : const SizedBox.shrink(),
                                       ],
                                     ),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: textScale * 15,
+                                      horizontal: textScale * 20,
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.yes,
+                                      textAlign: TextAlign.right,
+                                    ),
                                   ),
-                                  actionsAlignment: MainAxisAlignment.center,
-                                  actionsPadding: EdgeInsets.only(
-                                      bottom: size.height * 0.05),
-                                  actions: [
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          decision = 1;
-                                        });
-                                        BlocProvider.of<DecisionBloc>(context)
-                                            .add(AddDecisionEvent(
-                                          decision: DecisionModel(
-                                            childId: widget.child.id,
-                                            milestoneId:
-                                                widget.milestoneItem.id,
-                                            decision: 1,
-                                            takenAt: DateTime.now(),
-                                          ),
-                                          onSuccess: () {
-                                            BlocProvider.of<MilestoneBloc>(
-                                                    context)
-                                                .add(
-                                                    GetMilestonesForSummaryEvent(
-                                                        child: widget.child,
-                                                        periodId: widget
-                                                            .milestoneItem
-                                                            .period));
-                                            Navigator.pop(context);
-                                          },
-                                        ));
-                                      },
-                                      child: Container(
-                                        width: size.width * 0.15,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(6)),
-                                          color: decision == 1
-                                              ? Colors.green[200]
-                                              : Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black54,
-                                              offset: Offset(
-                                                  textScale * 2, textScale * 4),
-                                              blurRadius: textScale * 8,
-                                            ),
-                                          ],
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: textScale * 15,
-                                          horizontal: textScale * 20,
-                                        ),
-                                        child: Text(
-                                          AppLocalizations.of(context)!.yes,
-                                          textAlign: TextAlign.right,
-                                        ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      decision = 2;
+                                    });
+                                    BlocProvider.of<DecisionBloc>(context)
+                                        .add(AddDecisionEvent(
+                                      decision: DecisionModel(
+                                        childId: widget.child.id,
+                                        milestoneId: widget.milestoneItem.id,
+                                        decision: 2,
+                                        takenAt: DateTime.now(),
                                       ),
-                                    ),
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          decision = 2;
-                                        });
-                                        BlocProvider.of<DecisionBloc>(context)
-                                            .add(AddDecisionEvent(
-                                          decision: DecisionModel(
-                                            childId: widget.child.id,
-                                            milestoneId:
-                                                widget.milestoneItem.id,
-                                            decision: 2,
-                                            takenAt: DateTime.now(),
-                                          ),
-                                          onSuccess: () {
-                                            BlocProvider.of<MilestoneBloc>(
-                                                    context)
-                                                .add(
-                                                    GetMilestonesForSummaryEvent(
-                                                        child: widget.child,
-                                                        periodId: widget
-                                                            .milestoneItem
-                                                            .period));
-                                            Navigator.pop(context);
-                                          },
-                                        ));
-                                        // BlocProvider.of<DecisionBloc>(context).add(
-                                        //     GetDecisionsByAgeEvent(
-                                        //         dateOfBirth: selected_child!.dateOfBirth));
+                                      onSuccess: () {
+                                        BlocProvider.of<MilestoneBloc>(context)
+                                            .add(GetMilestonesForSummaryEvent(
+                                                child: widget.child,
+                                                periodId: widget
+                                                    .milestoneItem.period));
+                                        Navigator.pop(context);
                                       },
-                                      child: Container(
-                                        width: size.width * 0.15,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(6)),
-                                          color: decision == 2
-                                              ? Colors.red[200]
-                                              : Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black54,
-                                              offset: Offset(
-                                                  textScale * 2, textScale * 4),
-                                              blurRadius: textScale * 8,
-                                            ),
-                                          ],
+                                    ));
+                                    // BlocProvider.of<DecisionBloc>(context).add(
+                                    //     GetDecisionsByAgeEvent(
+                                    //         dateOfBirth: selected_child!.dateOfBirth));
+                                  },
+                                  child: Container(
+                                    width: size.width * 0.15,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(6)),
+                                      color: decision == 2
+                                          ? Colors.red[200]
+                                          : Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black54,
+                                          offset: Offset(
+                                              textScale * 2, textScale * 4),
+                                          blurRadius: textScale * 8,
                                         ),
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: textScale * 15,
-                                          horizontal: textScale * 20,
-                                        ),
-                                        child: Text(
-                                          AppLocalizations.of(context)!.no,
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
+                                      ],
                                     ),
-                                    InkWell(
-                                      onTap: () {
-                                        setState(() {
-                                          decision = 3;
-                                        });
-                                        BlocProvider.of<DecisionBloc>(context)
-                                            .add(AddDecisionEvent(
-                                                decision: DecisionModel(
-                                                  childId: widget.child.id,
-                                                  milestoneId:
-                                                      widget.milestoneItem.id,
-                                                  decision: 3,
-                                                  takenAt: DateTime.now(),
-                                                ),
-                                                onSuccess: () {
-                                                  BlocProvider.of<
-                                                              MilestoneBloc>(
-                                                          context)
-                                                      .add(
-                                                          GetMilestonesForSummaryEvent(
-                                                              child:
-                                                                  widget.child,
-                                                              periodId: widget
-                                                                  .milestoneItem
-                                                                  .period));
-                                                  Navigator.pop(context);
-                                                }));
-                                      },
-                                      child: Container(
-                                        width: size.width * 0.15,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(),
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(6)),
-                                          color: decision == 3
-                                              ? Colors.yellow[200]
-                                              : Colors.white,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: Colors.black54,
-                                              offset: Offset(
-                                                  textScale * 2, textScale * 4),
-                                              blurRadius: textScale * 8,
-                                            ),
-                                          ],
-                                        ),
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: textScale * 15,
-                                          horizontal: textScale * 20,
-                                        ),
-                                        child: Text(
-                                          AppLocalizations.of(context)!.maybe,
-                                          textAlign: TextAlign.right,
-                                        ),
-                                      ),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: textScale * 15,
+                                      horizontal: textScale * 20,
                                     ),
-                                  ],
-                                );
-                              },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.no,
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      decision = 3;
+                                    });
+                                    BlocProvider.of<DecisionBloc>(context)
+                                        .add(AddDecisionEvent(
+                                            decision: DecisionModel(
+                                              childId: widget.child.id,
+                                              milestoneId:
+                                                  widget.milestoneItem.id,
+                                              decision: 3,
+                                              takenAt: DateTime.now(),
+                                            ),
+                                            onSuccess: () {
+                                              BlocProvider.of<MilestoneBloc>(
+                                                      context)
+                                                  .add(
+                                                      GetMilestonesForSummaryEvent(
+                                                          child: widget.child,
+                                                          periodId: widget
+                                                              .milestoneItem
+                                                              .period));
+                                              Navigator.pop(context);
+                                            }));
+                                  },
+                                  child: Container(
+                                    width: size.width * 0.15,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(6)),
+                                      color: decision == 3
+                                          ? Colors.yellow[200]
+                                          : Colors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black54,
+                                          offset: Offset(
+                                              textScale * 2, textScale * 4),
+                                          blurRadius: textScale * 8,
+                                        ),
+                                      ],
+                                    ),
+                                    padding: EdgeInsets.symmetric(
+                                      vertical: textScale * 15,
+                                      horizontal: textScale * 20,
+                                    ),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.maybe,
+                                      textAlign: TextAlign.right,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             );
                           },
-                        )
-                        // Navigator.pushNamed(context, Routes.milestone,
-                        //     arguments: milestoneItem.category)
+                        );
                       },
-                      child: SvgPicture.asset(
+                    )
+                    // Navigator.pushNamed(context, Routes.milestone,
+                    //     arguments: milestoneItem.category)
+                  },
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: size.width * 0.65,
+                        child: AppText(
+                          text: widget.milestoneItem.description,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      const Spacer(),
+                      SvgPicture.asset(
                         editIcon,
                         width: size.width * 0.05,
                         alignment: Alignment.center,
                         color: Colors.black,
                       ),
-                    )
-                  : Container(),
-            ],
-          ),
+                    ],
+                  ),
+                )
+              : Container(),
           Row(
             children: [
               AppText(

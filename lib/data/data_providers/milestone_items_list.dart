@@ -239,7 +239,7 @@ List<MilestoneItem> milestoneItemsList = [
   ),
   MilestoneItem(
     id: 23,
-    description: "يضحك بصوت خافت عندما محاولة أضحاكه",
+    description: "يضحك بصوت خافت عند محاولة إضحاكه",
     period: 2,
     startingAge: 2,
     endingAge: 4,

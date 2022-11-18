@@ -5,6 +5,7 @@ import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,8 +41,10 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
               children: [
                 CircleAvatar(
                   radius: size.width * 0.05,
-                  backgroundImage:
-                      Image.file(File(widget.item.child.imagePath)).image,
+                  backgroundColor: Colors.white,
+                  backgroundImage: widget.item.child.imagePath != ""
+                      ? Image.file(File(widget.item.child.imagePath)).image
+                      : Image.asset(noImageAsset(widget.item.child)).image,
                 ),
                 SizedBox(width: size.width * 0.03),
                 Column(

@@ -94,7 +94,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fontWeight: FontWeight.w600,
                 padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                 onPressed: () {
-                  Navigator.popAndPushNamed(context, Routes.home);
+                  Navigator.pop(context);
                 },
               ),
             ),

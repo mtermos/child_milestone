@@ -205,8 +205,7 @@ class _EditChildFormState extends State<EditChildForm> {
                         content: Text(AppLocalizations.of(context)!
                             .enterAllFieldsSnackBar),
                       );
-                      if (chosenImage == null ||
-                          nameController.text == "" ||
+                      if (nameController.text == "" ||
                           durationController.text == "" ||
                           selectedGender == "") {
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -217,7 +216,8 @@ class _EditChildFormState extends State<EditChildForm> {
                       // final fileName =
                       //     basename(strings[strings.length - 2] + "." + strings.last);
                       String imagePath = "";
-                      if (chosenImage!.path != widget.child.imagePath) {
+                      if (chosenImage != null &&
+                          chosenImage!.path != widget.child.imagePath) {
                         final appDir = await getApplicationDocumentsDirectory();
                         final fileName = basename(chosenImage!.path);
                         imagePath = '${appDir.path}/$fileName';
