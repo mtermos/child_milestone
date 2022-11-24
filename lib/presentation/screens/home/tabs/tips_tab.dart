@@ -48,8 +48,8 @@ class _TipsState extends State<TipsTab> {
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
             current_child = state.new_current_child;
-            BlocProvider.of<TipBloc>(context).add(
-                GetTipsByAgeEvent(dateOfBirth: current_child!.dateOfBirth));
+            BlocProvider.of<TipBloc>(context)
+                .add(GetTipsByAgeEvent(child: current_child!));
           }
           return SingleChildScrollView(
             child: Column(

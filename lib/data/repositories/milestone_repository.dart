@@ -1,3 +1,4 @@
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 
@@ -33,8 +34,8 @@ class MilestoneRepository {
     }
   }
 
-  Future<List<MilestoneItem>?> getMilestonesByAge(DateTime dateOfBirth) async {
-    int period = periodCalculator(dateOfBirth).id;
+  Future<List<MilestoneItem>?> getMilestonesByAge(ChildModel child) async {
+    int period = periodCalculator(child).id;
     List<Map<String, dynamic>> result =
         await milestoneDao.getMilestonesByAge(period);
 

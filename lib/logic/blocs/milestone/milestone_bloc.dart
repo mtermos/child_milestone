@@ -74,7 +74,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
     emit(LoadingMilestonesWithDecisionsByAgeState());
     List<MilestoneWithDecision> items = [];
     List<MilestoneItem>? milestones =
-        await milestoneRepository.getMilestonesByAge(event.child.dateOfBirth);
+        await milestoneRepository.getMilestonesByAge(event.child);
 
     if (milestones != null) {
       for (var milestone in milestones) {
@@ -144,7 +144,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                     takenAt: DateTime.now())));
       }
 
-      int period = periodCalculator(event.child.dateOfBirth).id;
+      int period = periodCalculator(event.child).id;
 
       emit(LoadedMilestonesWithDecisionsByChildState(items, period));
     } else {
@@ -173,7 +173,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                     takenAt: DateTime.now())));
       }
 
-      int period = periodCalculator(event.child.dateOfBirth).id;
+      int period = periodCalculator(event.child).id;
 
       emit(LoadedMilestonesForSummaryState(items, period));
     } else {

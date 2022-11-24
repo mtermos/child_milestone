@@ -38,9 +38,11 @@
     "justNow": "Just Now",
     "yesterday": "Yesterday, ",
     "settingsCap": "SETTINGS",
+    "uploadData": "Upload Data",
     "goBack": "Go Back",
     "tipsRate": "How you find the given tips?",
     "selectChild": "select a child",
+    "selectPeriod": "select a period",
     "childSummary": "Child Summary",
     "logout": "Log out",
     "newPeriodNotificationTitle": "New Stage",
@@ -64,5 +66,6 @@
     "clickToWatchOn": "Click here to watch in",
     "clickToWatchVideo": "Click to watch assistative video",
     "clickToOpenDocument": "Click to read document",
+    "notReadyYet": "The child is not in the suitable corrected age",
     "selectLanguage": "Select Language"
 }

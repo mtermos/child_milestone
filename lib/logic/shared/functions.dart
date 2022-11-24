@@ -3,9 +3,13 @@ import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 
-Period periodCalculator(DateTime dateOfBirth) {
+Period periodCalculator(ChildModel child) {
   DateTime tempStart, tempEnd;
   DateTime nowDate = DateTime.now();
+  int daysCorrected = (37 - child.pregnancyDuration.toInt()) * 7;
+  DateTime dateOfBirth = child.dateOfBirth.add(Duration(days: daysCorrected));
+  // DateTime dateOfBirth = DateTime(dateOfBirth.year,
+  //       dateOfBirth.month + period.startingMonth, dateOfBirth.day)
   for (var period in monthlyPeriods) {
     tempStart = DateTime(dateOfBirth.year,
         dateOfBirth.month + period.startingMonth, dateOfBirth.day);

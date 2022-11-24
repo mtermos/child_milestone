@@ -251,9 +251,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                               BlocProvider.of<DecisionBloc>(
                                                       context)
                                                   .add(GetDecisionsByAgeEvent(
-                                                      dateOfBirth:
-                                                          newValue.dateOfBirth,
-                                                      childId: newValue.id));
+                                                      child: newValue));
 
                                               BlocProvider.of<
                                                           AllPreviousDecisionTakenCubit>(
@@ -313,8 +311,8 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     if (child != null) {
       BlocProvider.of<AllPreviousDecisionTakenCubit>(context)
           .checkIfAllTaken(child);
-      BlocProvider.of<DecisionBloc>(context).add(GetDecisionsByAgeEvent(
-          dateOfBirth: child.dateOfBirth, childId: child.id));
+      BlocProvider.of<DecisionBloc>(context)
+          .add(GetDecisionsByAgeEvent(child: child));
     }
   }
 

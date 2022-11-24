@@ -1,6 +1,7 @@
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
+import 'package:child_milestone/logic/shared/upload_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
@@ -42,6 +43,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
               width: size.width * 0.8,
               margin: const EdgeInsets.symmetric(horizontal: 40),
             ),
+            SizedBox(height: size.height * 0.02),
+            Container(
+              alignment: Alignment.center,
+              width: size.width * 0.8,
+              margin: EdgeInsets.symmetric(horizontal: size.width * 0.25),
+              child: AppButton(
+                label: AppLocalizations.of(context)!.uploadData,
+                fontWeight: FontWeight.w600,
+                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+                onPressed: () {
+                  print("uploading data");
+                  uploadData(context);
+                },
+              ),
+            ),
+            // upload data
+
             // SizedBox(height: size.height * 0.02),
             // Container(
             //   alignment: Alignment.center,

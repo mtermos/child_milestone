@@ -1,4 +1,5 @@
 import 'package:child_milestone/constants/tuples.dart';
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 
@@ -43,8 +44,8 @@ class DecisionRepository {
   }
 
   Future<DaoResponse<List<DecisionModel>, int>> getDecisionsByAge(
-      DateTime dateOfBirth, int childId) async {
-    int period = periodCalculator(dateOfBirth).id;
+      ChildModel child, int childId) async {
+    int period = periodCalculator(child).id;
     DaoResponse<List, int> daoResponse =
         await decisionDao.getDecisionsByAge(period, childId);
 

@@ -22,6 +22,7 @@ import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.d
 import 'package:child_milestone/logic/cubits/internet_connectivity/internet_cubit.dart';
 import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
+import 'package:child_milestone/logic/shared/upload_data.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -155,8 +156,7 @@ class Application extends StatelessWidget {
             final internetState = context.watch<InternetCubit>().state;
             if (internetState is InternetConnected) {
               print('InternetConnected:');
-              // BlocProvider.of<DecisionBloc>(context)
-              //     .add(const UploadDecisionsEvent());
+              uploadData(context);
             }
 
             return MaterialApp(

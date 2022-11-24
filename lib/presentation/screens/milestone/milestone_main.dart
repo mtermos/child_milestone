@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:child_milestone/constants/monthly_periods.dart';
-import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/data_providers/milestone_categories_list.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/data/models/milestone_category.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
@@ -62,7 +60,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
             current_child = state.new_current_child;
-            currentPeriod = periodCalculator(current_child!.dateOfBirth);
+            currentPeriod = periodCalculator(current_child!);
             if (selectedPeriod == null ||
                 currentPeriod!.id < selectedPeriod!.id) {
               selectedPeriod = currentPeriod;
@@ -182,7 +180,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
           ),
           alignment: AlignmentDirectional.center,
           hint: AppText(
-            text: AppLocalizations.of(context)!.selectChild,
+            text: AppLocalizations.of(context)!.selectPeriod,
             fontSize: textScale * 20,
           ),
           isExpanded: true,

@@ -1,3 +1,4 @@
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/data/repositories/tip_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -54,7 +55,7 @@ class TipBloc extends Bloc<TipEvent, TipState> {
 
   void getByAge(GetTipsByAgeEvent event, Emitter<TipState> emit) async {
     emit(LoadingTipsByAgeState());
-    List<TipModel>? tips = await tipRepository.getTipsByAge(event.dateOfBirth);
+    List<TipModel>? tips = await tipRepository.getTipsByAge(event.child);
     if (tips != null) {
       emit(LoadedTipsByAgeState(tips));
     } else {

@@ -1,3 +1,4 @@
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/rating.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 
@@ -31,8 +32,8 @@ class RatingRepository {
     return null;
   }
 
-  Future<List<RatingModel>?> getRatingsByAge(DateTime dateOfBirth) async {
-    int period = periodCalculator(dateOfBirth).id;
+  Future<List<RatingModel>?> getRatingsByAge(ChildModel child) async {
+    int period = periodCalculator(child).id;
 
     List<Map<String, dynamic>> result = await ratingDao.getRatingsByAge(period);
 

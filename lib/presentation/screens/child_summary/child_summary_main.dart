@@ -49,7 +49,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
         builder: (context, state) {
           if (state is CurrentChildChangedState) {
             currentChild = state.new_current_child;
-            currentPeriod = periodCalculator(currentChild!.dateOfBirth);
+            currentPeriod = periodCalculator(currentChild!);
             if (selectedPeriod == null ||
                 currentPeriod!.id < selectedPeriod!.id) {
               print("selectedPeriod changed");
@@ -381,7 +381,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
           ),
           alignment: AlignmentDirectional.center,
           hint: AppText(
-            text: AppLocalizations.of(context)!.selectChild,
+            text: AppLocalizations.of(context)!.selectPeriod,
             fontSize: textScale * 20,
           ),
           isExpanded: true,

@@ -102,7 +102,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
       GetDecisionsByAgeEvent event, Emitter<DecisionState> emit) async {
     emit(LoadingDecisionsByAgeState());
     DaoResponse<List<DecisionModel>, int> daoResponse = await decisionRepository
-        .getDecisionsByAge(event.dateOfBirth, event.childId);
+        .getDecisionsByAge(event.child, event.child.id);
     emit(LoadedDecisionsByAgeState(daoResponse.item1, daoResponse.item2));
     // if (daoResponse.item1) {
     //   emit(LoadedDecisionsByAgeState(daoResponse.item1, daoResponse.item2));
@@ -139,7 +139,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   Future stopWeeklyNotifications(int childId) async {
     ChildModel? child = await childRepository.getChildByID(childId);
     if (child != null) {
-      int period = periodCalculator(child.dateOfBirth).id;
+      int period = periodCalculator(child).id;
       List<NotificationModel> notifications = await notificationRepository
           .getNotificationsByChildIdAndPeriod(childId, period);
       NotificationService _notificationService = NotificationService();

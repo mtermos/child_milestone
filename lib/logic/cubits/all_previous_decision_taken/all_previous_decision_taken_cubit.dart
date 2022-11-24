@@ -18,7 +18,7 @@ class AllPreviousDecisionTakenCubit extends Cubit<Map<int, bool>> {
       : super(initialState);
 
   void checkIfAllTaken(ChildModel child) async {
-    int period = periodCalculator(child.dateOfBirth).id;
+    int period = periodCalculator(child).id;
     if (period <= 1) emit({child.id: true});
 
     List<MilestoneWithDecision> items = [];

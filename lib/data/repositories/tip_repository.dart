@@ -1,3 +1,4 @@
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 
@@ -30,8 +31,8 @@ class TipRepository {
     }
   }
 
-  Future<List<TipModel>?> getTipsByAge(DateTime dateOfBirth) async {
-    int period = periodCalculator(dateOfBirth).id;
+  Future<List<TipModel>?> getTipsByAge(ChildModel child) async {
+    int period = periodCalculator(child).id;
 
     List<Map<String, dynamic>> result = await tipDao.getTipsByAge(period);
 

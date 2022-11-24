@@ -29,6 +29,7 @@ class HomeTab extends StatefulWidget {
 class _HomeTabState extends State<HomeTab> {
   ChildModel? currentChild;
   int age = 0;
+  int correctedAge = 0;
   @override
   void initState() {
     super.initState();
@@ -70,8 +71,13 @@ class _HomeTabState extends State<HomeTab> {
           );
           if (state is CurrentChildChangedState) {
             currentChild = state.new_current_child;
+            int daysCorrected =
+                (37 - currentChild!.pregnancyDuration.toInt()) * 7;
+            DateTime dateOfBirth =
+                currentChild!.dateOfBirth.add(Duration(days: daysCorrected));
             age = DateTime.now().difference(currentChild!.dateOfBirth).inDays ~/
                 30;
+            correctedAge = DateTime.now().difference(dateOfBirth).inDays ~/ 30;
             try {
               circleAvatar = CircleAvatar(
                 radius: size.width * 0.15,
@@ -130,12 +136,23 @@ class _HomeTabState extends State<HomeTab> {
                             fontWeight: FontWeight.bold,
                           ),
                           SizedBox(height: textScale * 7),
-                          AppText(
-                            text: age.toString() +
-                                AppLocalizations.of(context)!.monthsOld,
-                            color: Colors.white,
-                            fontSize: textScale * 15,
-                          ),
+                          correctedAge > 0
+                              ? AppText(
+                                  text: age.toString() +
+                                      AppLocalizations.of(context)!.monthsOld +
+                                      " " +
+                                      correctedAge.toString() +
+                                      " " +
+                                      AppLocalizations.of(context)!.monthsOld,
+                                  color: Colors.white,
+                                  fontSize: textScale * 15,
+                                )
+                              : AppText(
+                                  text: age.toString() +
+                                      AppLocalizations.of(context)!.monthsOld,
+                                  color: Colors.white,
+                                  fontSize: textScale * 15,
+                                ),
                         ],
                       ),
                     ),
@@ -145,100 +162,166 @@ class _HomeTabState extends State<HomeTab> {
               SizedBox(
                 height: size.height * 0.01,
               ),
-              BlocBuilder<DecisionBloc, DecisionState>(
-                builder: (context, state) {
-                  if (state is LoadedDecisionsByAgeState) {
-                    return InkWell(
-                      child: Container(
-                        width: size.width * 0.85,
-                        padding: EdgeInsets.symmetric(
-                            horizontal: size.width * 0.08,
-                            vertical: size.height * 0.03),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: AppColors.primaryColor,
-                            width: textScale * 2,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                AppText(
-                                  text: AppLocalizations.of(context)!
-                                      .milestoneChecklist,
-                                  fontSize: textScale * 20,
+              correctedAge > 0
+                  ? BlocBuilder<DecisionBloc, DecisionState>(
+                      builder: (context, state) {
+                        if (state is LoadedDecisionsByAgeState) {
+                          return InkWell(
+                            child: Container(
+                              width: size.width * 0.85,
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: size.width * 0.08,
+                                  vertical: size.height * 0.03),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: AppColors.primaryColor,
+                                  width: textScale * 2,
                                 ),
-                                SizedBox(width: size.width * 0.02),
-                                Image.asset(
-                                  doubleArrowIcon,
-                                  width: size.width * 0.05,
-                                ),
-                              ],
-                            ),
-                            SizedBox(height: size.height * 0.025),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: LinearPercentIndicator(
-                                    animation: true,
-                                    isRTL: isRTL,
-                                    lineHeight: textScale * 15,
-                                    animationDuration: 2500,
-                                    percent: (state.decisions.length /
-                                        state.milestonesLength),
-                                    progressColor: Colors.red,
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      AppText(
+                                        text: AppLocalizations.of(context)!
+                                            .milestoneChecklist,
+                                        fontSize: textScale * 20,
+                                      ),
+                                      SizedBox(width: size.width * 0.02),
+                                      Image.asset(
+                                        doubleArrowIcon,
+                                        width: size.width * 0.05,
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                SizedBox(width: size.width * 0.015),
-                                Text(state.decisions.length.toString() +
-                                    "/" +
-                                    state.milestonesLength.toString()),
-                              ],
+                                  SizedBox(height: size.height * 0.025),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: LinearPercentIndicator(
+                                          animation: true,
+                                          isRTL: isRTL,
+                                          lineHeight: textScale * 15,
+                                          animationDuration: 2500,
+                                          percent: (state.decisions.length /
+                                              state.milestonesLength),
+                                          progressColor: Colors.red,
+                                        ),
+                                      ),
+                                      SizedBox(width: size.width * 0.015),
+                                      Text(state.decisions.length.toString() +
+                                          "/" +
+                                          state.milestonesLength.toString()),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ],
-                        ),
-                      ),
-                      onTap: () {
-                        Navigator.pushNamed(context, Routes.milestone);
+                            onTap: () {
+                              Navigator.pushNamed(context, Routes.milestone);
+                            },
+                          );
+                        } else {
+                          if (currentChild != null) {
+                            BlocProvider.of<DecisionBloc>(context).add(
+                                GetDecisionsByAgeEvent(child: currentChild!));
+                          }
+                          return Center(
+                            child: SizedBox(
+                              width: size.width * 0.3,
+                              child: const LoadingIndicator(
+                                indicatorType: Indicator.ballPulse,
+                                colors: [AppColors.primaryColor],
+                                strokeWidth: 1,
+                                backgroundColor: Colors.white,
+                                pathBackgroundColor: Colors.white,
+                              ),
+                            ),
+                          );
+                        }
                       },
-                    );
-                  } else {
-                    if (currentChild != null) {
-                      BlocProvider.of<DecisionBloc>(context).add(
-                          GetDecisionsByAgeEvent(
-                              dateOfBirth: currentChild!.dateOfBirth,
-                              childId: currentChild!.id));
-                    }
-                    return Center(
-                      child: SizedBox(
-                        width: size.width * 0.3,
-                        child: const LoadingIndicator(
-                          indicatorType: Indicator.ballPulse,
-                          colors: [AppColors.primaryColor],
-                          strokeWidth: 1,
-                          backgroundColor: Colors.white,
-                          pathBackgroundColor: Colors.white,
-                        ),
-                      ),
-                    );
-                  }
-                },
-              ),
+                    )
+                  : AppText(text: AppLocalizations.of(context)!.notReadyYet),
               const Spacer(),
 
-              BlocBuilder<AllPreviousDecisionTakenCubit, Map<int, bool>>(
-                  builder: (context, state) {
-                if (currentChild != null) {
-                  if (state[currentChild!.id] != null &&
-                      !state[currentChild!.id]!) {
-                    return Row(
-                      children: [
-                        SizedBox(width: size.width * 0.035),
-                        Stack(
-                          children: [
-                            InkWell(
+              correctedAge > 0
+                  ? BlocBuilder<AllPreviousDecisionTakenCubit, Map<int, bool>>(
+                      builder: (context, state) {
+                      if (currentChild != null) {
+                        if (state[currentChild!.id] != null &&
+                            !state[currentChild!.id]!) {
+                          return Row(
+                            children: [
+                              SizedBox(width: size.width * 0.035),
+                              Stack(
+                                children: [
+                                  InkWell(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.asset(
+                                      summary,
+                                      width: size.width * 0.45,
+                                    ),
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, Routes.childSummary);
+                                    },
+                                  ),
+                                  Positioned(
+                                    right: 0,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(2),
+                                      decoration: BoxDecoration(
+                                        color: Colors.red,
+                                        borderRadius: BorderRadius.circular(6),
+                                      ),
+                                      constraints: const BoxConstraints(
+                                        minWidth: 12,
+                                        minHeight: 12,
+                                      ),
+                                      child: Icon(
+                                        Icons.crisis_alert,
+                                        color: Colors.white,
+                                        size: textScale * 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(width: size.width * 0.03),
+                              SizedBox(
+                                width: size.width * 0.45,
+                                child: Center(
+                                  child: AppText(
+                                    text:
+                                        "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
+                                    color: Colors.red,
+                                    fontSize: textScale * 18,
+                                  ),
+                                ),
+                              ),
+                              // const Spacer(),
+                              // InkWell(
+                              //   borderRadius: BorderRadius.circular(12),
+                              //   child: Image.asset(
+                              //     tips,
+                              //     width: size.width * 0.4,
+                              //   ),
+                              //   onTap: () async {
+                              //     // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
+                              //     // widget.changeIndex(2);
+
+                              //     BlocProvider.of<DecisionBloc>(context)
+                              //         .add(const UploadDecisionsEvent());
+                              //     // _logout();
+                              //   },
+                              // ),
+                              SizedBox(width: size.width * 0.035),
+                            ],
+                          );
+                        } else {
+                          return Center(
+                            child: InkWell(
                               borderRadius: BorderRadius.circular(12),
                               child: Image.asset(
                                 summary,
@@ -249,76 +332,13 @@ class _HomeTabState extends State<HomeTab> {
                                     context, Routes.childSummary);
                               },
                             ),
-                            Positioned(
-                              right: 0,
-                              child: Container(
-                                padding: const EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                  color: Colors.red,
-                                  borderRadius: BorderRadius.circular(6),
-                                ),
-                                constraints: const BoxConstraints(
-                                  minWidth: 12,
-                                  minHeight: 12,
-                                ),
-                                child: Icon(
-                                  Icons.crisis_alert,
-                                  color: Colors.white,
-                                  size: textScale * 20,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(width: size.width * 0.03),
-                        SizedBox(
-                          width: size.width * 0.45,
-                          child: Center(
-                            child: AppText(
-                              text:
-                                  "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
-                              color: Colors.red,
-                              fontSize: textScale * 18,
-                            ),
-                          ),
-                        ),
-                        // const Spacer(),
-                        // InkWell(
-                        //   borderRadius: BorderRadius.circular(12),
-                        //   child: Image.asset(
-                        //     tips,
-                        //     width: size.width * 0.4,
-                        //   ),
-                        //   onTap: () async {
-                        //     // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
-                        //     // widget.changeIndex(2);
-
-                        //     BlocProvider.of<DecisionBloc>(context)
-                        //         .add(const UploadDecisionsEvent());
-                        //     // _logout();
-                        //   },
-                        // ),
-                        SizedBox(width: size.width * 0.035),
-                      ],
-                    );
-                  } else {
-                    return Center(
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(12),
-                        child: Image.asset(
-                          summary,
-                          width: size.width * 0.45,
-                        ),
-                        onTap: () {
-                          Navigator.pushNamed(context, Routes.childSummary);
-                        },
-                      ),
-                    );
-                  }
-                  return const SizedBox.shrink();
-                }
-                return const SizedBox.shrink();
-              }),
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      }
+                      return const SizedBox.shrink();
+                    })
+                  : SizedBox.shrink(),
               SizedBox(height: size.height * 0.01),
               // Container(
               //   width: size.width * 0.5,
