@@ -153,7 +153,45 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
           body: body,
           scheduledDate: tz.TZDateTime.from(temp, tz.local),
         );
+
+        //adding doctor appointment notification
+        String title2 =
+            AppLocalizations.of(context)!.newDoctorAppNotificationTitle;
+
+        String body2 = "";
+        if (child.gender == "Male") {
+          body2 = AppLocalizations.of(context)!
+                  .newDoctorAppNotificationBody1male +
+              child.name +
+              AppLocalizations.of(context)!.newDoctorAppNotificationBody2male;
+        } else {
+          body2 = AppLocalizations.of(context)!
+                  .newDoctorAppNotificationBody1female +
+              child.name +
+              AppLocalizations.of(context)!.newDoctorAppNotificationBody2female;
+        }
+
+        NotificationModel notification2 = NotificationModel(
+          title: title2,
+          body: body2,
+          issuedAt: temp,
+          opened: false,
+          dismissed: false,
+          route: Routes.milestone,
+          period: period.id,
+          childId: child.id,
+        );
+        DaoResponse<bool, int> response2 =
+            await notificationRepository.insertNotification(notification2);
+        notification2.id = response2.item2;
+        await _notificationService.scheduleNotifications(
+          id: response2.item2,
+          title: title2,
+          body: body2,
+          scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        );
       }
+
       for (var i = 1; i <= period.numWeeks; i++) {
         _addWeeklyNotifications(
             temp.add(Duration(days: 7 * i)), period.id, context, child);
@@ -205,6 +243,43 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
           id: response.item2,
           title: title,
           body: body,
+          scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        );
+
+        //adding doctor appointment notification
+        String title2 =
+            AppLocalizations.of(context)!.newDoctorAppNotificationTitle;
+
+        String body2 = "";
+        if (child.gender == "Male") {
+          body2 = AppLocalizations.of(context)!
+                  .newDoctorAppNotificationBody1male +
+              child.name +
+              AppLocalizations.of(context)!.newDoctorAppNotificationBody2male;
+        } else {
+          body2 = AppLocalizations.of(context)!
+                  .newDoctorAppNotificationBody1female +
+              child.name +
+              AppLocalizations.of(context)!.newDoctorAppNotificationBody2female;
+        }
+
+        NotificationModel notification2 = NotificationModel(
+          title: title2,
+          body: body2,
+          issuedAt: temp,
+          opened: false,
+          dismissed: false,
+          route: Routes.milestone,
+          period: period.id,
+          childId: child.id,
+        );
+        DaoResponse<bool, int> response2 =
+            await notificationRepository.insertNotification(notification2);
+        notification2.id = response2.item2;
+        await _notificationService.scheduleNotifications(
+          id: response2.item2,
+          title: title2,
+          body: body2,
           scheduledDate: tz.TZDateTime.from(temp, tz.local),
         );
       }

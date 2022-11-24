@@ -195,8 +195,8 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                                                   Radius
                                                                       .circular(
                                                                           8))),
-                                                      child: const AppText(
-                                                        text: "edit",
+                                                      child: AppText(
+                                                        text: AppLocalizations.of(context)!.edit,
                                                         color: Colors.white,
                                                       )),
                                                   onTap: () {
@@ -235,8 +235,8 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                                                   Radius
                                                                       .circular(
                                                                           8))),
-                                                      child: const AppText(
-                                                        text: "delete",
+                                                      child: AppText(
+                                                        text: AppLocalizations.of(context)!.delete,
                                                         color: Colors.white,
                                                       )),
                                                   onTap: () {
