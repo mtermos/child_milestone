@@ -200,10 +200,20 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                                         color: Colors.white,
                                                       )),
                                                   onTap: () {
-                                                    Navigator.popAndPushNamed(
-                                                        context,
-                                                        Routes.editChild,
-                                                        arguments: value.id);
+                                                    Navigator.pop(dropDownKey
+                                                        .currentContext!);
+                                                    Navigator.pushNamed(context,
+                                                            Routes.editChild,
+                                                            arguments: value.id)
+                                                        .then((value) {
+                                                      BlocProvider.of<
+                                                                  ChildBloc>(
+                                                              context)
+                                                          .add(
+                                                              GetAllChildrenEvent());
+
+                                                      checkChild();
+                                                    });
                                                   },
                                                 ),
                                                 SizedBox(

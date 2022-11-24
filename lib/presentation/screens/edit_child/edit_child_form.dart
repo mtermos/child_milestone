@@ -262,7 +262,7 @@ class _EditChildFormState extends State<EditChildForm> {
                           id: widget.child.id,
                           gender: selectedGender,
                           pregnancyDuration:
-                              double.parse(durationController.text),
+                              int.parse(durationController.text),
                         );
                         BlocProvider.of<ChildBloc>(context).add(EditChildEvent(
                             context: context,

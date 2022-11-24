@@ -102,11 +102,15 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   Future _addPeriodsNotifications(
       BuildContext context, ChildModel child) async {
+    int correctingWeeks = 37 - child.pregnancyDuration;
+    if (correctingWeeks < 0) correctingWeeks = 0;
     DateTime temp;
 
     // adding the monthly periods (10 periods)
     for (var period in monthlyPeriods) {
-      temp = child.dateOfBirth.toLocal();
+      temp = child.dateOfBirth
+          .toLocal()
+          .subtract(Duration(days: correctingWeeks * 7));
 
       if (temp.hour >= 10) {
         temp = DateTime(
@@ -158,7 +162,9 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
     // adding the yearly periods (2 periods)
     for (var period in yearlyPeriods) {
-      temp = child.dateOfBirth.toLocal();
+      temp = child.dateOfBirth
+          .toLocal()
+          .subtract(Duration(days: correctingWeeks * 7));
 
       if (temp.hour >= 10) {
         temp = DateTime(

@@ -58,7 +58,7 @@ class DatabaseProvider {
         "imagePath TEXT NOT NULL, "
         "dateOfBirth INTEGER NOT NULL, "
         "uploaded INTEGER, "
-        "pregnancyDuration REAL NOT NULL "
+        "pregnancyDuration INTEGER NOT NULL "
         ")");
 
     await database.execute("CREATE TABLE $milestonesTABLE ("

@@ -12,7 +12,7 @@ class ChildModel {
   DateTime dateOfBirth;
   String imagePath;
   String gender;
-  double pregnancyDuration;
+  int pregnancyDuration;
   bool uploaded;
   ChildModel({
     required this.id,
@@ -30,7 +30,7 @@ class ChildModel {
     DateTime? dateOfBirth,
     String? imagePath,
     String? gender,
-    double? pregnancyDuration,
+    int? pregnancyDuration,
     bool? uploaded,
   }) {
     return ChildModel(
@@ -64,7 +64,7 @@ class ChildModel {
           DateTime.fromMillisecondsSinceEpoch(map['dateOfBirth'] as int),
       imagePath: map['imagePath'] as String,
       gender: map['gender'] as String,
-      pregnancyDuration: map['pregnancyDuration'] as double,
+      pregnancyDuration: map['pregnancyDuration'] as int,
       uploaded: map['uploaded'] == 1,
     );
   }

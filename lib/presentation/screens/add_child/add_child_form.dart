@@ -275,7 +275,7 @@ class _AddChildFormState extends State<AddChildForm> {
                         id: int.parse(idController.text),
                         gender: selected_gender,
                         pregnancyDuration:
-                            double.parse(durationController.text),
+                            int.parse(durationController.text),
                       );
                       BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
                           context: context,
