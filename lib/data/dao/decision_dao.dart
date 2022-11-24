@@ -111,7 +111,6 @@ class DecisionDao {
       result = DaoResponse(true, id);
     } catch (err) {
       if (err is DatabaseException) {
-        print('err: ${err}');
         result = DaoResponse(false, err.getResultCode() ?? 0);
       }
     }

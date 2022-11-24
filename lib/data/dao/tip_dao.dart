@@ -33,7 +33,7 @@ class TipDao {
   Future<Map<String, dynamic>?> getTipByID(int tipId) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
+    List<Map<String, dynamic>> result = List.empty();
     result = await db.query(tipsTABLE, where: 'id = ?', whereArgs: [tipId]);
 
     if (result.isNotEmpty) return result[0];

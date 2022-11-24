@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 
@@ -29,27 +31,5 @@ class ChildRepository {
       ChildModel child = ChildModel.fromMap(result);
       return child;
     }
-  }
-
-  get_children_list() async {
-    List<ChildModel> children = [
-      ChildModel(
-        id: 1,
-        name: "Ahmad",
-        dateOfBirth: DateTime(2022, 1, 1),
-        imagePath: "assets/images/children/child1",
-        gender: 'Male',
-        pregnancyDuration: 36,
-      ),
-      ChildModel(
-        id: 2,
-        name: "Sara",
-        dateOfBirth: DateTime(2022, 2, 2),
-        imagePath: "assets/images/children/child2",
-        gender: 'Female',
-        pregnancyDuration: 36,
-      ),
-    ];
-    return children;
   }
 }

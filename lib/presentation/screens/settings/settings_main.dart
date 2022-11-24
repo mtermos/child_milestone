@@ -3,9 +3,7 @@ import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:child_milestone/logic/shared/upload_data.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
-import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/screens/settings/settings_background.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,7 +29,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
 
     return Scaffold(
       body: SettingsBackground(
@@ -53,6 +50,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 fontWeight: FontWeight.w600,
                 padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                 onPressed: () {
+                  // ignore: avoid_print
                   print("uploading data");
                   uploadData(context);
                 },

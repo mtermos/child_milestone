@@ -56,7 +56,7 @@ class RatingDao {
   Future<Map<String, dynamic>?> getRatingByID(int ratingId) async {
     final db = await dbProvider.database;
 
-    List<Map<String, dynamic>> result = new List.empty();
+    List<Map<String, dynamic>> result = List.empty();
     result =
         await db.query(ratingsTABLE, where: 'id = ?', whereArgs: [ratingId]);
 

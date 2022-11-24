@@ -1,11 +1,13 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, overridden_fields
 import 'package:child_milestone/constants/classes.dart';
 
 class MonthlyPeriod extends Period {
+  @override
   int id;
   int startingMonth;
   int endingMonth;
   int numWeeks;
+  @override
   String arabicName;
   MonthlyPeriod({
     required this.id,

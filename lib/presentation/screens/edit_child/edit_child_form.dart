@@ -315,7 +315,6 @@ class _EditChildFormState extends State<EditChildForm> {
           onChanged: (value) {
             setState(() {
               selectedGender = value!;
-              debugPrint('selectedGender: ${selectedGender}');
             });
           },
         ),

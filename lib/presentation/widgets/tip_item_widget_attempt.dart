@@ -125,12 +125,10 @@ class _MyYoutubePlayerState extends State<MyYoutubePlayer>
   }
 
   @override
-  void onError(String error) {
-  }
+  void onError(String error) {}
 
   @override
-  void onReady() {
-  }
+  void onReady() {}
 
   @override
   void onStateChange(String state) {
@@ -140,11 +138,10 @@ class _MyYoutubePlayerState extends State<MyYoutubePlayer>
   }
 
   @override
-  void onVideoDuration(double duration) {
-  }
+  void onVideoDuration(double duration) {}
 
   void _onYoutubeCreated(FlutterYoutubeViewController controller) {
-    this._controller = controller;
+    _controller = controller;
   }
 
   void _loadOrCueVideo() {

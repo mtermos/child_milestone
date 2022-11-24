@@ -21,6 +21,7 @@
     "childsIdExistsSnackBar": "رقم الطفل موجود مسبقا",
     "cancel": "إلغاء",
     "monthsOld": " شهراً!",
+    "monthsOld2": " أشهر!",
     "milestoneChecklist": "قائمة المتابعات",
     "notifications": "إشعارات",
     "tipsAndActivities": "النصائح والأنشطة",
@@ -86,5 +87,7 @@
     "clickToWatchVideo": "اضغط لمشاهدة الفيديو المساعد",
     "clickToOpenDocument": "اضغط لقراءة المستند المساعد",
     "notReadyYet": "الطفل لم يدخل في العمر المصحح المناسب بعد",
+    "chronologicalAge": "العمر الزمني",
+    "correctedAge": "العمر المصحح",
     "selectLanguage": "اختار اللغة"
 }

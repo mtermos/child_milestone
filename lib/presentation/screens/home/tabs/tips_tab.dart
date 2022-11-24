@@ -35,7 +35,7 @@ class _TipsState extends State<TipsTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+
     Image tipsBg = Image.asset(
       "assets/images/tips_bg.png",
       alignment: Alignment.topCenter,

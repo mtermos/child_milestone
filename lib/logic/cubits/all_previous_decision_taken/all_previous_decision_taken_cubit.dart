@@ -1,6 +1,5 @@
 // ignore_for_file: file_names
 import 'package:bloc/bloc.dart';
-import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
@@ -21,7 +20,6 @@ class AllPreviousDecisionTakenCubit extends Cubit<Map<int, bool>> {
     int period = periodCalculator(child).id;
     if (period <= 1) emit({child.id: true});
 
-    List<MilestoneWithDecision> items = [];
     List<MilestoneItem>? milestones =
         await milestoneRepository.getMilestonesUntilPeriod(period - 1);
 

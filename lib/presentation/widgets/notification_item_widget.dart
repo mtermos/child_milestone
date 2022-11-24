@@ -1,9 +1,6 @@
 import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
-import 'package:child_milestone/constants/strings.dart';
-import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
@@ -70,7 +67,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                     ),
                     SizedBox(height: size.height * 0.02),
                     AppText(
-                      text: readable_date(widget.item.notification.issuedAt),
+                      text: readableDate(widget.item.notification.issuedAt),
                       fontSize: textScale * 14,
                     )
                   ],
@@ -107,7 +104,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
     );
   }
 
-  String readable_date(DateTime dateTime) {
+  String readableDate(DateTime dateTime) {
     DateTime now = DateTime.now();
     DateTime justNow = DateTime.now().subtract(const Duration(minutes: 1));
     DateTime localDateTime = dateTime.toLocal();

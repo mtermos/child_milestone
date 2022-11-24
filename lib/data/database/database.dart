@@ -45,7 +45,6 @@ class DatabaseProvider {
     if (_database != null) return _database!;
     _database = await createDatabase();
     for (var table in tables) {
-      print(table);
       await _database!.delete(table);
     }
   }

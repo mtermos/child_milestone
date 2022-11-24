@@ -6,7 +6,6 @@ import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
-import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,9 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 class HomeTab extends StatefulWidget {
   Function changeIndex;
@@ -47,7 +44,6 @@ class _HomeTabState extends State<HomeTab> {
     String tips = "assets/images/tips.png";
     Size size = MediaQuery.of(context).size;
     final textScale = MediaQuery.of(context).size.height * 0.001;
-    NotificationService _notificationService = NotificationService();
     String doubleArrowIcon = "";
     bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
 
@@ -138,18 +134,38 @@ class _HomeTabState extends State<HomeTab> {
                           SizedBox(height: textScale * 7),
                           correctedAge > 0
                               ? AppText(
-                                  text: age.toString() +
-                                      AppLocalizations.of(context)!.monthsOld +
-                                      " " +
+                                  text: AppLocalizations.of(context)!
+                                          .chronologicalAge +
+                                      ": " +
+                                      age.toString() +
+                                      (age >= 10 || age == 1
+                                          ? AppLocalizations.of(context)!
+                                              .monthsOld
+                                          : AppLocalizations.of(context)!
+                                              .monthsOld2) +
+                                      "\t" +
+                                      AppLocalizations.of(context)!
+                                          .correctedAge +
+                                      ": " +
                                       correctedAge.toString() +
-                                      " " +
-                                      AppLocalizations.of(context)!.monthsOld,
+                                      (correctedAge >= 10 || correctedAge == 1
+                                          ? AppLocalizations.of(context)!
+                                              .monthsOld
+                                          : AppLocalizations.of(context)!
+                                              .monthsOld2),
                                   color: Colors.white,
                                   fontSize: textScale * 15,
                                 )
                               : AppText(
-                                  text: age.toString() +
-                                      AppLocalizations.of(context)!.monthsOld,
+                                  text: AppLocalizations.of(context)!
+                                          .chronologicalAge +
+                                      ": " +
+                                      age.toString() +
+                                      (age >= 10 || age == 1
+                                          ? AppLocalizations.of(context)!
+                                              .monthsOld
+                                          : AppLocalizations.of(context)!
+                                              .monthsOld2),
                                   color: Colors.white,
                                   fontSize: textScale * 15,
                                 ),

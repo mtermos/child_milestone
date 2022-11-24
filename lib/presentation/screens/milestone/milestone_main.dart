@@ -74,7 +74,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               SizedBox(
                 height: MediaQuery.of(context).padding.top,
               ),
-              TopBarView(hasBackBottun: true, hasDropDown: false),
+              const TopBarView(hasBackBottun: true, hasDropDown: false),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(
@@ -206,8 +206,6 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
               setState(() {
                 selectedPeriod = newValue;
               });
-              print('newValue: ${newValue.arabicName}');
-              print('selectedPeriod: ${selectedPeriod!.arabicName}');
             }
           },
         ),

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
-import 'package:flutter/material.dart';
 import 'package:sqflite/sqlite_api.dart';
 
 class ChildDao {
@@ -20,7 +19,6 @@ class ChildDao {
       if (err is DatabaseException) {
         result = DaoResponse(false, err.getResultCode() ?? 0);
       }
-      debugPrint('result: ${err}');
       result = const DaoResponse(false, -1);
     }
     return result;

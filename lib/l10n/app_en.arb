@@ -16,6 +16,7 @@
     "childsIdExistsSnackBar": "Child ID already exists",
     "cancel": "Cancel",
     "monthsOld": " months old!",
+    "monthsOld2": " months old!",
     "milestoneChecklist": "Milestone checklist",
     "notifications": "Notifications",
     "tipsAndActivities": "Tips &\nActivities",
@@ -75,5 +76,7 @@
     "clickToWatchVideo": "Click to watch assistative video",
     "clickToOpenDocument": "Click to read document",
     "notReadyYet": "The child is not in the suitable corrected age",
+    "chronologicalAge": "Chronological Age",
+    "correctedAge": "Corrected Age",
     "selectLanguage": "Select Language"
 }

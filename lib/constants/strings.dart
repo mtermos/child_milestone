@@ -27,5 +27,3 @@ class SharedPrefKeys {
   static const String selectedChildId = "selectedChildId";
   static const String langCode = "lang";
 }
-
-List<String> Categories = [""];

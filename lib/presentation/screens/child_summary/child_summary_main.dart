@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/monthly_periods.dart';
-import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
@@ -52,7 +51,6 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
             currentPeriod = periodCalculator(currentChild!);
             if (selectedPeriod == null ||
                 currentPeriod!.id < selectedPeriod!.id) {
-              print("selectedPeriod changed");
               selectedPeriod = currentPeriod;
             }
             BlocProvider.of<MilestoneBloc>(context).add(

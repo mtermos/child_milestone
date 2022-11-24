@@ -30,7 +30,7 @@ class _NotificationState extends State<NotificationTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+
     BlocProvider.of<NotificationBloc>(context)
         .add(GetAllUnopenedNotificationsEvent());
 
