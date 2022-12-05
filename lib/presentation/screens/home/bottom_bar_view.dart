@@ -41,6 +41,8 @@ class _BottomBarViewState extends State<BottomBarView>
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
+    final Size size = MediaQuery.of(context).size;
+    final textScale = MediaQuery.of(context).size.height * 0.001;
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
@@ -62,7 +64,7 @@ class _BottomBarViewState extends State<BottomBarView>
                 child: Column(
                   children: <Widget>[
                     SizedBox(
-                      height: 62,
+                      height: size.height * 0.09,
                       child: Padding(
                         padding:
                             const EdgeInsets.only(left: 8, right: 8, top: 4),
@@ -126,8 +128,9 @@ class _BottomBarViewState extends State<BottomBarView>
           },
         ),
         Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).padding.bottom),
+          padding: EdgeInsets.only(
+              bottom:
+                  MediaQuery.of(context).padding.bottom + size.height * 0.025),
           child: SizedBox(
             width: 38 * 2.0,
             height: 38 + 62.0,
@@ -261,13 +264,13 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
                         color: widget.tabIconData.isSelected
                             ? widget.tabIconData.selectedColor
                             : widget.tabIconData.notSelectedColor,
-                        width: textScale * 40,
-                        height: textScale * 40,
+                        width: size.width * 0.05,
+                        height: size.height * 0.05,
                       ),
                       SizedBox(height: size.height * 0.005),
                       AppText(
                         text: widget.tabIconData.title,
-                        fontSize: 15 * textScale,
+                        fontSize: 18 * textScale,
                       ),
                     ],
                   ),

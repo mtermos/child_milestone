@@ -99,9 +99,17 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                                       currentChild != null
                                           ? CircleAvatar(
                                               radius: size.width * 0.15,
-                                              backgroundImage: Image.file(File(
-                                                      currentChild!.imagePath))
-                                                  .image)
+                                              backgroundColor: Colors.white,
+                                              backgroundImage: currentChild!
+                                                          .imagePath !=
+                                                      ""
+                                                  ? Image.file(File(
+                                                          currentChild!
+                                                              .imagePath))
+                                                      .image
+                                                  : Image.asset(noImageAsset(
+                                                          currentChild!))
+                                                      .image)
                                           : CircleAvatar(
                                               backgroundColor: Colors.white,
                                               radius: size.width * 0.16,

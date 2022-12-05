@@ -30,10 +30,13 @@ class WelcomeScreen extends StatelessWidget {
             backgtound3,
             alignment: Alignment.bottomCenter,
           ),
-          Image.asset(
-            imagePath,
-            alignment: Alignment.topCenter,
-            fit: BoxFit.fitWidth,
+          Positioned(
+            left: 0,
+            child: Image.asset(
+              imagePath,
+              alignment: Alignment.topLeft,
+              fit: BoxFit.fitWidth,
+            ),
           ),
           Center(
             child: Column(
@@ -123,7 +126,11 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   void onGetStartedClicked(BuildContext context) {
-    Navigator.popAndPushNamed(context, Routes.login);
+    // Navigator.popAndPushNamed(context, Routes.login);
+
+    // remove the next line when adding login service
+    Navigator.popAndPushNamed(context, Routes.home);
+
     // BlocProvider.of<AuthBloc>(context).add(LoginEvent());
     // Navigator.of(context).pushReplacement(new MaterialPageRoute(
     //   builder: (BuildContext context) {

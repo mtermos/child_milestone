@@ -2,6 +2,7 @@ import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/common_widgets/column_with_seprator.dart';
+import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:child_milestone/presentation/widgets/notification_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,6 +31,7 @@ class _NotificationState extends State<NotificationTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final textScale = MediaQuery.of(context).size.height * 0.001;
 
     BlocProvider.of<NotificationBloc>(context)
         .add(GetAllUnopenedNotificationsEvent());
@@ -38,6 +40,7 @@ class _NotificationState extends State<NotificationTab> {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.max,
           children: [
             SizedBox(height: size.height * 0.02),
             Container(
@@ -54,6 +57,20 @@ class _NotificationState extends State<NotificationTab> {
               builder: (context, state) {
                 if (state is AllUnopenedNotificationsLoadedState) {
                   notificationsItems = state.notificationsWihChildren;
+                }
+                if (notificationsItems.isEmpty) {
+                  return Column(
+                    children: [
+                      SizedBox(height: size.height * 0.2),
+                      Center(
+                        child: AppText(
+                          text: "لا يوجد إشعارات",
+                          fontSize: textScale * 40,
+                          color: AppColors.primaryColor,
+                        ),
+                      ),
+                    ],
+                  );
                 }
                 return Column(
                   children: getChildrenWithSeperator(

@@ -22,18 +22,19 @@ class LoginBackground extends StatelessWidget {
       height: size.height,
       child: Stack(
         alignment: Alignment.center,
+        fit: StackFit.expand,
         children: <Widget>[
           Positioned(
             top: 0,
-            right: 0,
+            width: size.width,
             child: SvgPicture.asset(
               ellipse,
               alignment: Alignment.topCenter,
+              width: size.width,
             ),
           ),
           Positioned(
             top: 0,
-            right: 0,
             child: Image.asset(smiley_face, width: size.width),
           ),
           // Positioned(

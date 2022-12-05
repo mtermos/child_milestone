@@ -48,7 +48,6 @@ class DecisionRepository {
     int period = periodCalculator(child).id;
     DaoResponse<List, int> daoResponse =
         await decisionDao.getDecisionsByAge(period, childId);
-
     return DaoResponse(
         daoResponse.item1.isNotEmpty
             ? daoResponse.item1

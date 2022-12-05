@@ -41,21 +41,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               margin: const EdgeInsets.symmetric(horizontal: 40),
             ),
             SizedBox(height: size.height * 0.02),
-            Container(
-              alignment: Alignment.center,
-              width: size.width * 0.8,
-              margin: EdgeInsets.symmetric(horizontal: size.width * 0.25),
-              child: AppButton(
-                label: AppLocalizations.of(context)!.uploadData,
-                fontWeight: FontWeight.w600,
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
-                onPressed: () {
-                  // ignore: avoid_print
-                  print("uploading data");
-                  uploadData(context);
-                },
-              ),
-            ),
+            // Container(
+            //   alignment: Alignment.center,
+            //   width: size.width * 0.8,
+            //   margin: EdgeInsets.symmetric(horizontal: size.width * 0.25),
+            //   child: AppButton(
+            //     label: AppLocalizations.of(context)!.uploadData,
+            //     fontWeight: FontWeight.w600,
+            //     padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+            //     onPressed: () {
+            //       // ignore: avoid_print
+            //       print("uploading data");
+            //       uploadData(context);
+            //     },
+            //   ),
+            // ),
             // upload data
 
             // SizedBox(height: size.height * 0.02),

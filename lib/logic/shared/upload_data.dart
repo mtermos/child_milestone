@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 bool uploadData(BuildContext context) {
-  BlocProvider.of<DecisionBloc>(context).add(const UploadDecisionsEvent());
+  // BlocProvider.of<DecisionBloc>(context).add(const UploadDecisionsEvent());
   // on edit make new = true
 
   // upload children

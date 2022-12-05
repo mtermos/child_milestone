@@ -53,6 +53,7 @@ dependencies:
   path: null
   path_provider: ^2.0.10
   percent_indicator: ^3.0.1
+  rename: ^2.0.1
   shared_preferences: ^2.0.15
   sqflite: ^2.0.2+1
   test: null

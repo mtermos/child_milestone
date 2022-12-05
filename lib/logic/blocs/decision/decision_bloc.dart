@@ -99,8 +99,8 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   void getByAge(
       GetDecisionsByAgeEvent event, Emitter<DecisionState> emit) async {
     emit(LoadingDecisionsByAgeState());
-    DaoResponse<List<DecisionModel>, int> daoResponse = await decisionRepository
-        .getDecisionsByAge(event.child, event.child.id);
+    DaoResponse<List<DecisionModel>, int> daoResponse =
+        await decisionRepository.getDecisionsByAge(event.child, event.child.id);
     emit(LoadedDecisionsByAgeState(daoResponse.item1, daoResponse.item2));
     // if (daoResponse.item1) {
     //   emit(LoadedDecisionsByAgeState(daoResponse.item1, daoResponse.item2));

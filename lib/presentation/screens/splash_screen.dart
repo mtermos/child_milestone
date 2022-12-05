@@ -55,6 +55,8 @@ class _SplashScreenState extends State<SplashScreen> {
       Navigator.popAndPushNamed(context, Routes.home);
     } else {
       await resetData();
+      // remove the next line when adding login service
+      await prefs.setBool(SharedPrefKeys.isLogged, false);
       Navigator.popAndPushNamed(context, Routes.welcome);
     }
   }
@@ -73,10 +75,10 @@ class _SplashScreenState extends State<SplashScreen> {
     NotificationService _notificationService = NotificationService();
     await _notificationService.cancelAllNotifications();
     // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    await addTempChild();
+    // await addTempChild();
     await addTempMilestones();
     await addTempTips();
-    await addTempNotifications();
+    // await addTempNotifications();
   }
 
   addTempChild() async {

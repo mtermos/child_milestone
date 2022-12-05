@@ -251,8 +251,8 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       vertical: textScale * 15,
-                                      horizontal: textScale * 20,
                                     ),
+                                    alignment: Alignment.center,
                                     child: Text(
                                       AppLocalizations.of(context)!.yes,
                                       textAlign: TextAlign.right,
@@ -305,8 +305,8 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       vertical: textScale * 15,
-                                      horizontal: textScale * 20,
                                     ),
+                                    alignment: Alignment.center,
                                     child: Text(
                                       AppLocalizations.of(context)!.no,
                                       textAlign: TextAlign.right,
@@ -359,8 +359,8 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       vertical: textScale * 15,
-                                      horizontal: textScale * 20,
                                     ),
+                                    alignment: Alignment.center,
                                     child: Text(
                                       AppLocalizations.of(context)!.maybe,
                                       textAlign: TextAlign.right,
