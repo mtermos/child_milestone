@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    resetData();
+    // resetData();
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
   }
@@ -54,16 +54,17 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.getBool(SharedPrefKeys.isLogged)!) {
       Navigator.popAndPushNamed(context, Routes.home);
     } else {
-      await resetData();
+      await addTempMilestones();
+      await addTempTips();
       // remove the next line when adding login service
-      await prefs.setBool(SharedPrefKeys.isLogged, false);
+      await prefs.setBool(SharedPrefKeys.isLogged, true);
       Navigator.popAndPushNamed(context, Routes.welcome);
     }
   }
 
   resetData() async {
     final dbProvider = DatabaseProvider.dbProvider;
-    // await dbProvider.deleteDatabase();
+    await dbProvider.deleteDatabase();
     await dbProvider.createDatabase();
     final db = await dbProvider.database;
     await db.delete(childrenTABLE);
@@ -74,11 +75,11 @@ class _SplashScreenState extends State<SplashScreen> {
     await db.delete(ratingsTABLE);
     NotificationService _notificationService = NotificationService();
     await _notificationService.cancelAllNotifications();
-    // BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    // await addTempChild();
+    BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
+    await addTempChild();
     await addTempMilestones();
     await addTempTips();
-    // await addTempNotifications();
+    await addTempNotifications();
   }
 
   addTempChild() async {
