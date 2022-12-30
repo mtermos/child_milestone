@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    resetData();
+    // resetData();
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
   }
@@ -54,8 +54,8 @@ class _SplashScreenState extends State<SplashScreen> {
         prefs.getBool(SharedPrefKeys.isLogged)!) {
       Navigator.popAndPushNamed(context, Routes.home);
     } else {
-      // await addTempMilestones();
-      // await addTempTips();
+      await addTempMilestones();
+      await addTempTips();
       // remove the next line when adding login service
       await prefs.setBool(SharedPrefKeys.isLogged, true);
       Navigator.popAndPushNamed(context, Routes.welcome);
