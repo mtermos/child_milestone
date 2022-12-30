@@ -36,12 +36,12 @@ class _AddChildScreenState extends State<AddChildScreen> {
             Expanded(
               child: Stack(
                 children: [
-                  const AddChildForm(),
                   Positioned(
                     bottom: 0,
                     right: 0,
                     child: _addChildBackground(context, size),
                   ),
+                  const AddChildForm(),
                 ],
               ),
             )

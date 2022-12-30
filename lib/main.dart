@@ -159,16 +159,27 @@ class Application extends StatelessWidget {
               uploadData(context);
             }
 
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                // accentColor: Colors.blue,
-                visualDensity: VisualDensity.standard,
+            return GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                FocusScopeNode currentFocus = FocusScope.of(context);
+
+                if (!currentFocus.hasPrimaryFocus &&
+                    currentFocus.focusedChild != null) {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                }
+              },
+              child: MaterialApp(
+                debugShowCheckedModeBanner: false,
+                theme: ThemeData(
+                  // accentColor: Colors.blue,
+                  visualDensity: VisualDensity.standard,
+                ),
+                locale: lang,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                onGenerateRoute: appRouter.onGenerateRoute,
               ),
-              locale: lang,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              supportedLocales: AppLocalizations.supportedLocales,
-              onGenerateRoute: appRouter.onGenerateRoute,
             );
           },
         ),

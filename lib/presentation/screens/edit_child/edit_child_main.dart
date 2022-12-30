@@ -45,6 +45,11 @@ class _EditChildScreenState extends State<EditChildScreen> {
             Expanded(
               child: Stack(
                 children: [
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: _editChildBackground(context, size),
+                  ),
                   BlocBuilder<ChildBloc, ChildState>(
                     builder: (context, state) {
                       if (state is ChildLoadedState) {
@@ -54,11 +59,6 @@ class _EditChildScreenState extends State<EditChildScreen> {
                           ? EditChildForm(child: child!)
                           : AppText(text: "loading");
                     },
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: _editChildBackground(context, size),
                   ),
                 ],
               ),
