@@ -5,6 +5,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
@@ -187,13 +188,15 @@ class _EditChildFormState extends State<EditChildForm> {
                                 signed: true, decimal: true)
                             : TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.allow(
+                              RegExp('[0-9\u0660-\u0669]+')),
                         ],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return AppLocalizations.of(context)!.enterNumber;
                           }
-                          if (int.parse(value) < 25 || int.parse(value) > 42) {
+                          int valueInt = int.parse(replaceArabicNumber(value));
+                          if (valueInt < 25 || valueInt > 42) {
                             return AppLocalizations.of(context)!
                                 .enterValidNumber;
                           }
@@ -273,8 +276,8 @@ class _EditChildFormState extends State<EditChildForm> {
                             imagePath: imagePath,
                             id: widget.child.id,
                             gender: selectedGender,
-                            pregnancyDuration:
-                                int.parse(durationController.text),
+                            pregnancyDuration: int.parse(
+                                replaceArabicNumber(durationController.text)),
                           );
                           BlocProvider.of<ChildBloc>(context).add(
                               EditChildEvent(
