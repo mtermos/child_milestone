@@ -5,6 +5,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
@@ -180,13 +181,15 @@ class _AddChildFormState extends State<AddChildForm> {
                               signed: true, decimal: true)
                           : TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly,
+                        FilteringTextInputFormatter.allow(
+                            RegExp('[0-9\u0660-\u0669]+')),
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return AppLocalizations.of(context)!.enterNumber;
                         }
-                        if (int.parse(value) < 25 || int.parse(value) > 42) {
+                        int valueInt = int.parse(replaceArabicNumber(value));
+                        if (valueInt < 25 || valueInt > 42) {
                           return AppLocalizations.of(context)!.enterValidNumber;
                         }
                         return null;
@@ -230,7 +233,8 @@ class _AddChildFormState extends State<AddChildForm> {
                               signed: true, decimal: true)
                           : TextInputType.number,
                       inputFormatters: <TextInputFormatter>[
-                        FilteringTextInputFormatter.digitsOnly
+                        FilteringTextInputFormatter.allow(
+                            RegExp('[0-9\u0660-\u0669]+')),
                       ],
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -282,9 +286,10 @@ class _AddChildFormState extends State<AddChildForm> {
                           name: nameController.text,
                           dateOfBirth: _selectedDate,
                           imagePath: imagePath,
-                          id: int.parse(idController.text),
+                          id: int.parse(replaceArabicNumber(idController.text)),
                           gender: selected_gender,
-                          pregnancyDuration: int.parse(durationController.text),
+                          pregnancyDuration: int.parse(
+                              replaceArabicNumber(durationController.text)),
                         );
                         BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
                             context: context,
