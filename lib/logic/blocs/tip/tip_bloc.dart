@@ -2,6 +2,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/data/repositories/tip_repository.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -22,7 +23,11 @@ class TipBloc extends Bloc<TipEvent, TipState> {
 
   void addTip(AddTipEvent event, Emitter<TipState> emit) async {
     emit(AddingTipState());
-    await tipRepository.insertTip(event.tip);
+    try {
+      await tipRepository.insertTip(event.tip);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     emit(AddedTipState());
   }
 

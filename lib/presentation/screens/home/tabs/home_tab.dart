@@ -405,6 +405,13 @@ class _HomeTabState extends State<HomeTab> {
                         })
                       : SizedBox.shrink(),
                   SizedBox(height: size.height * 0.01),
+                  InkWell(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Text("testing"),
+                    onTap: () {
+                      Navigator.pushNamed(context, Routes.splashScreen);
+                    },
+                  ),
                   // Container(
                   //   width: size.width * 0.5,
                   //   child: AppButton(

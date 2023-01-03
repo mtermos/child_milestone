@@ -31,6 +31,16 @@ Period periodCalculator(ChildModel child) {
   return Period(id: 0, arabicName: "null");
 }
 
+Period periodFromID(int id) {
+  if (id > 0 && id < 10) {
+    return monthlyPeriods.where((element) => element.id == id).first;
+  } else if (id == 11 || id == 12) {
+    return yearlyPeriods.where((element) => element.id == id).first;
+  } else {
+    return Period(id: 0, arabicName: "null");
+  }
+}
+
 String noImageAsset(ChildModel childModel) {
   String noImageAsset = "";
   String babyBoy = "assets/images/children/baby_boy.png";

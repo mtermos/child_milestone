@@ -2,6 +2,7 @@
 import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/data_providers/milestone_categories_list.dart';
+import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +18,10 @@ import 'package:child_milestone/presentation/screens/milestone/milestone_item_wi
 import 'package:child_milestone/presentation/widgets/category_box_widget.dart';
 
 class MilestoneScreen extends StatefulWidget {
-  int? category;
+  int? periodId;
   MilestoneScreen({
     Key? key,
-    this.category,
+    this.periodId,
   }) : super(key: key);
 
   @override
@@ -35,7 +36,8 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
   Period? selectedPeriod;
   @override
   void initState() {
-    _selected = widget.category ?? 1;
+    // _selected = widget.milestone != null ? widget.milestone!.category : 1;
+    selectedPeriod = periodFromID(widget.periodId ?? 1);
     super.initState();
   }
 

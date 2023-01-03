@@ -1,13 +1,16 @@
 import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationItemWidget extends StatefulWidget {
   const NotificationItemWidget({Key? key, required this.item})
@@ -75,10 +78,11 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
               ],
             ),
             onTap: () {
-              Navigator.pushNamed(context, widget.item.notification.route,
-                  arguments: widget.item.milestone != null
-                      ? widget.item.milestone!.category
-                      : null);
+              BlocProvider.of<CurrentChildCubit>(context)
+                  .changeCurrentChild(widget.item.child, () {
+                Navigator.pushNamed(context, widget.item.notification.route,
+                    arguments: widget.item.notification.period);
+              });
             },
           ),
           const Spacer(),

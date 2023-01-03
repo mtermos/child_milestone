@@ -27,7 +27,6 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
   void changeCurrentChildById(int id) async {
     emit(ChangingCurrentChildState());
     ChildModel? newChild = await childRepository.getChildByID(id);
-
     if (newChild != null) {
       final prefs = await SharedPreferences.getInstance();
       prefs.setInt(SharedPrefKeys.selectedChildId, newChild.id);

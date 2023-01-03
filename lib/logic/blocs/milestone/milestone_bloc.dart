@@ -6,6 +6,7 @@ import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 
@@ -33,7 +34,11 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
   void addMilestone(
       AddMilestoneEvent event, Emitter<MilestoneState> emit) async {
     emit(AddingMilestoneState());
-    await milestoneRepository.insertMilestone(event.milestone);
+    try {
+      await milestoneRepository.insertMilestone(event.milestone);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
     emit(AddedMilestoneState());
   }
 

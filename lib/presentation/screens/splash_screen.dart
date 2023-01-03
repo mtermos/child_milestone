@@ -11,6 +11,7 @@ import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
@@ -31,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // resetData();
+    resetData();
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
   }
@@ -49,9 +50,12 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void checkUserIsLogged() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(SharedPrefKeys.selectedChildId, 1);
+    // await prefs.setInt(SharedPrefKeys.selectedChildId, 1);
     if ((prefs.getBool(SharedPrefKeys.isLogged) != null) &&
         prefs.getBool(SharedPrefKeys.isLogged)!) {
+      BlocProvider.of<CurrentChildCubit>(context).changeCurrentChildById(
+          prefs.getInt(SharedPrefKeys.selectedChildId) ?? 0);
+
       Navigator.popAndPushNamed(context, Routes.home);
     } else {
       await addTempMilestones();
@@ -99,7 +103,7 @@ class _SplashScreenState extends State<SplashScreen> {
     ChildModel newChild = ChildModel(
         id: 1,
         name: "رامي",
-        dateOfBirth: DateTime.now().subtract(const Duration(days: 30)),
+        dateOfBirth: DateTime.now().subtract(const Duration(days: 180)),
         imagePath: imagePath,
         gender: "Male",
         pregnancyDuration: 37);
