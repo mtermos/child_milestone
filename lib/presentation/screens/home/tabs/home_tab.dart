@@ -2,11 +2,13 @@ import 'dart:io';
 
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -405,13 +407,20 @@ class _HomeTabState extends State<HomeTab> {
                         })
                       : SizedBox.shrink(),
                   SizedBox(height: size.height * 0.01),
-                  InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Text("testing"),
-                    onTap: () {
-                      Navigator.pushNamed(context, Routes.splashScreen);
-                    },
-                  ),
+                  // InkWell(
+                  //   borderRadius: BorderRadius.circular(12),
+                  //   child: Text("testing"),
+                  //   onTap: () async {
+                  //     final NotificationRepository notificationRepository;
+                  //     final NotificationService _notificationService =
+                  //         NotificationService();
+
+                  //     await _notificationService.showNotifications(
+                  //       title: "title",
+                  //       body: "body",
+                  //     );
+                  //   },
+                  // ),
                   // Container(
                   //   width: size.width * 0.5,
                   //   child: AppButton(
