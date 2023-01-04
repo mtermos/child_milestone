@@ -38,7 +38,8 @@ class AppRouter {
         );
       case Routes.milestone:
         return MaterialPageRoute(
-          builder: (_) => MilestoneScreen(periodId: key as int),
+          builder: (_) =>
+              MilestoneScreen(periodId: key != null ? key as int : null),
         );
       case Routes.addChild:
         return MaterialPageRoute(
