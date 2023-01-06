@@ -54,12 +54,12 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     emit(EditingChildState());
     DaoResponse result = await childRepository.updateChild(event.child);
     if (result.item1) {
-      emit(EditedChildState(event.child));
       if (event.addNotifications) {
         await _deleteAllNotifications(event.child.id);
         await _addPeriodsNotifications(event.context, event.child);
       }
       event.whenDone();
+      emit(EditedChildState(event.child));
     } else {
       emit(ErrorEditingChildState());
     }

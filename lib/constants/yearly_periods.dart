@@ -9,26 +9,36 @@ class YearlyPeriod extends Period {
   int numWeeks;
   @override
   String arabicName;
+  @override
+  String arabicNameNumbers;
   YearlyPeriod({
     required this.id,
     required this.startingYear,
     required this.endingYear,
     required this.numWeeks,
     required this.arabicName,
-  }) : super(id: id, arabicName: arabicName);
+    required this.arabicNameNumbers,
+  }) : super(
+            id: id,
+            arabicName: arabicName,
+            arabicNameNumbers: arabicNameNumbers);
 }
 
 List<YearlyPeriod> yearlyPeriods = [
   YearlyPeriod(
-      id: 11,
-      startingYear: 3,
-      endingYear: 4,
-      numWeeks: 48,
-      arabicName: 'من السنة الثالثة حتى الرابعة'),
+    id: 11,
+    startingYear: 3,
+    endingYear: 4,
+    numWeeks: 48,
+    arabicName: 'من السنة الثالثة حتى الرابعة',
+    arabicNameNumbers: 'السنة 3 حتى 4',
+  ),
   YearlyPeriod(
-      id: 12,
-      startingYear: 4,
-      endingYear: 5,
-      numWeeks: 48,
-      arabicName: 'من السنة الرابعة حتى الخامسة'),
+    id: 12,
+    startingYear: 4,
+    endingYear: 5,
+    numWeeks: 48,
+    arabicName: 'من السنة الرابعة حتى الخامسة',
+    arabicNameNumbers: 'السنة 4 حتى 5',
+  ),
 ];

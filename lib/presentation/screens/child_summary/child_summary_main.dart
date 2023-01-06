@@ -131,8 +131,14 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: size.height * 0.05),
+                      SizedBox(height: size.height * 0.02),
                       periodDropDownList(currentPeriod!.id, size, textScale),
+                      SizedBox(height: size.height * 0.04),
+                      AppText(
+                        text: AppLocalizations.of(context)!.milestones,
+                        fontSize: textScale * 32,
+                        color: Colors.black,
+                      ),
                       SizedBox(height: size.height * 0.02),
                       BlocBuilder<MilestoneBloc, MilestoneState>(
                         builder: (context, state) {
@@ -367,56 +373,75 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
       periods.addAll(monthlyPeriods);
       periods.addAll(yearlyPeriods);
     }
-    return Center(
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<Period>(
-          selectedItemBuilder: (context) => periods.map<Widget>((e) {
-            return Center(
-              child: AppText(
-                text: e.arabicName,
-                fontSize: textScale * 24,
-                color: Colors.black,
-              ),
-            );
-          }).toList(),
-          value: selectedPeriod,
-          borderRadius: const BorderRadius.all(Radius.circular(10)),
-          icon: const Icon(
-            Icons.arrow_drop_down,
-            color: Colors.black,
-          ),
-          alignment: AlignmentDirectional.center,
-          hint: AppText(
-            text: AppLocalizations.of(context)!.selectPeriod,
-            fontSize: textScale * 20,
-          ),
-          isExpanded: true,
-          items: periods.map<DropdownMenuItem<Period>>((Period value) {
-            return DropdownMenuItem<Period>(
-              value: value,
-              alignment: AlignmentDirectional.center,
-              child: Row(
-                children: [
-                  AppText(
-                    text: value.arabicName,
-                    fontSize: textScale * 24,
-                    // color: widget.light
-                    //     ? Colors.white
-                    //     : Colors.black,
-                  ),
-                ],
-              ),
-            );
-          }).toList(),
-          onChanged: (Period? newValue) {
-            if (newValue != null) {
-              setState(() {
-                selectedPeriod = newValue;
-              });
-            }
-          },
+    return Row(
+      mainAxisAlignment:
+          MainAxisAlignment.center, //Center Row contents horizontally,
+      crossAxisAlignment:
+          CrossAxisAlignment.center, //Center Row contents vertically,
+
+      children: [
+        SizedBox(width: size.width * 0.05),
+        AppText(
+          text: AppLocalizations.of(context)!.period + ":",
+          fontSize: textScale * 28,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
         ),
-      ),
+        Expanded(
+          child: Center(
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<Period>(
+                selectedItemBuilder: (context) => periods.map<Widget>((e) {
+                  return Center(
+                    child: AppText(
+                      text: e.arabicNameNumbers,
+                      fontSize: textScale * 28,
+                      color: Colors.black,
+                    ),
+                  );
+                }).toList(),
+                value: selectedPeriod,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                icon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Colors.black,
+                ),
+                // alignment: AlignmentDirectional.center,
+                hint: AppText(
+                  text: AppLocalizations.of(context)!.selectPeriod,
+                  fontSize: textScale * 20,
+                ),
+                isExpanded: true,
+                items: periods.map<DropdownMenuItem<Period>>((Period value) {
+                  return DropdownMenuItem<Period>(
+                    value: value,
+                    alignment: AlignmentDirectional.center,
+                    child: Row(
+                      children: [
+                        AppText(
+                          text: value.arabicNameNumbers,
+                          fontSize: textScale * 24,
+                          // color: widget.light
+                          //     ? Colors.white
+                          //     : Colors.black,
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+                onChanged: (Period? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      selectedPeriod = newValue;
+                    });
+                  }
+                },
+              ),
+            ),
+          ),
+        ),
+        SizedBox(width: size.width * 0.1),
+      ],
     );
   }
 }

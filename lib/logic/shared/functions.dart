@@ -6,8 +6,13 @@ import 'package:child_milestone/data/models/child_model.dart';
 Period periodCalculator(ChildModel child) {
   DateTime tempStart, tempEnd;
   DateTime nowDate = DateTime.now();
-  int daysCorrected = (37 - child.pregnancyDuration.toInt()) * 7;
-  DateTime dateOfBirth = child.dateOfBirth.add(Duration(days: daysCorrected));
+  DateTime dateOfBirth;
+  if (child.pregnancyDuration.toInt() < 37) {
+    int daysCorrected = (37 - child.pregnancyDuration.toInt()) * 7;
+    dateOfBirth = child.dateOfBirth.add(Duration(days: daysCorrected));
+  } else {
+    dateOfBirth = child.dateOfBirth;
+  }
   // DateTime dateOfBirth = DateTime(dateOfBirth.year,
   //       dateOfBirth.month + period.startingMonth, dateOfBirth.day)
   for (var period in monthlyPeriods) {
@@ -28,7 +33,7 @@ Period periodCalculator(ChildModel child) {
       return period;
     }
   }
-  return Period(id: 0, arabicName: "null");
+  return Period(id: 0, arabicName: "null", arabicNameNumbers: "null");
 }
 
 Period periodFromID(int id) {
@@ -37,7 +42,7 @@ Period periodFromID(int id) {
   } else if (id == 11 || id == 12) {
     return yearlyPeriods.where((element) => element.id == id).first;
   } else {
-    return Period(id: 0, arabicName: "null");
+    return Period(id: 0, arabicName: "null", arabicNameNumbers: "null");
   }
 }
 

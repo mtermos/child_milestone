@@ -27,8 +27,10 @@ class NotificationWithChildAndMilestone {
 class Period {
   int id;
   String arabicName;
-  Period( {
+  String arabicNameNumbers;
+  Period({
     required this.id,
     required this.arabicName,
+    required this.arabicNameNumbers,
   });
 }

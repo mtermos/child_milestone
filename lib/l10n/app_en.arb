@@ -69,6 +69,8 @@
     "homePage": "Home Page",
     "enterDecision": "Enter your answer to this milestone",
     "updateDecision": "Change your answer to this milestone",
+    "period": "Age Group",
+    "milestones": "Milestones",
     "unansweredTitle": "The unanswered milestones",
     "yesTitle": "Milestones answered YES",
     "noTitle": "Milestones answered NO",

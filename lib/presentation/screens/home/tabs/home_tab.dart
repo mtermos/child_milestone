@@ -108,10 +108,15 @@ class _HomeTabState extends State<HomeTab> {
               );
               if (state is CurrentChildChangedState) {
                 currentChild = state.new_current_child;
-                int daysCorrected =
-                    (37 - currentChild!.pregnancyDuration.toInt()) * 7;
-                DateTime dateOfBirth = currentChild!.dateOfBirth
-                    .add(Duration(days: daysCorrected));
+                DateTime dateOfBirth;
+                if (currentChild!.pregnancyDuration.toInt() < 37) {
+                  int daysCorrected =
+                      (37 - currentChild!.pregnancyDuration.toInt()) * 7;
+                  dateOfBirth = currentChild!.dateOfBirth
+                      .add(Duration(days: daysCorrected));
+                } else {
+                  dateOfBirth = currentChild!.dateOfBirth;
+                }
                 age = DateTime.now()
                         .difference(currentChild!.dateOfBirth)
                         .inDays ~/
