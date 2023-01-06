@@ -185,7 +185,7 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                   return Center(
                     child: AppText(
                       text: e.arabicNameNumbers,
-                      fontSize: textScale * 28,
+                      fontSize: textScale * 24,
                       color: Colors.black,
                     ),
                   );

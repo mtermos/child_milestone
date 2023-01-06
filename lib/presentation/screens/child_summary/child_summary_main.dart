@@ -395,7 +395,7 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                   return Center(
                     child: AppText(
                       text: e.arabicNameNumbers,
-                      fontSize: textScale * 28,
+                      fontSize: textScale * 24,
                       color: Colors.black,
                     ),
                   );

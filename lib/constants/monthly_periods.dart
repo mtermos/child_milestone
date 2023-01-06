@@ -31,7 +31,7 @@ List<MonthlyPeriod> monthlyPeriods = [
     endingMonth: 2,
     numWeeks: 8,
     arabicName: 'منذ الولادة حتى الشهر الثاني',
-    arabicNameNumbers: 'منذ الولادة حتى الشهر 2',
+    arabicNameNumbers: 'الولادة حتى الشهر 2',
   ),
   MonthlyPeriod(
     id: 2,
