@@ -17,6 +17,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class HomeTab extends StatefulWidget {
   Function changeIndex;
@@ -49,7 +50,10 @@ class _HomeTabState extends State<HomeTab> {
     String tips = "assets/images/tips.png";
     String arrowsDown = "assets/icons/arrows-down.svg";
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
     String doubleArrowIcon = "";
     bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
 
@@ -104,7 +108,7 @@ class _HomeTabState extends State<HomeTab> {
             builder: (context, state) {
               CircleAvatar circleAvatar = CircleAvatar(
                 backgroundColor: Colors.white,
-                radius: size.width * 0.16,
+                radius: isMOBILE ? size.width * 0.16 : size.width * 0.13,
               );
               if (state is CurrentChildChangedState) {
                 currentChild = state.new_current_child;
@@ -125,7 +129,7 @@ class _HomeTabState extends State<HomeTab> {
                     DateTime.now().difference(dateOfBirth).inDays ~/ 30;
                 try {
                   circleAvatar = CircleAvatar(
-                    radius: size.width * 0.15,
+                    radius: isMOBILE ? size.width * 0.15 : size.width * 0.13,
                     backgroundColor: Colors.white,
                     backgroundImage: currentChild!.imagePath != ""
                         ? Image.file(File(currentChild!.imagePath)).image
@@ -143,7 +147,7 @@ class _HomeTabState extends State<HomeTab> {
               return Column(
                 children: [
                   SizedBox(
-                    height: size.width * 0.65,
+                    height: isMOBILE ? size.height * 0.33 : size.height * 0.45,
                     child: Stack(
                       alignment: Alignment.topCenter,
                       children: <Widget>[
@@ -152,7 +156,9 @@ class _HomeTabState extends State<HomeTab> {
                           child: Center(
                             child: SvgPicture.asset(
                               profilePicBg,
-                              width: size.width * 0.9,
+                              width: isMOBILE
+                                  ? size.width * 0.9
+                                  : size.width * 0.8,
                               alignment: Alignment.topCenter,
                             ),
                           ),
@@ -226,7 +232,7 @@ class _HomeTabState extends State<HomeTab> {
                     ),
                   ),
                   SizedBox(
-                    height: size.height * 0.01,
+                    height: isMOBILE ? size.height * 0.01 : size.height * 0.005,
                   ),
                   correctedAge > 0
                       ? BlocBuilder<DecisionBloc, DecisionState>(
@@ -234,7 +240,9 @@ class _HomeTabState extends State<HomeTab> {
                             if (state is LoadedDecisionsByAgeState) {
                               return InkWell(
                                 child: Container(
-                                  width: size.width * 0.85,
+                                  width: isMOBILE
+                                      ? size.width * 0.85
+                                      : size.width * 0.75,
                                   padding: EdgeInsets.symmetric(
                                       horizontal: size.width * 0.08,
                                       vertical: size.height * 0.03),
@@ -261,7 +269,7 @@ class _HomeTabState extends State<HomeTab> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: size.height * 0.025),
+                                      SizedBox(height: textScale * 14),
                                       Row(
                                         children: [
                                           Expanded(
@@ -275,12 +283,15 @@ class _HomeTabState extends State<HomeTab> {
                                               progressColor: Colors.red,
                                             ),
                                           ),
-                                          SizedBox(width: size.width * 0.015),
-                                          Text(state.decisions.length
-                                                  .toString() +
-                                              "/" +
-                                              state.milestonesLength
-                                                  .toString()),
+                                          SizedBox(width: textScale * 10),
+                                          AppText(
+                                            text: state.decisions.length
+                                                    .toString() +
+                                                "/" +
+                                                state.milestonesLength
+                                                    .toString(),
+                                            fontSize: textScale * 16,
+                                          ),
                                         ],
                                       ),
                                     ],
@@ -322,95 +333,115 @@ class _HomeTabState extends State<HomeTab> {
                           if (currentChild != null) {
                             if (state[currentChild!.id] != null &&
                                 !state[currentChild!.id]!) {
-                              return Row(
-                                children: [
-                                  SizedBox(width: size.width * 0.035),
-                                  Stack(
-                                    children: [
-                                      InkWell(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Image.asset(
-                                          summary,
-                                          width: size.width * 0.45,
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isMOBILE
+                                      ? size.width * 0.05
+                                      : size.width * 0.1,
+                                  vertical: isMOBILE ? 0 : size.height * 0.01,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Image.asset(
+                                            summary,
+                                            width: isMOBILE
+                                                ? size.width * 0.45
+                                                : size.width * 0.25,
+                                          ),
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, Routes.childSummary);
+                                          },
                                         ),
-                                        onTap: () {
-                                          Navigator.pushNamed(
-                                              context, Routes.childSummary);
-                                        },
-                                      ),
-                                      Positioned(
-                                        right: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.all(2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                          ),
-                                          constraints: const BoxConstraints(
-                                            minWidth: 12,
-                                            minHeight: 12,
-                                          ),
-                                          child: Icon(
-                                            Icons.crisis_alert,
-                                            color: Colors.white,
-                                            size: textScale * 20,
+                                        Positioned(
+                                          right: 0,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            constraints: const BoxConstraints(
+                                              minWidth: 12,
+                                              minHeight: 12,
+                                            ),
+                                            child: Icon(
+                                              Icons.crisis_alert,
+                                              color: Colors.white,
+                                              size: textScale * 20,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
-                                  ),
-                                  SizedBox(width: size.width * 0.03),
-                                  SizedBox(
-                                    width: size.width * 0.45,
-                                    child: Center(
-                                      child: AppText(
-                                        text:
-                                            "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
-                                        color: Colors.red,
-                                        fontSize: textScale * 18,
+                                      ],
+                                    ),
+                                    Expanded(child: SizedBox.shrink()),
+                                    SizedBox(
+                                      width: isMOBILE
+                                          ? size.width * 0.40
+                                          : size.width * 0.45,
+                                      child: Center(
+                                        child: AppText(
+                                          text:
+                                              "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
+                                          color: Colors.red,
+                                          fontSize: textScale * 16,
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  // const Spacer(),
-                                  // InkWell(
-                                  //   borderRadius: BorderRadius.circular(12),
-                                  //   child: Image.asset(
-                                  //     tips,
-                                  //     width: size.width * 0.4,
-                                  //   ),
-                                  //   onTap: () async {
-                                  //     // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
-                                  //     // widget.changeIndex(2);
+                                    // const Spacer(),
+                                    // InkWell(
+                                    //   borderRadius: BorderRadius.circular(12),
+                                    //   child: Image.asset(
+                                    //     tips,
+                                    //     width: size.width * 0.4,
+                                    //   ),
+                                    //   onTap: () async {
+                                    //     // launchUrl(Uri.parse(widget.milestoneItem.videoPath!));
+                                    //     // widget.changeIndex(2);
 
-                                  //     BlocProvider.of<DecisionBloc>(context)
-                                  //         .add(const UploadDecisionsEvent());
-                                  //     // _logout();
-                                  //   },
-                                  // ),
-                                  SizedBox(width: size.width * 0.035),
-                                ],
+                                    //     BlocProvider.of<DecisionBloc>(context)
+                                    //         .add(const UploadDecisionsEvent());
+                                    //     // _logout();
+                                    //   },
+                                    // ),
+                                  ],
+                                ),
                               );
                             } else {
-                              return Center(
-                                child: InkWell(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.asset(
-                                    summary,
-                                    width: size.width * 0.45,
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isMOBILE
+                                      ? size.width * 0.05
+                                      : size.width * 0.1,
+                                  vertical: isMOBILE ? 0 : size.height * 0.01,
+                                ),
+                                child: Center(
+                                  child: InkWell(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Image.asset(
+                                      summary,
+                                      width: isMOBILE
+                                          ? size.width * 0.45
+                                          : size.width * 0.3,
+                                    ),
+                                    onTap: () {
+                                      Navigator.pushNamed(
+                                          context, Routes.childSummary);
+                                    },
                                   ),
-                                  onTap: () {
-                                    Navigator.pushNamed(
-                                        context, Routes.childSummary);
-                                  },
                                 ),
                               );
                             }
-                            return const SizedBox.shrink();
                           }
                           return const SizedBox.shrink();
                         })
-                      : SizedBox.shrink(),
+                      : const SizedBox.shrink(),
                   SizedBox(height: size.height * 0.01),
                   // InkWell(
                   //   borderRadius: BorderRadius.circular(12),

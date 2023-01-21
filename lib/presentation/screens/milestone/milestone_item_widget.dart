@@ -4,9 +4,11 @@ import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
+import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class MilestoneItemWidget extends StatefulWidget {
   const MilestoneItemWidget(
@@ -32,7 +34,10 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
     return Container(
       margin: EdgeInsets.only(
         bottom: size.height * 0.05,
@@ -77,9 +82,10 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     vertical: textScale * 15,
                     horizontal: textScale * 20,
                   ),
-                  child: Text(
-                    widget.item.milestoneItem.description,
+                  child: AppText(
+                    text: widget.item.milestoneItem.description,
                     textAlign: TextAlign.right,
+                    fontSize: isMOBILE ? textScale * 18 : textScale * 18,
                   ),
                 ),
               ),
@@ -130,9 +136,10 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     vertical: textScale * 15,
                   ),
                   alignment: Alignment.center,
-                  child: Text(
-                    AppLocalizations.of(context)!.yes,
+                  child: AppText(
+                    text: AppLocalizations.of(context)!.yes,
                     textAlign: TextAlign.right,
+                    fontSize: isMOBILE ? textScale * 20 : textScale * 18,
                   ),
                 ),
               ),
@@ -182,9 +189,10 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     vertical: textScale * 15,
                   ),
                   alignment: Alignment.center,
-                  child: Text(
-                    AppLocalizations.of(context)!.no,
+                  child: AppText(
+                    text: AppLocalizations.of(context)!.no,
                     textAlign: TextAlign.right,
+                    fontSize: isMOBILE ? textScale * 20 : textScale * 18,
                   ),
                 ),
               ),
@@ -231,9 +239,10 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                   padding: EdgeInsets.symmetric(
                     vertical: textScale * 15,
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.maybe,
+                  child: AppText(
+                    text: AppLocalizations.of(context)!.maybe,
                     textAlign: TextAlign.right,
+                    fontSize: isMOBILE ? textScale * 20 : textScale * 18,
                   ),
                 ),
               ),

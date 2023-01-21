@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
@@ -49,7 +50,10 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
     const String editIcon = "assets/icons/edit_icon.svg";
     const String videoSVG = "assets/images/video.svg";
     Widget? youtubeWidget;
@@ -174,6 +178,7 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                                 .enterDecision
                                             : AppLocalizations.of(context)!
                                                 .updateDecision,
+                                        fontSize: textScale * 20,
                                       ),
                                     ),
                                   ),
@@ -253,9 +258,10 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                       vertical: textScale * 15,
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      AppLocalizations.of(context)!.yes,
+                                    child: AppText(
+                                      text: AppLocalizations.of(context)!.yes,
                                       textAlign: TextAlign.right,
+                                      fontSize: textScale * 20,
                                     ),
                                   ),
                                 ),
@@ -307,9 +313,10 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                       vertical: textScale * 15,
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      AppLocalizations.of(context)!.no,
+                                    child: AppText(
+                                      text: AppLocalizations.of(context)!.no,
                                       textAlign: TextAlign.right,
+                                      fontSize: textScale * 20,
                                     ),
                                   ),
                                 ),
@@ -361,9 +368,10 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                       vertical: textScale * 15,
                                     ),
                                     alignment: Alignment.center,
-                                    child: Text(
-                                      AppLocalizations.of(context)!.maybe,
+                                    child: AppText(
+                                      text: AppLocalizations.of(context)!.maybe,
                                       textAlign: TextAlign.right,
+                                      fontSize: textScale * 20,
                                     ),
                                   ),
                                 ),
@@ -383,6 +391,7 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                         child: AppText(
                           text: widget.milestoneItem.description,
                           textAlign: TextAlign.start,
+                          fontSize: textScale * 20,
                         ),
                       ),
                       const Spacer(),

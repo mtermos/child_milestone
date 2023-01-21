@@ -7,6 +7,7 @@ import 'package:child_milestone/presentation/screens/login/login_background.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreen({Key? key}) : super(key: key);
@@ -76,81 +77,93 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
 
     return Scaffold(
-      body: LoginBackground(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SizedBox(height: size.height * 0.3),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
-              child: loginTextWidget(),
-            ),
-            SizedBox(height: size.height * 0.03),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
-              child: TextField(
-                controller: usernameController,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.username),
+      body: SingleChildScrollView(
+        child: LoginBackground(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(height: size.height * 0.3),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                child: loginTextWidget(textScale),
               ),
-            ),
-            SizedBox(height: size.height * 0.03),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
-              child: TextField(
-                controller: passController,
-                decoration: InputDecoration(
-                    labelText: AppLocalizations.of(context)!.password),
-                obscureText: true,
+              SizedBox(height: size.height * 0.03),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                child: TextField(
+                  controller: usernameController,
+                  style: TextStyle(fontSize: textScale * 20),
+                  decoration: InputDecoration(
+                      labelStyle: TextStyle(fontSize: textScale * 20),
+                      labelText: AppLocalizations.of(context)!.username),
+                ),
               ),
-            ),
-            // Container(
-            //   alignment: Alignment.centerRight,
-            //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            //   child: Text(
-            //     AppLocalizations.of(context)!.forgotPassword,
-            //     style: const TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
-            //   ),
-            // ),
-            SizedBox(height: size.height * 0.05),
-            Container(
-              alignment: Alignment.centerRight,
-              margin: EdgeInsets.symmetric(
-                  horizontal: size.width * 0.15, vertical: size.height * 0.02),
-              child: loginButton(context),
-            ),
-            // Container(
-            //   alignment: Alignment.center,
-            //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-            //   child: GestureDetector(
-            //     onTap: () => {
-            //       // print("register")
-            //       // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
-            //     },
-            //     child: Text(
-            //       AppLocalizations.of(context)!.noAccount,
-            //       style: const TextStyle(
-            //           fontSize: 12,
-            //           fontWeight: FontWeight.bold,
-            //           color: Color(0xFF2661FA)),
-            //     ),
-            //   ),
-            // )
-          ],
+              SizedBox(height: size.height * 0.03),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                child: TextField(
+                  style: TextStyle(fontSize: textScale * 20),
+                  controller: passController,
+                  decoration: InputDecoration(
+                      labelStyle: TextStyle(fontSize: textScale * 20),
+                      labelText: AppLocalizations.of(context)!.password),
+                  obscureText: true,
+                ),
+              ),
+              // Container(
+              //   alignment: Alignment.centerRight,
+              //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              //   child: Text(
+              //     AppLocalizations.of(context)!.forgotPassword,
+              //     style: const TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
+              //   ),
+              // ),
+              SizedBox(height: size.height * 0.05),
+              Container(
+                alignment: Alignment.centerRight,
+                margin: EdgeInsets.symmetric(
+                    horizontal: size.width * 0.15,
+                    vertical: size.height * 0.02),
+                child: loginButton(context, textScale),
+              ),
+              // Container(
+              //   alignment: Alignment.center,
+              //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+              //   child: GestureDetector(
+              //     onTap: () => {
+              //       // print("register")
+              //       // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
+              //     },
+              //     child: Text(
+              //       AppLocalizations.of(context)!.noAccount,
+              //       style: const TextStyle(
+              //           fontSize: 12,
+              //           fontWeight: FontWeight.bold,
+              //           color: Color(0xFF2661FA)),
+              //     ),
+              //   ),
+              // )
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget loginButton(BuildContext context) {
+  Widget loginButton(BuildContext context, double textScale) {
     Size size = MediaQuery.of(context).size;
     return AppButton(
       label: AppLocalizations.of(context)!.loginLabel,
       fontWeight: FontWeight.w600,
+      fontSize: textScale * 20,
       padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
       onPressed: () {
         BlocProvider.of<AuthBloc>(context).add(LoginEvent(
@@ -164,177 +177,13 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  Widget loginTextWidget() {
+  Widget loginTextWidget(double textScale) {
     return AppText(
       text: AppLocalizations.of(context)!.loginLabel,
-      fontSize: 36,
+      fontSize: textScale * 40,
       fontWeight: FontWeight.w600,
       // color: Colors.white,
       color: const Color.fromRGBO(78, 76, 76, 1),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   size = MediaQuery.of(context).size;
-  //   return Scaffold(
-  //     // backgroundColor: AppColors.primaryColor,
-  //     backgroundColor: Colors.white,
-  //     body: Stack(
-  //       children: [
-  //         SvgPicture.asset(
-  //           ellipse,
-  //           alignment: Alignment.topCenter,
-  //         ),
-  //         // SvgPicture.asset(
-  //         //   smile,
-  //         //   alignment: Alignment.topCenter,
-  //         // ),
-  //         Container(
-  //           margin: EdgeInsets.only(top: 60),
-  //           decoration: BoxDecoration(
-  //             image: DecorationImage(
-  //               alignment: Alignment.topCenter,
-  //               image: AssetImage(smiley_face),
-  //               fit: BoxFit.scaleDown,
-  //             ),
-  //           ),
-  //           child: Center(
-  //             child: Column(
-  //               mainAxisSize: MainAxisSize.max,
-  //               children: [
-  //                 const Spacer(),
-  //                 Text("Login"),
-  //                 const SizedBox(
-  //                   height: 100,
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-  //   // return Scaffold(
-  //   //   backgroundColor: ColorsCustom.loginScreenUp,
-  //   //   body: Column(
-  //   //     children: <Widget>[
-  //   //       SizedBox(height: size.height * 0.0671),
-  //   //       Container(
-  //   //           height: size.height * 0.178,
-  //   //           width: size.width * 0.316,
-  //   //           child: Image.asset(
-  //   //             'lib/assets/images/pebal.png',
-  //   //             fit: BoxFit.contain,
-  //   //           )),
-  //   //       SizedBox(height: size.height * 0.085),
-  //   //       Expanded(
-  //   //         child: _formLogin(),
-  //   //       ),
-  //   //     ],
-  //   //   ),
-  //   // );
-  // }
-
-  // Widget _formLogin() {
-  //   return BlocBuilder<BlocAuth, AuthState>(condition: (previousState, state) {
-  //     if (state is LogedState) {
-  //       Navigator.push(
-  //           context, MaterialPageRoute(builder: (context) => HomeScreen()));
-  //     }
-  //     return;
-  //   }, builder: (context, state) {
-  //     if (state is ForcingLoginState) {
-  //       return SizedBox(
-  //         child: SpinKitWave(
-  //           color: Colors.white,
-  //         ),
-  //       );
-  //     } else {
-  //       return Form(
-  //         key: _formKey,
-  //         child: Container(
-  //           padding: EdgeInsets.symmetric(horizontal: 20),
-  //           child: SingleChildScrollView(
-  //             child: Column(
-  //               children: <Widget>[
-  //                 SizedBox(height: 20),
-  //                 InputLogin(
-  //                   validator: _validatorEmail,
-  //                   prefixIcon: Icons.account_circle,
-  //                   hint: 'Email',
-  //                   keyboardType: TextInputType.emailAddress,
-  //                   textEditingController: loginController,
-  //                 ),
-  //                 SizedBox(height: size.height * 0.03),
-  //                 InputLogin(
-  //                   prefixIcon: Icons.lock,
-  //                   hint: 'Password',
-  //                   obscureText: true,
-  //                   textEditingController: passController,
-  //                 ),
-  //                 SizedBox(height: size.height * 0.035),
-  //                 _buttonLogin(),
-  //                 SizedBox(height: size.height * 0.01),
-  //                 InkWell(
-  //                   onTap: () => _forgotPassword(),
-  //                   child: Text(
-  //                     'Forgot Password?',
-  //                     textAlign: TextAlign.center,
-  //                     style: TextStylesLogin.textLink,
-  //                   ),
-  //                 ),
-  //                 Padding(
-  //                   padding:
-  //                       EdgeInsets.symmetric(horizontal: size.height * 0.084),
-  //                   child: Divider(
-  //                     height: size.height * 0.14,
-  //                     color: Colors.white,
-  //                   ),
-  //                 ),
-  //                 InkWell(
-  //                   onTap: () => _signUp(),
-  //                   child: Text(
-  //                     'SIGN UP with your email',
-  //                     textAlign: TextAlign.right,
-  //                     style: TextStylesLogin.textLink,
-  //                   ),
-  //                 ),
-  //               ],
-  //             ),
-  //           ),
-  //         ),
-  //       );
-  //     }
-  //   });
-  // }
-
-  // Widget _buttonLogin() {
-  //   return BlocBuilder<BlocAuth, AuthState>(
-  //     builder: (context, state) {
-  //       if (state is LoadingLoginState) {
-  //         return ButtonLogin(
-  //           isLoading: true,
-  //           backgroundColor: Colors.white,
-  //           label: 'LOGIN ...',
-  //           mOnPressed: () => {},
-  //         );
-  //       } else if (state is LogedState) {
-  //         return ButtonLogin(
-  //           backgroundColor: Colors.white,
-  //           label: 'CONECTED!',
-  //           mOnPressed: () => {},
-  //         );
-  //       } else {
-  //         return ButtonLogin(
-  //           backgroundColor: Colors.white,
-  //           label: 'SIGN IN',
-  //           mOnPressed: () => _login(),
-  //         );
-  //       }
-  //     },
-  //   );
-  // }
-
 }

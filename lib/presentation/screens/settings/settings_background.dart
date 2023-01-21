@@ -3,6 +3,7 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class SettingsBackground extends StatelessWidget {
   final Widget child;
@@ -20,7 +21,10 @@ class SettingsBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
 
     return Container(
       width: size.width,
@@ -45,7 +49,7 @@ class SettingsBackground extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   settings,
-                  width: size.width * 0.1,
+                  width: isMOBILE ? size.width * 0.1 : size.width * 0.08,
                   alignment: Alignment.center,
                   color: Colors.white,
                 ),

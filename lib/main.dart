@@ -29,6 +29,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/presentation/router/app_router.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -170,6 +171,14 @@ class Application extends StatelessWidget {
                 }
               },
               child: MaterialApp(
+                builder: (context, child) => ResponsiveWrapper.builder(
+                  ClampingScrollWrapper.builder(context, child!),
+                  breakpoints: const [
+                    ResponsiveBreakpoint.resize(350, name: MOBILE),
+                    ResponsiveBreakpoint.resize(600, name: TABLET),
+                    ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+                  ],
+                ),
                 debugShowCheckedModeBanner: false,
                 theme: ThemeData(
                   // accentColor: Colors.blue,

@@ -5,6 +5,7 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class BottomBarView extends StatefulWidget {
   const BottomBarView(
@@ -42,7 +43,11 @@ class _BottomBarViewState extends State<BottomBarView>
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
     final Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
+    final int v = isMOBILE ? 38 : 58;
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,
       children: <Widget>[
@@ -60,7 +65,7 @@ class _BottomBarViewState extends State<BottomBarView>
                                 parent: animationController!,
                                 curve: Curves.fastOutSlowIn))
                             .value *
-                        38.0),
+                        (isMOBILE ? 38.0 : 60)),
                 child: Column(
                   children: <Widget>[
                     SizedBox(
@@ -94,7 +99,7 @@ class _BottomBarViewState extends State<BottomBarView>
                                           parent: animationController!,
                                           curve: Curves.fastOutSlowIn))
                                       .value *
-                                  64.0,
+                                  (isMOBILE ? 64.0 : 128),
                             ),
                             Expanded(
                               child: TabIcons(
@@ -129,17 +134,20 @@ class _BottomBarViewState extends State<BottomBarView>
         ),
         Padding(
           padding: EdgeInsets.only(
-              bottom:
-                  MediaQuery.of(context).padding.bottom + size.height * 0.025),
+              bottom: isMOBILE
+                  ? (MediaQuery.of(context).padding.bottom +
+                      size.height * 0.025)
+                  : (MediaQuery.of(context).padding.bottom +
+                      size.height * 0.05)),
           child: SizedBox(
-            width: 38 * 2.0,
-            height: 38 + 62.0,
+            width: v * 2.0,
+            height: v + 62.0,
             child: Container(
               alignment: Alignment.topCenter,
               color: Colors.transparent,
               child: SizedBox(
-                width: 38 * 2.0,
-                height: 38 * 2.0,
+                width: v * 2.0,
+                height: v * 2.0,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ScaleTransition(
@@ -167,10 +175,10 @@ class _BottomBarViewState extends State<BottomBarView>
                           highlightColor: Colors.transparent,
                           focusColor: Colors.transparent,
                           onTap: widget.addClick,
-                          child: const Icon(
+                          child: Icon(
                             Icons.add,
                             color: Colors.white,
-                            size: 32,
+                            size: isMOBILE ? 32 : 50,
                           ),
                         ),
                       ),
@@ -232,7 +240,10 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     localizeTitle(widget.tabIconData);
     final Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
     return AspectRatio(
       aspectRatio: 1,
       child: Center(

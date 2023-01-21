@@ -20,6 +20,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class AddChildForm extends StatefulWidget {
   const AddChildForm({Key? key}) : super(key: key);
@@ -63,7 +64,11 @@ class _AddChildFormState extends State<AddChildForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
+
     final format = DateFormat("yyyy-MM-dd");
 
     return BlocBuilder<ChildBloc, ChildState>(
@@ -71,7 +76,7 @@ class _AddChildFormState extends State<AddChildForm> {
         if (state is AddingChildState) {
           return Center(
             child: SizedBox(
-              width: size.width * 0.5,
+              width: isMOBILE ? size.width * 0.5 : size.width * 0.35,
               child: const LoadingIndicator(
                 indicatorType: Indicator.ballPulse,
                 colors: [AppColors.primaryColor],
@@ -101,7 +106,7 @@ class _AddChildFormState extends State<AddChildForm> {
                     child: profilePictureFile ??
                         SvgPicture.asset(
                           addChildPlusIcon,
-                          width: size.width * 0.4,
+                          width: isMOBILE ? size.width * 0.4 : size.width * 0.3,
                         ),
                     onTap: () async {
                       ImagePicker picker = ImagePicker();
@@ -111,7 +116,8 @@ class _AddChildFormState extends State<AddChildForm> {
                         setState(() {
                           chosen_image = image;
                           profilePictureFile = CircleAvatar(
-                            radius: size.width * 0.2,
+                            radius:
+                                isMOBILE ? size.width * 0.2 : size.width * 0.15,
                             backgroundImage: Image.file(File(image.path)).image,
                           );
                         });
@@ -130,6 +136,7 @@ class _AddChildFormState extends State<AddChildForm> {
                     margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
                     child: TextFormField(
                       controller: nameController,
+                      style: TextStyle(fontSize: textScale * 20),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return AppLocalizations.of(context)!.enterName;
@@ -137,8 +144,9 @@ class _AddChildFormState extends State<AddChildForm> {
                         return null;
                       },
                       decoration: InputDecoration(
-                          labelText:
-                              AppLocalizations.of(context)!.childsNameField),
+                        labelText:
+                            AppLocalizations.of(context)!.childsNameField,
+                      ),
                     ),
                   ),
                   SizedBox(height: size.height * 0.01),
@@ -147,6 +155,7 @@ class _AddChildFormState extends State<AddChildForm> {
                     margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
                     child: DateTimeField(
                       decoration: InputDecoration(
+                          labelStyle: TextStyle(fontSize: textScale * 20),
                           labelText:
                               AppLocalizations.of(context)!.dateOfBirthField),
                       format: format,
@@ -176,6 +185,7 @@ class _AddChildFormState extends State<AddChildForm> {
                     margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
                     child: TextFormField(
                       controller: durationController,
+                      style: TextStyle(fontSize: textScale * 20),
                       keyboardType: Platform.isIOS
                           ? const TextInputType.numberWithOptions(
                               signed: true, decimal: true)
@@ -213,11 +223,13 @@ class _AddChildFormState extends State<AddChildForm> {
                           text: AppLocalizations.of(context)!.genderField,
                           fontSize: textScale * 20,
                         ),
-                        addRadioButton(0, AppLocalizations.of(context)!.male),
+                        addRadioButton(0, AppLocalizations.of(context)!.male,
+                            size, textScale, isMOBILE),
                         SizedBox(
                           width: size.width * 0.05,
                         ),
-                        addRadioButton(1, AppLocalizations.of(context)!.female),
+                        addRadioButton(1, AppLocalizations.of(context)!.female,
+                            size, textScale, isMOBILE),
                       ],
                     ),
                   ),
@@ -228,6 +240,7 @@ class _AddChildFormState extends State<AddChildForm> {
                         left: size.width * 0.1, right: size.width * 0.4),
                     child: TextFormField(
                       controller: idController,
+                      style: TextStyle(fontSize: textScale * 20),
                       keyboardType: Platform.isIOS
                           ? const TextInputType.numberWithOptions(
                               signed: true, decimal: true)
@@ -253,8 +266,9 @@ class _AddChildFormState extends State<AddChildForm> {
                     margin: EdgeInsets.only(
                         left: size.width * 0.1, right: size.width * 0.6),
                     child: AppButton(
-                      label: "+  Add",
+                      label: "+  " + AppLocalizations.of(context)!.add,
                       roundness: 12,
+                      fontSize: textScale * 20,
                       onPressed: () async {
                         var snackBar = SnackBar(
                           content: Text(AppLocalizations.of(context)!
@@ -329,22 +343,28 @@ class _AddChildFormState extends State<AddChildForm> {
     );
   }
 
-  Row addRadioButton(int btnValue, String title) {
+  Row addRadioButton(
+      int btnValue, String title, Size size, double textScale, bool isMOBILE) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Radio<String>(
-          activeColor: AppColors.primaryColor,
-          value: gender[btnValue],
-          groupValue: selected_gender,
-          onChanged: (value) {
-            setState(() {
-              selected_gender = value!;
-            });
-          },
+        Transform.scale(
+          scale: isMOBILE ? 1 : 1.5,
+          child: Radio<String>(
+            activeColor: AppColors.primaryColor,
+            value: gender[btnValue],
+            groupValue: selected_gender,
+            onChanged: (value) {
+              setState(() {
+                selected_gender = value!;
+              });
+            },
+          ),
         ),
-        Text(
-          title,
+        SizedBox(width: isMOBILE ? 0 : size.width * 0.01),
+        AppText(
+          text: title,
+          fontSize: textScale * 20,
         )
       ],
     );

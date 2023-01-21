@@ -10,6 +10,7 @@ import 'package:child_milestone/presentation/widgets/tip_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class TipsTab extends StatefulWidget {
   const TipsTab({Key? key}) : super(key: key);
@@ -35,11 +36,17 @@ class _TipsState extends State<TipsTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0015;
 
     Image tipsBg = Image.asset(
       "assets/images/tips_bg.png",
       alignment: Alignment.topCenter,
       width: size.width,
+      height: isMOBILE ? null : size.height * 0.45,
+      fit: isMOBILE ? null : BoxFit.fill,
     );
 
     return Scaffold(
@@ -56,7 +63,7 @@ class _TipsState extends State<TipsTab> {
               children: [
                 Container(
                   width: size.width,
-                  height: size.width * 0.85,
+                  height: isMOBILE ? size.width * 0.85 : size.height * 0.45,
                   child: Stack(
                     alignment: Alignment.center,
                     children: <Widget>[
@@ -101,7 +108,7 @@ class _TipsState extends State<TipsTab> {
                               text: AppLocalizations.of(context)!
                                   .tipsAndActivities,
                               color: Colors.white,
-                              fontSize: size.height * 0.03,
+                              fontSize: textScale * 26,
                               fontWeight: FontWeight.bold,
                               textAlign: TextAlign.center,
                             ),

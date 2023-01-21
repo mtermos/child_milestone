@@ -10,6 +10,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class AppRateTab extends StatefulWidget {
   const AppRateTab({Key? key}) : super(key: key);
@@ -48,7 +49,16 @@ class _AppRateState extends State<AppRateTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
+
+    Map<int, String> ratingsTexts = {
+      1: AppLocalizations.of(context)!.appInterfaceRating,
+      2: AppLocalizations.of(context)!.contentRating,
+      3: AppLocalizations.of(context)!.educationalContentRating,
+    };
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -89,183 +99,94 @@ class _AppRateState extends State<AppRateTab> {
 
             return Column(
               children: [
-                SizedBox(height: size.height * 0.02),
-                Container(
-                  alignment: AlignmentDirectional.topStart,
-                  padding: EdgeInsets.only(
-                      left: size.width * 0.05, right: size.width * 0.05),
-                  child: AppText(
-                    text: AppLocalizations.of(context)!.appRate,
-                    fontSize: textScale * 36,
-                    textAlign: TextAlign.start,
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: size.height * 0.015,
-                    horizontal: size.width * 0.05,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black54,
-                        offset: Offset(textScale * 2, textScale * 4),
-                        blurRadius: textScale * 8,
+                    SizedBox(height: size.height * 0.02),
+                    Container(
+                      alignment: AlignmentDirectional.topStart,
+                      padding: EdgeInsets.only(
+                          left: size.width * 0.05, right: size.width * 0.05),
+                      child: AppText(
+                        text: AppLocalizations.of(context)!.appRate,
+                        fontSize: textScale * 36,
+                        textAlign: TextAlign.start,
                       ),
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: textScale * 15,
-                    horizontal: textScale * 20,
-                  ),
-                  child: Column(
-                    children: [
-                      AppText(
-                          text:
-                              AppLocalizations.of(context)!.appInterfaceRating),
-                      SizedBox(height: size.height * 0.01),
-                      RatingBar.builder(
-                        initialRating: ratingsList[0].rating,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        wrapAlignment: WrapAlignment.center,
-                        itemPadding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.01),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
+                    ),
+                    SizedBox(height: size.height * 0.02),
+                  ] +
+                  ratingsList
+                      .map(
+                        (e) => Container(
+                          width: isMOBILE ? null : size.width * 0.6,
+                          margin: EdgeInsets.symmetric(
+                            vertical: size.height * 0.015,
+                            horizontal: size.width * 0.05,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(15)),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black54,
+                                offset: Offset(textScale * 2, textScale * 4),
+                                blurRadius: textScale * 8,
+                              ),
+                            ],
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: textScale * 15,
+                            horizontal: textScale * 20,
+                          ),
+                          child: Column(
+                            children: [
+                              AppText(
+                                text: ratingsTexts[e.ratingId]!,
+                                fontSize: textScale * 20,
+                              ),
+                              SizedBox(height: size.height * 0.01),
+                              RatingBar.builder(
+                                initialRating: e.rating,
+                                minRating: 1,
+                                direction: Axis.horizontal,
+                                allowHalfRating: true,
+                                itemCount: 5,
+                                wrapAlignment: WrapAlignment.center,
+                                itemPadding: EdgeInsets.symmetric(
+                                    horizontal: size.width * 0.01),
+                                itemBuilder: (context, _) => const Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  e.rating = rating;
+                                  e.takenAt = DateTime.now();
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        onRatingUpdate: (rating) {
-                          ratingsList[0].rating = rating;
-                          ratingsList[0].takenAt = DateTime.now();
-                          // ratingsList[0] = RatingModel(
-                          //     ratingId: 1,
-                          //     rating: rating,
-                          //     uploaded: false,
-                          //     takenAt: DateTime.now());
+                      )
+                      .toList() +
+                  [
+                    SizedBox(height: size.height * 0.05),
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal:
+                              isMOBILE ? size.width * 0.2 : size.width * 0.3),
+                      child: AppButton(
+                        label: AppLocalizations.of(context)!.rate,
+                        fontSize: textScale * 24,
+                        padding: EdgeInsets.symmetric(
+                            vertical: isMOBILE ? 18 : textScale * 24),
+                        onPressed: () {
+                          for (var rating in ratingsList) {
+                            BlocProvider.of<RatingBloc>(context)
+                                .add(AddRatingEvent(rating: rating));
+                          }
                         },
                       ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: size.height * 0.015,
-                    horizontal: size.width * 0.05,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black54,
-                        offset: Offset(textScale * 2, textScale * 4),
-                        blurRadius: textScale * 8,
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: textScale * 15,
-                    horizontal: textScale * 20,
-                  ),
-                  child: Column(
-                    children: [
-                      AppText(
-                          text: AppLocalizations.of(context)!.contentRating),
-                      SizedBox(height: size.height * 0.01),
-                      RatingBar.builder(
-                        initialRating: ratingsList[1].rating,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        wrapAlignment: WrapAlignment.center,
-                        itemPadding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.01),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {
-                          ratingsList[1].rating = rating;
-                          ratingsList[1].takenAt = DateTime.now();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: size.height * 0.02),
-                Container(
-                  margin: EdgeInsets.symmetric(
-                    vertical: size.height * 0.015,
-                    horizontal: size.width * 0.05,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black54,
-                        offset: Offset(textScale * 2, textScale * 4),
-                        blurRadius: textScale * 8,
-                      ),
-                    ],
-                  ),
-                  padding: EdgeInsets.symmetric(
-                    vertical: textScale * 15,
-                    horizontal: textScale * 20,
-                  ),
-                  child: Column(
-                    children: [
-                      AppText(
-                          text: AppLocalizations.of(context)!
-                              .educationalContentRating),
-                      SizedBox(height: size.height * 0.01),
-                      RatingBar.builder(
-                        initialRating: ratingsList[2].rating,
-                        minRating: 1,
-                        direction: Axis.horizontal,
-                        allowHalfRating: true,
-                        itemCount: 5,
-                        wrapAlignment: WrapAlignment.center,
-                        itemPadding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.01),
-                        itemBuilder: (context, _) => const Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        ),
-                        onRatingUpdate: (rating) {
-                          ratingsList[2].rating = rating;
-                          ratingsList[2].takenAt = DateTime.now();
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                // Spacer(),
-                SizedBox(height: size.height * 0.05),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: size.width * 0.2),
-                  child: AppButton(
-                    label: AppLocalizations.of(context)!.rate,
-                    onPressed: () {
-                      for (var rating in ratingsList) {
-                        BlocProvider.of<RatingBloc>(context)
-                            .add(AddRatingEvent(rating: rating));
-                      }
-                    },
-                  ),
-                ),
-              ],
+                    ),
+                  ],
             );
           },
         ),

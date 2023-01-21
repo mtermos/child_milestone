@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationItemWidget extends StatefulWidget {
@@ -28,7 +29,10 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
   Widget build(BuildContext context) {
     const String xIcon = "assets/icons/x-icon.png";
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
     return Container(
       margin: const EdgeInsets.symmetric(
         vertical: 10,
@@ -54,14 +58,15 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                       width: size.width * 0.65,
                       child: RichText(
                         text: TextSpan(
-                          style: const TextStyle(
-                            fontSize: 14.0,
+                          style: TextStyle(
+                            fontSize: textScale * 18,
                             color: Colors.black,
                           ),
                           children: <TextSpan>[
                             TextSpan(
                                 text: widget.item.child.name + " ",
-                                style: const TextStyle(
+                                style: TextStyle(
+                                    fontSize: textScale * 18,
                                     fontWeight: FontWeight.bold)),
                             TextSpan(text: widget.item.notification.body),
                           ],

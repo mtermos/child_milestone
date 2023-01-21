@@ -7,6 +7,7 @@ import 'package:child_milestone/presentation/widgets/notification_item_widget.da
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class NotificationTab extends StatefulWidget {
   const NotificationTab({Key? key}) : super(key: key);
@@ -31,8 +32,10 @@ class _NotificationState extends State<NotificationTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
-
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
     BlocProvider.of<NotificationBloc>(context)
         .add(GetAllUnopenedNotificationsEvent());
 
@@ -49,6 +52,7 @@ class _NotificationState extends State<NotificationTab> {
                   left: size.width * 0.05, right: size.width * 0.05),
               child: AppText(
                 text: AppLocalizations.of(context)!.notifications,
+                fontSize: textScale * 24,
                 textAlign: TextAlign.start,
               ),
             ),

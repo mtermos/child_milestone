@@ -7,6 +7,7 @@ class AppText extends StatelessWidget {
   final Color color;
   final bool? link;
   final TextAlign? textAlign;
+  final TextStyle? style;
 
   const AppText({
     required this.text,
@@ -15,6 +16,7 @@ class AppText extends StatelessWidget {
     this.color = Colors.black,
     this.link = false,
     this.textAlign,
+    this.style,
   }) : super();
 
   @override
@@ -22,11 +24,12 @@ class AppText extends StatelessWidget {
     return Text(
       text,
       textAlign: textAlign ?? TextAlign.center,
-      style: TextStyle(
-        fontSize: fontSize,
-        fontWeight: fontWeight,
-        color: link! ? Colors.blue : color,
-      ),
+      style: style ??
+          TextStyle(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: link! ? Colors.blue : color,
+          ),
     );
   }
 }

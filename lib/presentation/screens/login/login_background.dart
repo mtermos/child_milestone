@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class LoginBackground extends StatelessWidget {
   final Widget child;
@@ -16,6 +17,10 @@ class LoginBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
 
     return Container(
       width: double.infinity,
@@ -31,11 +36,17 @@ class LoginBackground extends StatelessWidget {
               ellipse,
               alignment: Alignment.topCenter,
               width: size.width,
+              height: isMOBILE ? null : size.height * 0.4,
+              fit: isMOBILE ? BoxFit.contain : BoxFit.fill,
             ),
           ),
           Positioned(
-            top: 0,
-            child: Image.asset(smiley_face, width: size.width),
+            top: isMOBILE ? 0 : -size.height * 0.1,
+            child: Image.asset(
+              smiley_face,
+              width: size.width,
+              scale: isMOBILE ? 1 : 0.7,
+            ),
           ),
           // Positioned(
           //   top: 50,

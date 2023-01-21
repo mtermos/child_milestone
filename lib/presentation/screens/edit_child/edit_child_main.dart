@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class EditChildScreen extends StatefulWidget {
   final int childId;
@@ -27,6 +28,11 @@ class _EditChildScreenState extends State<EditChildScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
+
     return Container(
       color: Colors.white,
       child: Scaffold(
@@ -48,7 +54,7 @@ class _EditChildScreenState extends State<EditChildScreen> {
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: _editChildBackground(context, size),
+                    child: _editChildBackground(context, size, isMOBILE),
                   ),
                   BlocBuilder<ChildBloc, ChildState>(
                     builder: (context, state) {
@@ -88,11 +94,11 @@ class _EditChildScreenState extends State<EditChildScreen> {
     );
   }
 
-  Widget _editChildBackground(BuildContext context, Size size) {
+  Widget _editChildBackground(BuildContext context, Size size, bool isMOBILE) {
     const String editChildBgItem1 = "assets/images/add_child_bg_item_1.svg";
     return SvgPicture.asset(
       editChildBgItem1,
-      width: size.width * 0.5,
+      width: isMOBILE ? size.width * 0.5 : size.width * 0.35,
     );
   }
 }

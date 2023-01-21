@@ -7,6 +7,7 @@ import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/screens/settings/settings_background.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
@@ -29,6 +30,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
 
     return Scaffold(
       body: SettingsBackground(
@@ -94,6 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: AppButton(
                 label: AppLocalizations.of(context)!.logout,
                 fontWeight: FontWeight.w600,
+                fontSize: textScale * 20,
                 padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                 onPressed: () {
                   _logout();
@@ -108,6 +114,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               child: AppButton(
                 label: AppLocalizations.of(context)!.goBack,
                 fontWeight: FontWeight.w600,
+                fontSize: textScale * 20,
                 padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
                 onPressed: () {
                   Navigator.pop(context);

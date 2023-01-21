@@ -20,6 +20,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class EditChildForm extends StatefulWidget {
   final ChildModel child;
@@ -65,7 +66,11 @@ class _EditChildFormState extends State<EditChildForm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
+
     final format = DateFormat("yyyy-MM-dd");
 
     return BlocBuilder<ChildBloc, ChildState>(
@@ -73,7 +78,7 @@ class _EditChildFormState extends State<EditChildForm> {
         if (state is EditingChildState) {
           return Center(
             child: SizedBox(
-              width: size.width * 0.3,
+              width: isMOBILE ? size.width * 0.5 : size.width * 0.35,
               child: const LoadingIndicator(
                 indicatorType: Indicator.ballPulse,
                 colors: [AppColors.primaryColor],
@@ -103,7 +108,8 @@ class _EditChildFormState extends State<EditChildForm> {
                       child: profilePictureFile ??
                           SvgPicture.asset(
                             editChildPlusIcon,
-                            width: size.width * 0.4,
+                            width:
+                                isMOBILE ? size.width * 0.4 : size.width * 0.3,
                           ),
                       onTap: () async {
                         ImagePicker picker = ImagePicker();
@@ -113,7 +119,9 @@ class _EditChildFormState extends State<EditChildForm> {
                           setState(() {
                             chosenImage = image;
                             profilePictureFile = CircleAvatar(
-                              radius: size.width * 0.2,
+                              radius: isMOBILE
+                                  ? size.width * 0.2
+                                  : size.width * 0.15,
                               backgroundImage:
                                   Image.file(File(image.path)).image,
                             );
@@ -134,6 +142,7 @@ class _EditChildFormState extends State<EditChildForm> {
                           EdgeInsets.symmetric(horizontal: size.width * 0.1),
                       child: TextFormField(
                         controller: nameController,
+                        style: TextStyle(fontSize: textScale * 20),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return AppLocalizations.of(context)!.enterName;
@@ -153,6 +162,7 @@ class _EditChildFormState extends State<EditChildForm> {
                       child: DateTimeField(
                         initialValue: _selectedDate,
                         decoration: InputDecoration(
+                            labelStyle: TextStyle(fontSize: textScale * 20),
                             labelText:
                                 AppLocalizations.of(context)!.dateOfBirthField),
                         format: format,
@@ -183,6 +193,7 @@ class _EditChildFormState extends State<EditChildForm> {
                           EdgeInsets.symmetric(horizontal: size.width * 0.1),
                       child: TextFormField(
                         controller: durationController,
+                        style: TextStyle(fontSize: textScale * 20),
                         keyboardType: Platform.isIOS
                             ? const TextInputType.numberWithOptions(
                                 signed: true, decimal: true)
@@ -221,12 +232,17 @@ class _EditChildFormState extends State<EditChildForm> {
                             text: AppLocalizations.of(context)!.genderField,
                             fontSize: textScale * 20,
                           ),
-                          addRadioButton(0, AppLocalizations.of(context)!.male),
+                          addRadioButton(0, AppLocalizations.of(context)!.male,
+                              size, textScale, isMOBILE),
                           SizedBox(
                             width: size.width * 0.05,
                           ),
                           addRadioButton(
-                              1, AppLocalizations.of(context)!.female),
+                              1,
+                              AppLocalizations.of(context)!.female,
+                              size,
+                              textScale,
+                              isMOBILE),
                         ],
                       ),
                     ),
@@ -236,7 +252,8 @@ class _EditChildFormState extends State<EditChildForm> {
                       margin: EdgeInsets.only(
                           left: size.width * 0.1, right: size.width * 0.6),
                       child: AppButton(
-                        label: "Edit",
+                        label: AppLocalizations.of(context)!.edit,
+                        fontSize: textScale * 20,
                         roundness: 12,
                         onPressed: () async {
                           var snackBar = SnackBar(
@@ -323,22 +340,27 @@ class _EditChildFormState extends State<EditChildForm> {
     );
   }
 
-  Row addRadioButton(int btnValue, String title) {
+  Row addRadioButton(
+      int btnValue, String title, Size size, double textScale, bool isMOBILE) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
-        Radio<String>(
-          activeColor: AppColors.primaryColor,
-          value: gender[btnValue],
-          groupValue: selectedGender,
-          onChanged: (value) {
-            setState(() {
-              selectedGender = value!;
-            });
-          },
+        Transform.scale(
+          scale: isMOBILE ? 1 : 1.5,
+          child: Radio<String>(
+            activeColor: AppColors.primaryColor,
+            value: gender[btnValue],
+            groupValue: selectedGender,
+            onChanged: (value) {
+              setState(() {
+                selectedGender = value!;
+              });
+            },
+          ),
         ),
-        Text(
-          title,
+        AppText(
+          text: title,
+          fontSize: textScale * 20,
         )
       ],
     );

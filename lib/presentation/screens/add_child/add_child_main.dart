@@ -3,6 +3,7 @@ import 'package:child_milestone/presentation/screens/add_child/add_child_form.da
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class AddChildScreen extends StatefulWidget {
   @override
@@ -18,6 +19,11 @@ class _AddChildScreenState extends State<AddChildScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
+
     return Container(
       color: Colors.white,
       child: Scaffold(
@@ -39,7 +45,7 @@ class _AddChildScreenState extends State<AddChildScreen> {
                   Positioned(
                     bottom: 0,
                     right: 0,
-                    child: _addChildBackground(context, size),
+                    child: _addChildBackground(context, size, isMOBILE),
                   ),
                   const AddChildForm(),
                 ],
@@ -70,11 +76,11 @@ class _AddChildScreenState extends State<AddChildScreen> {
     );
   }
 
-  Widget _addChildBackground(BuildContext context, Size size) {
+  Widget _addChildBackground(BuildContext context, Size size, bool isMOBILE) {
     const String addChildBgItem1 = "assets/images/add_child_bg_item_1.svg";
     return SvgPicture.asset(
       addChildBgItem1,
-      width: size.width * 0.5,
+      width: isMOBILE ? size.width * 0.5 : size.width * 0.35,
     );
   }
 }

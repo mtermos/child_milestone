@@ -4,6 +4,7 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 class AppButton extends StatelessWidget {
   final String label;
   final double roundness;
+  final double fontSize;
   final FontWeight fontWeight;
   final EdgeInsets padding;
   final Widget? trailingWidget;
@@ -13,6 +14,7 @@ class AppButton extends StatelessWidget {
   const AppButton({
     required this.label,
     this.roundness = 18,
+    this.fontSize = 18,
     this.fontWeight = FontWeight.bold,
     this.padding = const EdgeInsets.symmetric(vertical: 18),
     this.trailingWidget,
@@ -45,7 +47,7 @@ class AppButton extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: fontSize,
                   fontWeight: fontWeight,
                 ),
               ),

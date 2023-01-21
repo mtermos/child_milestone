@@ -4,6 +4,7 @@ import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 class WelcomeScreen extends StatelessWidget {
   final String imagePath = "assets/images/welcome_image.png";
@@ -15,27 +16,36 @@ class WelcomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final textScale = MediaQuery.of(context).size.height * 0.001;
+    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final textScale = isMOBILE
+        ? MediaQuery.of(context).size.height * 0.001
+        : MediaQuery.of(context).size.height * 0.0011;
 
     return Scaffold(
       // backgroundColor: AppColors.primaryColor,
       backgroundColor: Colors.white,
       body: Stack(
         children: [
-          SvgPicture.asset(
-            backgtound2,
-            alignment: Alignment.topCenter,
-          ),
+          isMOBILE
+              ? SvgPicture.asset(
+                  backgtound2,
+                  alignment: Alignment.topCenter,
+                )
+              : SizedBox.shrink(),
           SvgPicture.asset(
             backgtound3,
             alignment: Alignment.bottomCenter,
+            // height: size.height * 0.45,
+            // fit: isMOBILE ? BoxFit.contain : BoxFit.fill,
           ),
           Positioned(
             left: 0,
             child: Image.asset(
               imagePath,
               alignment: Alignment.topLeft,
-              fit: BoxFit.fitWidth,
+              width: size.width,
+              height: size.height * 0.45,
+              fit: isMOBILE ? null : BoxFit.fill,
             ),
           ),
           Center(
@@ -55,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                 SizedBox(
                   height: size.height * 0.015,
                 ),
-                getButton(context),
+                getButton(context, textScale),
                 SizedBox(
                   height: size.height * 0.07,
                 )
@@ -110,13 +120,14 @@ class WelcomeScreen extends StatelessWidget {
     );
   }
 
-  Widget getButton(BuildContext context) {
+  Widget getButton(BuildContext context, double textScale) {
     Size size = MediaQuery.of(context).size;
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
       child: AppButton(
         label: AppLocalizations.of(context)!.getStarted,
         fontWeight: FontWeight.w600,
+        fontSize: textScale * 20,
         padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
         onPressed: () {
           onGetStartedClicked(context);
