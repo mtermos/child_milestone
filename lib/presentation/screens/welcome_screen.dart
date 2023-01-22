@@ -44,8 +44,8 @@ class WelcomeScreen extends StatelessWidget {
               imagePath,
               alignment: Alignment.topLeft,
               width: size.width,
-              height: size.height * 0.45,
-              fit: isMOBILE ? null : BoxFit.fill,
+              height: isMOBILE ? null : size.height * 0.45,
+              fit: isMOBILE ? BoxFit.fitWidth : BoxFit.fill,
             ),
           ),
           Center(

@@ -62,9 +62,8 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     }
 
     return SizedBox(
-      height: isMOBILE
-          ? MediaQuery.of(context).padding.top
-          : MediaQuery.of(context).padding.top * 4,
+      height:
+          isMOBILE ? size.height * 0.1 : MediaQuery.of(context).padding.top * 4,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: isMOBILE ? size.width * 0.04 : size.width * 0.03,
