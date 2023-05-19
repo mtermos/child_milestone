@@ -73,16 +73,25 @@ class _EditChildFormState extends State<EditChildForm> {
 
     final format = DateFormat("yyyy-MM-dd");
 
-    return BlocBuilder<ChildBloc, ChildState>(
+    return BlocConsumer<ChildBloc, ChildState>(
+      listener: (context, state) {
+        if (state is ErrorEditingChildState) {
+          var snackBar = SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.checkInternetConnection),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
       builder: (context, state) {
         if (state is EditingChildState) {
           return Center(
             child: SizedBox(
-              width: isMOBILE ? size.width * 0.5 : size.width * 0.35,
+              width: isMOBILE ? size.width * 0.35 : size.width * 0.35,
               child: const LoadingIndicator(
-                indicatorType: Indicator.ballPulse,
+                indicatorType: Indicator.circleStrokeSpin,
                 colors: [AppColors.primaryColor],
-                strokeWidth: 1,
+                strokeWidth: 4,
                 backgroundColor: Colors.white,
                 pathBackgroundColor: Colors.white,
               ),
@@ -292,6 +301,7 @@ class _EditChildFormState extends State<EditChildForm> {
                             dateOfBirth: _selectedDate,
                             imagePath: imagePath,
                             id: widget.child.id,
+                            idBackend: widget.child.idBackend,
                             gender: selectedGender,
                             pregnancyDuration: int.parse(
                                 replaceArabicNumber(durationController.text)),

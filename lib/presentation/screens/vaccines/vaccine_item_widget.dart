@@ -3,6 +3,7 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
+import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +11,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-class MilestoneItemWidget extends StatefulWidget {
-  const MilestoneItemWidget(
+class VaccineItemWidget extends StatefulWidget {
+  const VaccineItemWidget(
       {Key? key, required this.item, required this.selectedPeriod})
       : super(key: key);
-  final MilestoneWithDecision item;
+  final VaccineWithDecision item;
   final Period selectedPeriod;
 
   @override
-  _MilestoneItemWidgetState createState() => _MilestoneItemWidgetState();
+  _VaccineItemWidgetState createState() => _VaccineItemWidgetState();
 }
 
-class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
+class _VaccineItemWidgetState extends State<VaccineItemWidget> {
   ChildModel? selected_child;
   int decision = 0;
 
@@ -55,7 +56,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     child: ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.asset(
-                    widget.item.milestoneItem.imagePath ?? "",
+                    "assets/images/children/infant1.jpeg",
                     alignment: Alignment.topCenter,
                     color: Colors.white.withOpacity(0.8),
                     colorBlendMode: BlendMode.modulate,
@@ -83,7 +84,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     horizontal: textScale * 20,
                   ),
                   child: AppText(
-                    text: widget.item.milestoneItem.description,
+                    text: widget.item.vaccine.description,
                     textAlign: TextAlign.right,
                     fontSize: isMOBILE ? textScale * 18 : textScale * 18,
                   ),
@@ -103,14 +104,14 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
                       decision: DecisionModel(
                         childId: selected_child!.id,
-                        milestoneId: widget.item.milestoneItem.id,
-                        vaccineId: 0,
+                        vaccineId: widget.item.vaccine.id,
+                        milestoneId: 0,
                         decision: 1,
                         takenAt: DateTime.now(),
                       ),
                       onSuccess: () {
-                        BlocProvider.of<MilestoneBloc>(context).add(
-                            GetMilestonesWithDecisionsByPeriodEvent(
+                        BlocProvider.of<VaccineBloc>(context).add(
+                            GetVaccinesWithDecisionsByPeriodEvent(
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
@@ -154,14 +155,14 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
                       decision: DecisionModel(
                         childId: selected_child!.id,
-                        milestoneId: widget.item.milestoneItem.id,
-                        vaccineId: 0,
+                        vaccineId: widget.item.vaccine.id,
+                        milestoneId: 0,
                         decision: 2,
                         takenAt: DateTime.now(),
                       ),
                       onSuccess: () {
-                        BlocProvider.of<MilestoneBloc>(context).add(
-                            GetMilestonesWithDecisionsByPeriodEvent(
+                        BlocProvider.of<VaccineBloc>(context).add(
+                            GetVaccinesWithDecisionsByPeriodEvent(
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
@@ -208,14 +209,14 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                     BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
                       decision: DecisionModel(
                         childId: selected_child!.id,
-                        milestoneId: widget.item.milestoneItem.id,
-                        vaccineId: 0,
+                        vaccineId: widget.item.vaccine.id,
+                        milestoneId: 0,
                         decision: 3,
                         takenAt: DateTime.now(),
                       ),
                       onSuccess: () {
-                        BlocProvider.of<MilestoneBloc>(context).add(
-                            GetMilestonesWithDecisionsByPeriodEvent(
+                        BlocProvider.of<VaccineBloc>(context).add(
+                            GetVaccinesWithDecisionsByPeriodEvent(
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
@@ -261,8 +262,8 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
         await BlocProvider.of<CurrentChildCubit>(context).getCurrentChild();
     if (child != null) {
       BlocProvider.of<DecisionBloc>(context).add(
-          GetDecisionByChildAndMilestoneEvent(
-              childId: child.id, milestoneId: widget.item.milestoneItem.id));
+          GetDecisionByChildAndVaccineEvent(
+              childId: child.id, vaccineId: widget.item.vaccine.id));
       setState(() {
         selected_child = child;
       });

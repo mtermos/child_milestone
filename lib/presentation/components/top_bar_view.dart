@@ -106,7 +106,16 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
             widget.hasDropDown
                 ? Expanded(
                     flex: 6,
-                    child: BlocBuilder<ChildBloc, ChildState>(
+                    child: BlocConsumer<ChildBloc, ChildState>(
+                      listener: (context, state) {
+                        if (state is ErrorDeletingChildState) {
+                          var snackBar = SnackBar(
+                            content: Text(AppLocalizations.of(context)!
+                                .checkInternetConnection),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
                       builder: (context, state) {
                         if (state is AllChildrenLoadedState) {
                           childrenList = state.children;
@@ -127,6 +136,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                           childrenList = [];
                           selectedChild = null;
                         }
+                        print('childrenList: ${childrenList}');
                         return Center(
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<ChildModel>(
@@ -355,12 +365,23 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
               actions: [
                 InkWell(
                   onTap: () {
-                    BlocProvider.of<ChildBloc>(context)
-                        .add(DeleteChildEvent(id: id));
-                    BlocProvider.of<ChildBloc>(context)
-                        .add(GetAllChildrenEvent());
-                    Navigator.pop(context);
-                    Navigator.pop(dropDownKey.currentContext!);
+                    BlocProvider.of<ChildBloc>(context).add(
+                      DeleteChildEvent(
+                        id: id,
+                        onSuccess: () {
+                          BlocProvider.of<ChildBloc>(context)
+                              .add(GetAllChildrenEvent());
+                          Navigator.pop(context);
+                          Navigator.pop(dropDownKey.currentContext!);
+                        },
+                        onFail: () {
+                          BlocProvider.of<ChildBloc>(context)
+                              .add(GetAllChildrenEvent());
+                          Navigator.pop(context);
+                          Navigator.pop(dropDownKey.currentContext!);
+                        },
+                      ),
+                    );
                   },
                   child: Container(
                     decoration: BoxDecoration(

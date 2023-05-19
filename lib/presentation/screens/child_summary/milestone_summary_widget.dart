@@ -223,6 +223,7 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                       decision: DecisionModel(
                                         childId: widget.child.id,
                                         milestoneId: widget.milestoneItem.id,
+                                        vaccineId: 0,
                                         decision: 1,
                                         takenAt: DateTime.now(),
                                       ),
@@ -275,6 +276,7 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                       decision: DecisionModel(
                                         childId: widget.child.id,
                                         milestoneId: widget.milestoneItem.id,
+                                        vaccineId: 0,
                                         decision: 2,
                                         takenAt: DateTime.now(),
                                       ),
@@ -331,6 +333,7 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                               childId: widget.child.id,
                                               milestoneId:
                                                   widget.milestoneItem.id,
+                                              vaccineId: 0,
                                               decision: 3,
                                               takenAt: DateTime.now(),
                                             ),

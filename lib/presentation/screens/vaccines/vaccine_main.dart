@@ -3,7 +3,9 @@ import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/data_providers/milestone_categories_list.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
+import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
+import 'package:child_milestone/presentation/screens/vaccines/vaccine_item_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -18,26 +20,24 @@ import 'package:child_milestone/presentation/screens/milestone/milestone_item_wi
 import 'package:child_milestone/presentation/widgets/category_box_widget.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-class MilestoneScreen extends StatefulWidget {
+class VaccineScreen extends StatefulWidget {
   int? periodId;
-  MilestoneScreen({
+  VaccineScreen({
     Key? key,
     this.periodId,
   }) : super(key: key);
 
   @override
-  _MilestoneScreenState createState() => _MilestoneScreenState();
+  _VaccineScreenState createState() => _VaccineScreenState();
 }
 
-class _MilestoneScreenState extends State<MilestoneScreen> {
-  int _selected = 1;
+class _VaccineScreenState extends State<VaccineScreen> {
   ChildModel? current_child;
-  List<MilestoneWithDecision> items = [];
+  List<VaccineWithDecision> items = [];
   Period? currentPeriod;
   Period? selectedPeriod;
   @override
   void initState() {
-    // _selected = widget.milestone != null ? widget.milestone!.category : 1;
     // selectedPeriod = periodFromID(widget.periodId ?? 1);
     super.initState();
   }
@@ -71,8 +71,9 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                 currentPeriod!.id < selectedPeriod!.id) {
               selectedPeriod = currentPeriod;
             }
-            BlocProvider.of<MilestoneBloc>(context).add(
-                GetMilestonesWithDecisionsByPeriodEvent(
+
+            BlocProvider.of<VaccineBloc>(context).add(
+                GetVaccinesWithDecisionsByPeriodEvent(
                     child: current_child!, periodId: selectedPeriod!.id));
           }
           return Column(
@@ -95,52 +96,24 @@ class _MilestoneScreenState extends State<MilestoneScreen> {
                         padding:
                             EdgeInsets.symmetric(horizontal: size.width * 0.05),
                         child: AppText(
-                          text:
-                              AppLocalizations.of(context)!.milestoneChecklist,
+                          text: AppLocalizations.of(context)!.vaccineChecklist,
                           fontSize: textScale * 24,
                           textAlign: TextAlign.start,
                         ),
                       ),
                       SizedBox(height: size.height * 0.02),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: size.width * 0.02),
-                        child: Row(
-                          children: categories.map((e) {
-                            return Expanded(
-                              flex: 1,
-                              child: InkWell(
-                                highlightColor: null,
-                                onTap: () {
-                                  setState(() {
-                                    _selected = e.id;
-                                  });
-                                },
-                                child: CategoryBoxWidget(
-                                  item: e,
-                                  selected: _selected,
-                                ),
-                              ),
-                            );
-                          }).toList(),
-                        ),
-                      ),
-                      SizedBox(height: size.height * 0.01),
-                      BlocBuilder<MilestoneBloc, MilestoneState>(
+                      BlocBuilder<VaccineBloc, VaccineState>(
                         builder: (context, state) {
                           if (state
-                              is LoadedMilestonesWithDecisionsByPeriodState) {
+                              is LoadedVaccinesWithDecisionsByPeriodState) {
                             items = state.items;
                           }
                           return Column(
                             children: items
-                                .where((element) =>
-                                    element.milestoneItem.category == _selected)
-                                .map((e) => MilestoneItemWidget(
+                                .map((e) => VaccineItemWidget(
                                       item: e,
                                       selectedPeriod: selectedPeriod!,
-                                      key: ValueKey(
-                                          e.milestoneItem.id.toString()),
+                                      key: ValueKey(e.vaccine.id.toString()),
                                     ))
                                 .toList(),
                           );

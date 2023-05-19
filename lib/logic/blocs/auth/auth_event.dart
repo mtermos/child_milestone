@@ -1,11 +1,15 @@
+import 'package:flutter/material.dart';
+
 abstract class AuthEvent {}
 
 class LoginEvent extends AuthEvent {
+  final BuildContext context;
   final String username;
   final String password;
+
   Function onSuccess;
 
-  LoginEvent(this.username, this.password, this.onSuccess);
+  LoginEvent(this.context, this.username, this.password, this.onSuccess);
 }
 
 class ForceLoginEvent extends AuthEvent {}

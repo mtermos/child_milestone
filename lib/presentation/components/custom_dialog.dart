@@ -5,13 +5,15 @@ import 'package:flutter/material.dart';
 class CustomDialogBox extends StatefulWidget {
   final String title, descriptions, text;
   final Image img;
+  final Function onButtonPress;
 
   const CustomDialogBox(
       {Key? key,
       required this.title,
       required this.descriptions,
       required this.text,
-      required this.img})
+      required this.img,
+      required this.onButtonPress})
       : super(key: key);
 
   @override
@@ -70,6 +72,7 @@ class _CustomDialogBoxState extends State<CustomDialogBox> {
                 child: ElevatedButton(
                     onPressed: () {
                       Navigator.of(context).pop();
+                      widget.onButtonPress();
                     },
                     child: Text(
                       widget.text,

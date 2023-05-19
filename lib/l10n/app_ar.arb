@@ -88,8 +88,11 @@
     "clickToWatchOn": "اضغط هنا لمشاهدة الفيديو عبر",
     "clickToWatchVideo": "اضغط لمشاهدة الفيديو المساعد",
     "clickToOpenDocument": "اضغط لقراءة المستند المساعد",
+    "clickToOpenURL": "اضغط لفتح الموقع",
     "notReadyYet": "الطفل لم يدخل في العمر المصحح المناسب بعد",
     "chronologicalAge": "العمر الزمني",
     "correctedAge": "العمر المصحح",
+    "vaccineChecklist": "قائمة اللقاحات",
+    "checkInternetConnection": "الرجاء التحقق من اتصال الهاتف بالانترنت ثم المحاولة مرة أخرى",
     "selectLanguage": "اختار اللغة"
 }

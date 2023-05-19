@@ -15,8 +15,8 @@ class DecisionDao {
 
     List<Map<String, dynamic>> decisionItem = await db.query(
       decisionsTABLE,
-      where: 'milestoneId = ? AND childId = ?',
-      whereArgs: [decision.milestoneId, decision.childId],
+      where: 'milestoneId = ? AND childId = ? AND vaccineId = ?',
+      whereArgs: [decision.milestoneId, decision.childId, decision.vaccineId],
     );
 
     if (decisionItem.isEmpty) {
@@ -31,6 +31,37 @@ class DecisionDao {
     } else {
       decision.id = decisionItem[0]["id"];
       return updateDecision(decision);
+    }
+
+    return result;
+  }
+
+  //Adds new Decision record
+  Future<DaoResponse<bool, int>> createDecisionsList(
+      List<DecisionModel> decisions) async {
+    final db = await dbProvider.database;
+    DaoResponse<bool, int> result = const DaoResponse(false, 0);
+    for (var decision in decisions) {
+      List<Map<String, dynamic>> decisionItem = await db.query(
+        decisionsTABLE,
+        where: 'milestoneId = ? AND childId = ? AND vaccineId = ?',
+        whereArgs: [decision.milestoneId, decision.childId, decision.vaccineId],
+      );
+
+      if (decisionItem.isEmpty) {
+        try {
+          var id = await db.insert(decisionsTABLE, decision.toMap());
+          result = DaoResponse(true, id);
+        } catch (err) {
+          if (err is DatabaseException) {
+            result = DaoResponse(false, err.getResultCode() ?? 0);
+            return result;
+          }
+        }
+      } else {
+        decision.id = decisionItem[0]["id"];
+        return updateDecision(decision);
+      }
     }
 
     return result;
@@ -86,6 +117,18 @@ class DecisionDao {
       decisionsTABLE,
       where: 'childId = ? AND milestoneId = ?',
       whereArgs: [childId, milestoneId],
+    );
+    return decisionItem.isNotEmpty ? decisionItem[0] : {};
+  }
+
+  Future<Map<String, dynamic>> getDecisionByChildAndVaccine(
+      int childId, int vaccineId) async {
+    final db = await dbProvider.database;
+
+    List<Map<String, dynamic>> decisionItem = await db.query(
+      decisionsTABLE,
+      where: 'childId = ? AND vaccineId = ?',
+      whereArgs: [childId, vaccineId],
     );
     return decisionItem.isNotEmpty ? decisionItem[0] : {};
   }

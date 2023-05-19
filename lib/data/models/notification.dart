@@ -13,6 +13,7 @@ class NotificationModel {
   int period;
   int childId;
   int? milestoneId;
+  int? vaccineId;
   NotificationModel({
     this.id,
     required this.title,
@@ -24,6 +25,7 @@ class NotificationModel {
     required this.period,
     required this.childId,
     this.milestoneId,
+    this.vaccineId,
     this.uploaded = false,
   });
 
@@ -39,6 +41,7 @@ class NotificationModel {
     int? period,
     int? childId,
     int? milestoneId,
+    int? vaccineId,
   }) {
     return NotificationModel(
       id: id ?? this.id,
@@ -52,6 +55,7 @@ class NotificationModel {
       period: period ?? this.period,
       childId: childId ?? this.childId,
       milestoneId: milestoneId ?? this.milestoneId,
+      vaccineId: vaccineId ?? this.vaccineId,
     );
   }
 
@@ -68,6 +72,7 @@ class NotificationModel {
       'period': period,
       'childId': childId,
       'milestoneId': milestoneId,
+      'vaccineId': vaccineId,
     };
   }
 
@@ -85,6 +90,7 @@ class NotificationModel {
       childId: map['childId'] as int,
       milestoneId:
           map['milestoneId'] != null ? map['milestoneId'] as int : null,
+      vaccineId: map['vaccineId'] != null ? map['vaccineId'] as int : null,
     );
   }
 
@@ -113,7 +119,8 @@ class NotificationModel {
         other.route == route &&
         other.period == period &&
         other.childId == childId &&
-        other.milestoneId == milestoneId;
+        other.milestoneId == milestoneId &&
+        other.vaccineId == vaccineId;
   }
 
   @override
@@ -128,6 +135,7 @@ class NotificationModel {
         route.hashCode ^
         period.hashCode ^
         childId.hashCode ^
-        milestoneId.hashCode;
+        milestoneId.hashCode ^
+        vaccineId.hashCode;
   }
 }

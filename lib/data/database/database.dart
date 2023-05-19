@@ -7,6 +7,7 @@ import 'package:sqflite/sqflite.dart';
 const childrenTABLE = 'Children';
 const notificationsTABLE = 'Notifications';
 const milestonesTABLE = 'Milestones';
+const vaccinesTABLE = 'vaccines';
 const tipsTABLE = 'Tips';
 const decisionsTABLE = 'Decisions';
 const ratingsTABLE = 'Ratings';
@@ -27,13 +28,17 @@ class DatabaseProvider {
     WidgetsFlutterBinding.ensureInitialized();
 
     var database = await openDatabase(path,
-        version: 3, onCreate: initDB, onUpgrade: onUpgrade);
+        version: 6, onCreate: initDB, onUpgrade: onUpgrade);
     return database;
   }
 
   //This is optional, and only used for changing DB schema migrations
   void onUpgrade(Database database, int oldVersion, int newVersion) {
-    if (newVersion > oldVersion) {}
+    if (_database != null) {
+      var batch = _database!.batch();
+      if (oldVersion == 3) _updateTableTipsV3toV4(batch);
+      if (newVersion > oldVersion) {}
+    }
   }
 
   deleteDatabase() async {
@@ -57,11 +62,24 @@ class DatabaseProvider {
         "imagePath TEXT NOT NULL, "
         "dateOfBirth INTEGER NOT NULL, "
         "uploaded INTEGER, "
+        "idBackend TEXT, "
         "pregnancyDuration INTEGER NOT NULL "
         ")");
 
     await database.execute("CREATE TABLE $milestonesTABLE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "description TEXT, "
+        "imagePath TEXT, "
+        "videoPath TEXT, "
+        "period INTEGER, "
+        "startingAge INTEGER, "
+        "endingAge INTEGER, "
+        "category INTEGER "
+        ")");
+
+    await database.execute("CREATE TABLE $vaccinesTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "name TEXT, "
         "description TEXT, "
         "imagePath TEXT, "
         "videoPath TEXT, "
@@ -78,13 +96,15 @@ class DatabaseProvider {
         "route TEXT, "
         "childId INTEGER, "
         "milestoneId INTEGER, "
+        "vaccineId INTEGER, "
         "opened INTEGER, "
         "dismissed INTEGER, "
         "uploaded INTEGER, "
         "issuedAt INTEGER, "
         "period INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
-        "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
+        "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id), "
+        "FOREIGN KEY (vaccineId) REFERENCES $vaccinesTABLE (id) "
         ")");
 
     await database.execute("CREATE TABLE $tipsTABLE ("
@@ -93,6 +113,7 @@ class DatabaseProvider {
         "body TEXT, "
         "videoURL TEXT, "
         "documentURL TEXT, "
+        "webURL TEXT, "
         "period INTEGER "
         ")");
 
@@ -100,11 +121,13 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "childId INTEGER, "
         "milestoneId INTEGER, "
+        "vaccineId INTEGER, "
         "decision INTEGER, "
         "takenAt INTEGER, "
         "uploaded INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
-        "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id) "
+        "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id), "
+        "FOREIGN KEY (vaccineId) REFERENCES $vaccinesTABLE (id) "
         ")");
 
     await database.execute("CREATE TABLE $ratingsTABLE ("
@@ -114,5 +137,9 @@ class DatabaseProvider {
         "takenAt INTEGER, "
         "uploaded INTEGER "
         ")");
+  }
+
+  void _updateTableTipsV3toV4(Batch batch) {
+    batch.execute('ALTER TABLE Tips ADD webURL TEXT');
   }
 }

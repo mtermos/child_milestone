@@ -14,6 +14,7 @@ class ChildModel {
   String gender;
   int pregnancyDuration;
   bool uploaded;
+  String? idBackend;
   ChildModel({
     required this.id,
     required this.name,
@@ -22,6 +23,7 @@ class ChildModel {
     required this.gender,
     required this.pregnancyDuration,
     this.uploaded = false,
+    this.idBackend,
   });
 
   ChildModel copyWith({
@@ -32,6 +34,7 @@ class ChildModel {
     String? gender,
     int? pregnancyDuration,
     bool? uploaded,
+    String? idBackend,
   }) {
     return ChildModel(
       id: id ?? this.id,
@@ -41,6 +44,7 @@ class ChildModel {
       gender: gender ?? this.gender,
       pregnancyDuration: pregnancyDuration ?? this.pregnancyDuration,
       uploaded: uploaded ?? this.uploaded,
+      idBackend: idBackend ?? this.idBackend,
     );
   }
 
@@ -53,6 +57,7 @@ class ChildModel {
       'gender': gender,
       'pregnancyDuration': pregnancyDuration,
       'uploaded': uploaded ? 1 : 0,
+      'idBackend': idBackend,
     };
   }
 
@@ -66,6 +71,7 @@ class ChildModel {
       gender: map['gender'] as String,
       pregnancyDuration: map['pregnancyDuration'] as int,
       uploaded: map['uploaded'] == 1,
+      idBackend: map['idBackend'] != null ? map['idBackend'] as String : "",
     );
   }
 
@@ -76,7 +82,7 @@ class ChildModel {
 
   @override
   String toString() {
-    return 'ChildModel(id: $id, name: $name, dateOfBirth: $dateOfBirth, imagePath: $imagePath, gender: $gender, pregnancyDuration: $pregnancyDuration, uploaded: $uploaded)';
+    return 'ChildModel(id: $id, name: $name, dateOfBirth: $dateOfBirth, imagePath: $imagePath, gender: $gender, pregnancyDuration: $pregnancyDuration, uploaded: $uploaded, idBackend: $idBackend)';
   }
 
   @override
@@ -86,6 +92,7 @@ class ChildModel {
     return other.id == id &&
         other.name == name &&
         other.dateOfBirth == dateOfBirth &&
+        other.idBackend == idBackend &&
         other.imagePath == imagePath &&
         other.gender == gender &&
         other.pregnancyDuration == pregnancyDuration &&
@@ -97,6 +104,7 @@ class ChildModel {
     return id.hashCode ^
         name.hashCode ^
         dateOfBirth.hashCode ^
+        idBackend.hashCode ^
         imagePath.hashCode ^
         gender.hashCode ^
         pregnancyDuration.hashCode ^

@@ -12,6 +12,7 @@ class SettingsBackground extends StatelessWidget {
   final String smiley_face = "assets/images/smiley_face.png";
   final String settings = "assets/icons/home_page/settings_icon.svg";
   final String ellipse = "assets/images/ellipse_settings.svg";
+  final String iconPath = "assets/icons/steps_icon.png";
 
   const SettingsBackground({
     Key? key,

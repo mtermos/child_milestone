@@ -45,6 +45,14 @@ class GetDecisionByChildAndMilestoneEvent extends DecisionEvent {
       {required this.childId, required this.milestoneId});
 }
 
+
+class GetDecisionByChildAndVaccineEvent extends DecisionEvent {
+  final int childId;
+  final int vaccineId;
+  const GetDecisionByChildAndVaccineEvent(
+      {required this.childId, required this.vaccineId});
+}
+
 class UploadDecisionsEvent extends DecisionEvent {
   const UploadDecisionsEvent();
 }

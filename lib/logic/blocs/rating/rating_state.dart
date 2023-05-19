@@ -8,9 +8,9 @@ abstract class RatingState extends Equatable {
 
 class InitialRatingState extends RatingState {}
 
-class AddingRatingState extends RatingState {}
+class AddingRatingsState extends RatingState {}
 
-class AddedRatingState extends RatingState {}
+class AddedRatingsState extends RatingState {}
 
 class RatingLoadingState extends RatingState {}
 
@@ -50,3 +50,14 @@ class RatingErrorState extends RatingState {
   @override
   List<Object?> get props => [error];
 }
+
+class UploadingRatingsState extends RatingState {}
+
+class ErrorUploadingRatingsState extends RatingState {
+  final String error;
+  ErrorUploadingRatingsState({
+    required this.error,
+  });
+}
+
+class UploadedRatingsState extends RatingState {}

@@ -1,12 +1,17 @@
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
+import 'package:child_milestone/logic/blocs/auth/auth_state.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/screens/login/login_background.dart';
+import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -65,6 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     usernameController.text = '';
     passController.text = '';
+    getTextFromStorage();
   }
 
   @override
@@ -82,79 +88,116 @@ class _LoginScreenState extends State<LoginScreen> {
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: LoginBackground(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: size.height * 0.3),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.15),
-                child: loginTextWidget(textScale),
-              ),
-              SizedBox(height: size.height * 0.03),
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
-                child: TextField(
-                  controller: usernameController,
-                  style: TextStyle(fontSize: textScale * 20),
-                  decoration: InputDecoration(
-                      labelStyle: TextStyle(fontSize: textScale * 20),
-                      labelText: AppLocalizations.of(context)!.username),
+    return BlocConsumer<AuthBloc, AuthState>(
+      listener: (context, state) {
+        if (state is LoginErrorState) {
+          var snackBar = SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.checkInternetConnection),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
+      builder: (context, state) {
+        if (state is LoadingLoginState) {
+          return Scaffold(
+            body: SingleChildScrollView(
+              child: LoginBackground(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: size.height * 0.2),
+                    child: SizedBox(
+                      width: isMOBILE ? size.width * 0.35 : size.width * 0.35,
+                      child: const LoadingIndicator(
+                        indicatorType: Indicator.circleStrokeSpin,
+                        colors: [AppColors.primaryColor],
+                        strokeWidth: 4,
+                        backgroundColor: Colors.white,
+                        pathBackgroundColor: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
               ),
-              SizedBox(height: size.height * 0.03),
-              Container(
-                alignment: Alignment.center,
-                margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
-                child: TextField(
-                  style: TextStyle(fontSize: textScale * 20),
-                  controller: passController,
-                  decoration: InputDecoration(
-                      labelStyle: TextStyle(fontSize: textScale * 20),
-                      labelText: AppLocalizations.of(context)!.password),
-                  obscureText: true,
-                ),
+            ),
+          );
+        }
+        return Scaffold(
+          body: SingleChildScrollView(
+            child: LoginBackground(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  SizedBox(height: size.height * 0.3),
+                  Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                    child: loginTextWidget(textScale),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                    child: TextField(
+                      controller: usernameController,
+                      style: TextStyle(fontSize: textScale * 20),
+                      decoration: InputDecoration(
+                          labelStyle: TextStyle(fontSize: textScale * 20),
+                          labelText: AppLocalizations.of(context)!.username),
+                    ),
+                  ),
+                  SizedBox(height: size.height * 0.03),
+                  Container(
+                    alignment: Alignment.center,
+                    margin: EdgeInsets.symmetric(horizontal: size.width * 0.15),
+                    child: TextField(
+                      style: TextStyle(fontSize: textScale * 20),
+                      controller: passController,
+                      decoration: InputDecoration(
+                          labelStyle: TextStyle(fontSize: textScale * 20),
+                          labelText: AppLocalizations.of(context)!.password),
+                      obscureText: true,
+                    ),
+                  ),
+                  // Container(
+                  //   alignment: Alignment.centerRight,
+                  //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  //   child: Text(
+                  //     AppLocalizations.of(context)!.forgotPassword,
+                  //     style: const TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
+                  //   ),
+                  // ),
+                  SizedBox(height: size.height * 0.05),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    margin: EdgeInsets.symmetric(
+                        horizontal: size.width * 0.15,
+                        vertical: size.height * 0.02),
+                    child: loginButton(context, textScale),
+                  ),
+                  // Container(
+                  //   alignment: Alignment.center,
+                  //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                  //   child: GestureDetector(
+                  //     onTap: () => {
+                  //       // print("register")
+                  //       // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
+                  //     },
+                  //     child: Text(
+                  //       AppLocalizations.of(context)!.noAccount,
+                  //       style: const TextStyle(
+                  //           fontSize: 12,
+                  //           fontWeight: FontWeight.bold,
+                  //           color: Color(0xFF2661FA)),
+                  //     ),
+                  //   ),
+                  // )
+                ],
               ),
-              // Container(
-              //   alignment: Alignment.centerRight,
-              //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              //   child: Text(
-              //     AppLocalizations.of(context)!.forgotPassword,
-              //     style: const TextStyle(fontSize: 12, color: Color(0XFF2661FA)),
-              //   ),
-              // ),
-              SizedBox(height: size.height * 0.05),
-              Container(
-                alignment: Alignment.centerRight,
-                margin: EdgeInsets.symmetric(
-                    horizontal: size.width * 0.15,
-                    vertical: size.height * 0.02),
-                child: loginButton(context, textScale),
-              ),
-              // Container(
-              //   alignment: Alignment.center,
-              //   margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-              //   child: GestureDetector(
-              //     onTap: () => {
-              //       // print("register")
-              //       // Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterScreen()))
-              //     },
-              //     child: Text(
-              //       AppLocalizations.of(context)!.noAccount,
-              //       style: const TextStyle(
-              //           fontSize: 12,
-              //           fontWeight: FontWeight.bold,
-              //           color: Color(0xFF2661FA)),
-              //     ),
-              //   ),
-              // )
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
@@ -166,13 +209,16 @@ class _LoginScreenState extends State<LoginScreen> {
       fontSize: textScale * 20,
       padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
       onPressed: () {
-        BlocProvider.of<AuthBloc>(context).add(LoginEvent(
-          usernameController.text,
-          passController.text,
-          () {
-            Navigator.popAndPushNamed(context, Routes.home);
-          },
-        ));
+        BlocProvider.of<AuthBloc>(context).add(
+          LoginEvent(context, usernameController.text, passController.text, () {
+            BlocProvider.of<CurrentChildCubit>(context).setFirstChildCurrent(
+              () {
+                // Navigator.popUntil(context, (route) => false)
+                Navigator.popAndPushNamed(context, Routes.home);
+              },
+            );
+          }),
+        );
       },
     );
   }
@@ -185,5 +231,12 @@ class _LoginScreenState extends State<LoginScreen> {
       // color: Colors.white,
       color: const Color.fromRGBO(78, 76, 76, 1),
     );
+  }
+
+  getTextFromStorage() async {
+    const storage = FlutterSecureStorage();
+    usernameController.text =
+        await storage.read(key: StorageKeys.username) ?? "";
+    passController.text = await storage.read(key: StorageKeys.password) ?? "";
   }
 }

@@ -3,12 +3,22 @@ import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/notification.dart';
+import 'package:child_milestone/data/models/vaccine.dart';
 
 class MilestoneWithDecision {
   MilestoneItem milestoneItem;
   DecisionModel decision;
   MilestoneWithDecision({
     required this.milestoneItem,
+    required this.decision,
+  });
+}
+
+class VaccineWithDecision {
+  Vaccine vaccine;
+  DecisionModel decision;
+  VaccineWithDecision({
+    required this.vaccine,
     required this.decision,
   });
 }
@@ -32,5 +42,14 @@ class Period {
     required this.id,
     required this.arabicName,
     required this.arabicNameNumbers,
+  });
+}
+
+class allTaken {
+  bool milestones;
+  bool vaccines;
+  allTaken({
+    required this.milestones,
+    required this.vaccines,
   });
 }

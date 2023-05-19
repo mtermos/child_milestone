@@ -80,3 +80,14 @@ class DeletingChildState extends ChildState {}
 class ErrorDeletingChildState extends ChildState {}
 
 class DeletedChildState extends ChildState {}
+
+class UploadingChildrenState extends ChildState {}
+
+class ErrorUploadingChildrenState extends ChildState {
+  final String error;
+  ErrorUploadingChildrenState({
+    required this.error,
+  });
+}
+
+class UploadedChildrenState extends ChildState {}

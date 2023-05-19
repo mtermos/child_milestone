@@ -1,9 +1,11 @@
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
+import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/notification.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
+import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
@@ -12,6 +14,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:child_milestone/constants/strings.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'decision_event.dart';
 part 'decision_state.dart';
@@ -20,12 +23,14 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   final DecisionRepository decisionRepository;
   final NotificationRepository notificationRepository;
   final ChildRepository childRepository;
+  final MilestoneRepository milestoneRepository;
 
-  DecisionBloc(
-      {required this.decisionRepository,
-      required this.notificationRepository,
-      required this.childRepository})
-      : super(InitialDecisionState()) {
+  DecisionBloc({
+    required this.decisionRepository,
+    required this.notificationRepository,
+    required this.childRepository,
+    required this.milestoneRepository,
+  }) : super(InitialDecisionState()) {
     on<AddDecisionEvent>(addDecision);
     on<GetAllDecisionsEvent>(getAllDecisions);
     on<DeleteAllDecisionsEvent>(deleteAllDecisions);
@@ -34,8 +39,9 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     on<GetDecisionsByChild>(getByChild);
     on<GetDecisionsByAgeEvent>(getByAge);
     on<GetDecisionByChildAndMilestoneEvent>(getByChildAndMilestone);
+    on<GetDecisionByChildAndVaccineEvent>(getByChildAndVaccine);
 
-    on<UploadDecisionsEvent>(uploadDecisionsEvent);
+    // on<UploadDecisionsEvent>(updateDecisionsOnBackend);
   }
 
   void addDecision(AddDecisionEvent event, Emitter<DecisionState> emit) async {
@@ -125,6 +131,22 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     // }
   }
 
+  void getByChildAndVaccine(GetDecisionByChildAndVaccineEvent event,
+      Emitter<DecisionState> emit) async {
+    emit(LoadingDecisionByChildAndVaccineState());
+    DecisionModel? decisionModel = await decisionRepository
+        .getDecisionByChildAndVaccine(event.childId, event.vaccineId);
+
+    if (decisionModel != null) {
+      emit(LoadedDecisionByChildAndVaccineState(decisionModel));
+    }
+    // if (daoResponse.item1) {
+    //   emit(LoadedDecisionsByAgeState(daoResponse.item1, daoResponse.item2));
+    // } else {
+    //   emit(ErrorLoadingDecisionsByAgeState());
+    // }
+  }
+
   Future<bool> checkIfAllDecisions(int childId) async {
     List<DecisionModel> daoResponse =
         await decisionRepository.getDecisionsByChild(childId);
@@ -153,32 +175,93 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     return false;
   }
 
-  void uploadDecisionsEvent(
-      UploadDecisionsEvent event, Emitter<DecisionState> emit) async {
-    emit(UploadingDecisionState());
-    List<DecisionModel> newDecisions =
-        (await decisionRepository.getAllDecisions())
-            .where((element) => !element.uploaded)
-            .toList();
+  // void updateDecisionsOnBackend(
+  //     UploadDecisionsEvent event, Emitter<DecisionState> emit) async {
+  //   emit(UploadingDecisionState());
 
-    if (newDecisions.isNotEmpty) {
-      final response = await http.post(Uri.parse(Urls.backendUrl + "test/"),
-          body: {
-            "decisions":
-                newDecisions.map((item) => item.toJson()).toList().toString()
-          });
+  //   List<ChildModel> children = await childRepository.getAllChildren();
+  //   List<MilestoneItem> milestones =
+  //       await milestoneRepository.getAllMilestones();
 
-      if (response.statusCode == 200) {
-        for (var decision in newDecisions) {
-          if (decision.uploaded) {
-            continue;
-          }
-          decision.uploaded = true;
-          decisionRepository.updateDecision(decision);
-        }
-      }
-    } else {
-      emit(ErrorUploadingDecisionState(error: "response not 200"));
-    }
-  }
+  //   for (var child in children) {
+  //     List data = [];
+  //     // List<DecisionModel> decisions =
+  //     //     await decisionRepository.getDecisionsByChild(child.id);
+  //     for (var milestone in milestones) {
+  //       DecisionModel? decisionModel = await decisionRepository
+  //           .getDecisionByChildAndMilestone(child.id, milestone.id);
+
+  //       if (decisionModel != null) {
+  //         String decisionInWords = "";
+  //         if (decisionModel.decision == 1) decisionInWords = "Yes";
+  //         if (decisionModel.decision == 2) decisionInWords = "No";
+  //         if (decisionModel.decision == 3) decisionInWords = "Maybe";
+
+  //         data.add({
+  //           "number": milestone.id,
+  //           "question": milestone.description,
+  //           "category": milestone.category,
+  //           "startingAge": milestone.startingAge,
+  //           "endingAge": milestone.endingAge,
+  //           "period": milestone.period,
+  //           "decision": decisionInWords,
+  //         });
+  //       }
+  //     }
+
+  //     // update child with these data
+  //     print('data: ${data}');
+  //   }
+
+  // if (newDecisions.isNotEmpty) {
+  //   final response = await http.post(Uri.parse(Urls.backendUrl + "test/"),
+  //       body: {
+  //         "decisions":
+  //             newDecisions.map((item) => item.toJson()).toList().toString()
+  //       });
+
+  //   if (response.statusCode == 200) {
+  //     for (var decision in newDecisions) {
+  //       if (decision.uploaded) {
+  //         continue;
+  //       }
+  //       decision.uploaded = true;
+  //       decisionRepository.updateDecision(decision);
+  //     }
+  //   }
+  // } else {
+  //   emit(ErrorUploadingDecisionState(error: "response not 200"));
+  // }
+  // }
+
+  // Future<String?> updateDecisionsOnBackend(
+  //     List<DecisionModel> decisions) async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String? token = prefs.getString(SharedPrefKeys.accessToken);
+  //   String? userID = prefs.getString(SharedPrefKeys.userID);
+  //   if (token != null) {
+  //     try {
+  //       final response = await http.put(
+  //         Uri.parse(Urls.backendUrl + Urls.createRatingUrl),
+  //         headers: {
+  //           "Authorization": "Bearer " + token,
+  //         },
+  //         body: {
+  //           "id": ratingModel.ratingId,
+  //           "rating": ratingModel.rating,
+  //           "parent_id": userID,
+  //         },
+  //       );
+  //       // print('response.body: ${response.body}');
+  //       if (response.statusCode == 200) {
+  //         return null;
+  //       } else {
+  //         return "response not 200";
+  //       }
+  //     } catch (e) {
+  //       return "connection failed";
+  //     }
+  //   }
+  //   return "token not available";
+  // }
 }

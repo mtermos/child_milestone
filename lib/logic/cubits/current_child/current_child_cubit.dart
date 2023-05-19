@@ -48,4 +48,22 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
     }
     return null;
   }
+
+  Future<ChildModel?> resetCurrentChild() async {
+    emit(NoCurrentChildState());
+  }
+
+  Future<ChildModel?> setFirstChildCurrent(Function onSuccess) async {
+    List<ChildModel>? children = await childRepository.getAllChildren();
+    if (children != null && children.isNotEmpty) {
+      ChildModel child = children.first;
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setInt(SharedPrefKeys.selectedChildId, child.id);
+      onSuccess();
+      emit(CurrentChildChangedState(new_current_child: child));
+    } else {
+      onSuccess();
+      emit(NoCurrentChildState());
+    }
+  }
 }

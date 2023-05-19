@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AppButton extends StatelessWidget {
   final String label;
@@ -10,6 +11,7 @@ class AppButton extends StatelessWidget {
   final Widget? trailingWidget;
   final Color? color;
   final Function? onPressed;
+  final String? SVGLink;
 
   const AppButton({
     required this.label,
@@ -20,6 +22,7 @@ class AppButton extends StatelessWidget {
     this.trailingWidget,
     this.color = AppColors.primaryColor,
     this.onPressed,
+    this.SVGLink,
   }) : super();
 
   @override
@@ -42,14 +45,30 @@ class AppButton extends StatelessWidget {
           fit: StackFit.passthrough,
           children: <Widget>[
             Center(
-              child: Text(
-                label,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: fontSize,
-                  fontWeight: fontWeight,
-                ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: fontSize,
+                      fontWeight: fontWeight,
+                    ),
+                  ),
+                  SVGLink != null
+                      ? SizedBox(width: fontSize)
+                      : SizedBox.shrink(),
+                  SVGLink != null
+                      ? SvgPicture.asset(
+                          SVGLink!,
+                          width: fontSize * 2,
+                          alignment: Alignment.center,
+                          color: Colors.white,
+                        )
+                      : SizedBox.shrink(),
+                ],
               ),
             ),
             if (trailingWidget != null)

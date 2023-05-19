@@ -5,11 +5,15 @@ import 'package:child_milestone/data/dao/milestone_dao.dart';
 import 'package:child_milestone/data/dao/notification_dao.dart';
 import 'package:child_milestone/data/dao/rating_dao.dart';
 import 'package:child_milestone/data/dao/tip_dao.dart';
+import 'package:child_milestone/data/dao/vaccine_dao.dart';
+import 'package:child_milestone/data/database/database.dart';
+import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/data/repositories/rating_repository.dart';
 import 'package:child_milestone/data/repositories/tip_repository.dart';
+import 'package:child_milestone/data/repositories/vaccine_repository.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
@@ -17,6 +21,7 @@ import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/rating/rating_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
+import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/cubits/internet_connectivity/internet_cubit.dart';
@@ -84,6 +89,8 @@ class Application extends StatelessWidget {
                 NotificationDao(), ChildDao(), MilestoneDao())),
         RepositoryProvider<RatingRepository>(
             create: (context) => RatingRepository(RatingDao())),
+        RepositoryProvider<VaccineRepository>(
+            create: (context) => VaccineRepository(VaccineDao())),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -92,19 +99,43 @@ class Application extends StatelessWidget {
                 InternetCubit(connectivity: connectivity),
           ),
           BlocProvider<AuthBloc>(
-            create: (context) => AuthBloc(),
+            create: (context) => AuthBloc(
+              childRepository: RepositoryProvider.of<ChildRepository>(context),
+              ratingRepository:
+                  RepositoryProvider.of<RatingRepository>(context),
+              decisionRepository:
+                  RepositoryProvider.of<DecisionRepository>(context),
+              notificationRepository:
+                  RepositoryProvider.of<NotificationRepository>(context),
+            ),
           ),
           BlocProvider<ChildBloc>(
             create: (context) => ChildBloc(
               childRepository: RepositoryProvider.of<ChildRepository>(context),
               notificationRepository:
                   RepositoryProvider.of<NotificationRepository>(context),
+              decisionRepository:
+                  RepositoryProvider.of<DecisionRepository>(context),
+              milestoneRepository:
+                  RepositoryProvider.of<MilestoneRepository>(context),
+              vaccineRepository:
+                  RepositoryProvider.of<VaccineRepository>(context),
+              ratingRepository:
+                  RepositoryProvider.of<RatingRepository>(context),
             ),
           ),
           BlocProvider<MilestoneBloc>(
             create: (context) => MilestoneBloc(
               milestoneRepository:
                   RepositoryProvider.of<MilestoneRepository>(context),
+              decisionRepository:
+                  RepositoryProvider.of<DecisionRepository>(context),
+            ),
+          ),
+          BlocProvider<VaccineBloc>(
+            create: (context) => VaccineBloc(
+              vaccineRepository:
+                  RepositoryProvider.of<VaccineRepository>(context),
               decisionRepository:
                   RepositoryProvider.of<DecisionRepository>(context),
             ),
@@ -121,6 +152,8 @@ class Application extends StatelessWidget {
               notificationRepository:
                   RepositoryProvider.of<NotificationRepository>(context),
               childRepository: RepositoryProvider.of<ChildRepository>(context),
+              milestoneRepository:
+                  RepositoryProvider.of<MilestoneRepository>(context),
             ),
           ),
           BlocProvider<NotificationBloc>(
@@ -147,6 +180,8 @@ class Application extends StatelessWidget {
             create: (context) => AllPreviousDecisionTakenCubit(
               milestoneRepository:
                   RepositoryProvider.of<MilestoneRepository>(context),
+              vaccineRepository:
+                  RepositoryProvider.of<VaccineRepository>(context),
               decisionRepository:
                   RepositoryProvider.of<DecisionRepository>(context),
             ),
@@ -154,12 +189,6 @@ class Application extends StatelessWidget {
         ],
         child: BlocBuilder<LanguageCubit, Locale>(
           builder: (context, lang) {
-            final internetState = context.watch<InternetCubit>().state;
-            if (internetState is InternetConnected) {
-              print('InternetConnected:');
-              uploadData(context);
-            }
-
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {

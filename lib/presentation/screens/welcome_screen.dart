@@ -1,10 +1,15 @@
 import 'package:child_milestone/constants/strings.dart';
+import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class WelcomeScreen extends StatelessWidget {
   final String imagePath = "assets/images/welcome_image.png";
@@ -137,10 +142,11 @@ class WelcomeScreen extends StatelessWidget {
   }
 
   void onGetStartedClicked(BuildContext context) {
-    // Navigator.popAndPushNamed(context, Routes.login);
+    BlocProvider.of<CurrentChildCubit>(context).resetCurrentChild();
+    Navigator.popAndPushNamed(context, Routes.login);
 
     // remove the next line when adding login service
-    Navigator.popAndPushNamed(context, Routes.home);
+    // Navigator.popAndPushNamed(context, Routes.home);
 
     // BlocProvider.of<AuthBloc>(context).add(LoginEvent());
     // Navigator.of(context).pushReplacement(new MaterialPageRoute(

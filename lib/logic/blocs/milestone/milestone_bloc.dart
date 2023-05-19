@@ -91,6 +91,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                 DecisionModel(
                     childId: event.child.id,
                     milestoneId: milestone.id,
+                    vaccineId: 0,
                     decision: -1,
                     takenAt: DateTime.now())));
       }
@@ -118,6 +119,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                 DecisionModel(
                     childId: event.child.id,
                     milestoneId: milestone.id,
+                    vaccineId: 0,
                     decision: -1,
                     takenAt: DateTime.now())));
       }
@@ -145,6 +147,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                 DecisionModel(
                     childId: event.child.id,
                     milestoneId: milestone.id,
+                    vaccineId: 0,
                     decision: -1,
                     takenAt: DateTime.now())));
       }
@@ -174,6 +177,7 @@ class MilestoneBloc extends Bloc<MilestoneEvent, MilestoneState> {
                 DecisionModel(
                     childId: event.child.id,
                     milestoneId: milestone.id,
+                    vaccineId: 0,
                     decision: -1,
                     takenAt: DateTime.now())));
       }

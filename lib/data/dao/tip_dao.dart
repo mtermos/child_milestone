@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/tip.dart';
+import 'package:sqflite/sql.dart';
 
 class TipDao {
   final dbProvider = DatabaseProvider.dbProvider;
@@ -9,7 +10,8 @@ class TipDao {
   //Adds new Tip record
   Future<int> createTip(TipModel tip) async {
     final db = await dbProvider.database;
-    var result = db.insert(tipsTABLE, tip.toMap());
+    var result = db.insert(tipsTABLE, tip.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore);
     return result;
   }
 

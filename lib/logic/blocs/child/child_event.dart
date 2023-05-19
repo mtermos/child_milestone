@@ -47,5 +47,18 @@ class GetChildEvent extends ChildEvent {
 
 class DeleteChildEvent extends ChildEvent {
   final int id;
-  const DeleteChildEvent({required this.id});
+  final Function onSuccess;
+  final Function onFail;
+  const DeleteChildEvent({
+    required this.id,
+    required this.onSuccess,
+    required this.onFail,
+  });
+}
+
+class UploadChildrenEvent extends ChildEvent {
+  final BuildContext context;
+  const UploadChildrenEvent({
+    required this.context,
+  });
 }

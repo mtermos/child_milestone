@@ -19,6 +19,9 @@ class DecisionRepository {
   Future insertDecision(DecisionModel decision) =>
       decisionDao.createDecision(decision);
 
+  Future insertDecisionsList(List<DecisionModel> decisions) =>
+      decisionDao.createDecisionsList(decisions);
+
   Future updateDecision(DecisionModel decision) =>
       decisionDao.updateDecision(decision);
 
@@ -61,6 +64,14 @@ class DecisionRepository {
       int childId, int milestoneId) async {
     Map<String, dynamic> decisionMap =
         await decisionDao.getDecisionByChildAndMilestone(childId, milestoneId);
+
+    return decisionMap.isNotEmpty ? DecisionModel.fromMap(decisionMap) : null;
+  }
+
+  Future<DecisionModel?> getDecisionByChildAndVaccine(
+      int childId, int vaccineId) async {
+    Map<String, dynamic> decisionMap =
+        await decisionDao.getDecisionByChildAndVaccine(childId, vaccineId);
 
     return decisionMap.isNotEmpty ? DecisionModel.fromMap(decisionMap) : null;
   }

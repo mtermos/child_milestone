@@ -291,14 +291,14 @@ List<TipModel> tipsItems = [
     id: 35,
     title: "35",
     body: "35",
-    videoURL: "https://raisingchildren.net.au/preschoolers/videos",
+    webURL: "https://raisingchildren.net.au/preschoolers/videos",
     period: 11,
   ),
   TipModel(
     id: 36,
     title: "36",
     body: "36",
-    videoURL:
+    webURL:
         "https://raisingchildren.net.au/preschoolers/videos/development-3-5-years",
     period: 11,
   ),
@@ -306,7 +306,7 @@ List<TipModel> tipsItems = [
     id: 37,
     title: "37",
     body: "37",
-    videoURL:
+    webURL:
         "https://raisingchildren.net.au/preschoolers/videos/play-learning-3-5-years",
     period: 11,
   ),
@@ -314,7 +314,7 @@ List<TipModel> tipsItems = [
     id: 38,
     title: "38",
     body: "38",
-    videoURL:
+    webURL:
         "https://raisingchildren.net.au/preschoolers/videos/social-development",
     period: 11,
   ),

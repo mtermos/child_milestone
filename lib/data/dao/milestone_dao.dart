@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
+import 'package:sqflite/sql.dart';
 
 class MilestoneDao {
   final dbProvider = DatabaseProvider.dbProvider;
@@ -9,7 +10,8 @@ class MilestoneDao {
   //Adds new Milestone record
   Future<int> createMilestone(MilestoneItem milestone) async {
     final db = await dbProvider.database;
-    var result = db.insert(milestonesTABLE, milestone.toMap());
+    var result = db.insert(milestonesTABLE, milestone.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.ignore);
     return result;
   }
 

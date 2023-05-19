@@ -98,6 +98,19 @@ class LoadedDecisionByChildAndMilestoneState extends DecisionState {
   List<Object?> get props => [decision];
 }
 
+class LoadingDecisionByChildAndVaccineState extends DecisionState {}
+
+class ErrorLoadingDecisionByChildAndVaccineState extends DecisionState {}
+
+class LoadedDecisionByChildAndVaccineState extends DecisionState {
+  final DecisionModel decision;
+
+  LoadedDecisionByChildAndVaccineState(this.decision);
+
+  @override
+  List<Object?> get props => [decision];
+}
+
 class UploadingDecisionState extends DecisionState {}
 
 class ErrorUploadingDecisionState extends DecisionState {

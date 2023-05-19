@@ -23,6 +23,7 @@ class LoginBackground extends StatelessWidget {
         : MediaQuery.of(context).size.height * 0.0011;
 
     return Container(
+      color: Colors.white,
       width: double.infinity,
       height: size.height,
       child: Stack(

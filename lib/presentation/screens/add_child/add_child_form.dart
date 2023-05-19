@@ -71,16 +71,25 @@ class _AddChildFormState extends State<AddChildForm> {
 
     final format = DateFormat("yyyy-MM-dd");
 
-    return BlocBuilder<ChildBloc, ChildState>(
+    return BlocConsumer<ChildBloc, ChildState>(
+      listener: (context, state) {
+        if (state is ErrorAddingChildState) {
+          var snackBar = SnackBar(
+            content:
+                Text(AppLocalizations.of(context)!.checkInternetConnection),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        }
+      },
       builder: (context, state) {
         if (state is AddingChildState) {
           return Center(
             child: SizedBox(
-              width: isMOBILE ? size.width * 0.5 : size.width * 0.35,
+              width: isMOBILE ? size.width * 0.35 : size.width * 0.35,
               child: const LoadingIndicator(
-                indicatorType: Indicator.ballPulse,
+                indicatorType: Indicator.circleStrokeSpin,
                 colors: [AppColors.primaryColor],
-                strokeWidth: 2,
+                strokeWidth: 4,
                 backgroundColor: Colors.white,
                 pathBackgroundColor: Colors.white,
               ),

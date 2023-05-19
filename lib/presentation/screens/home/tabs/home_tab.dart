@@ -1,14 +1,13 @@
 import 'dart:io';
 
+import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
-import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -47,6 +46,7 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     const String profilePicBg = "assets/images/profile_pic_bg.svg";
     String summary = "assets/images/summary.png";
+    String vaccinesIcon = "assets/images/vaccines_ar.png";
     String tips = "assets/images/tips.png";
     String arrowsDown = "assets/icons/arrows-down.svg";
     Size size = MediaQuery.of(context).size;
@@ -238,6 +238,8 @@ class _HomeTabState extends State<HomeTab> {
                       ? BlocBuilder<DecisionBloc, DecisionState>(
                           builder: (context, state) {
                             if (state is LoadedDecisionsByAgeState) {
+                              double percentDone = state.decisions.length /
+                                  state.milestonesLength;
                               return InkWell(
                                 child: Container(
                                   width: isMOBILE
@@ -278,8 +280,9 @@ class _HomeTabState extends State<HomeTab> {
                                               isRTL: isRTL,
                                               lineHeight: textScale * 15,
                                               animationDuration: 2500,
-                                              percent: (state.decisions.length /
-                                                  state.milestonesLength),
+                                              percent: percentDone.isNaN
+                                                  ? 0
+                                                  : percentDone,
                                               progressColor: Colors.red,
                                             ),
                                           ),
@@ -329,14 +332,14 @@ class _HomeTabState extends State<HomeTab> {
 
                   correctedAge > 0
                       ? BlocBuilder<AllPreviousDecisionTakenCubit,
-                          Map<int, bool>>(builder: (context, state) {
+                          Map<int, allTaken>>(builder: (context, state) {
                           if (currentChild != null) {
                             if (state[currentChild!.id] != null &&
-                                !state[currentChild!.id]!) {
+                                !state[currentChild!.id]!.milestones) {
                               return Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: isMOBILE
-                                      ? size.width * 0.05
+                                      ? size.width * 0.03
                                       : size.width * 0.1,
                                   vertical: isMOBILE ? 0 : size.height * 0.01,
                                 ),
@@ -380,20 +383,61 @@ class _HomeTabState extends State<HomeTab> {
                                         ),
                                       ],
                                     ),
+                                    // SizedBox(width: size.width * 0.01),
                                     Expanded(child: SizedBox.shrink()),
-                                    SizedBox(
-                                      width: isMOBILE
-                                          ? size.width * 0.40
-                                          : size.width * 0.45,
-                                      child: Center(
-                                        child: AppText(
-                                          text:
-                                              "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
-                                          color: Colors.red,
-                                          fontSize: textScale * 16,
+
+                                    Stack(
+                                      children: [
+                                        InkWell(
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          child: Image.asset(
+                                            vaccinesIcon,
+                                            width: isMOBILE
+                                                ? size.width * 0.45
+                                                : size.width * 0.25,
+                                          ),
+                                          onTap: () {
+                                            Navigator.pushNamed(
+                                                context, Routes.vaccine);
+                                          },
                                         ),
-                                      ),
+                                        Positioned(
+                                          right: 0,
+                                          child: Container(
+                                            padding: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            constraints: const BoxConstraints(
+                                              minWidth: 12,
+                                              minHeight: 12,
+                                            ),
+                                            child: Icon(
+                                              Icons.crisis_alert,
+                                              color: Colors.white,
+                                              size: textScale * 20,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
+                                    // Expanded(child: SizedBox.shrink()),
+                                    // SizedBox(
+                                    //   width: isMOBILE
+                                    //       ? size.width * 0.40
+                                    //       : size.width * 0.45,
+                                    //   child: Center(
+                                    //     child: AppText(
+                                    //       text:
+                                    //           "لا زال يوحد بعض المتابعات من مراحل سابقة لم يتم الاجابة عنها، نرجو منكم الدخول إلى صفحة للاجابة.",
+                                    //       color: Colors.red,
+                                    //       fontSize: textScale * 16,
+                                    //     ),
+                                    //   ),
+                                    // ),
                                     // const Spacer(),
                                     // InkWell(
                                     //   borderRadius: BorderRadius.circular(12),
@@ -417,24 +461,40 @@ class _HomeTabState extends State<HomeTab> {
                               return Padding(
                                 padding: EdgeInsets.symmetric(
                                   horizontal: isMOBILE
-                                      ? size.width * 0.05
+                                      ? size.width * 0.03
                                       : size.width * 0.1,
                                   vertical: isMOBILE ? 0 : size.height * 0.01,
                                 ),
-                                child: Center(
-                                  child: InkWell(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: Image.asset(
-                                      summary,
-                                      width: isMOBILE
-                                          ? size.width * 0.45
-                                          : size.width * 0.3,
+                                child: Row(
+                                  children: [
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.asset(
+                                        summary,
+                                        width: isMOBILE
+                                            ? size.width * 0.45
+                                            : size.width * 0.3,
+                                      ),
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, Routes.childSummary);
+                                      },
                                     ),
-                                    onTap: () {
-                                      Navigator.pushNamed(
-                                          context, Routes.childSummary);
-                                    },
-                                  ),
+                                    Expanded(child: SizedBox.shrink()),
+                                    InkWell(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Image.asset(
+                                        vaccinesIcon,
+                                        width: isMOBILE
+                                            ? size.width * 0.45
+                                            : size.width * 0.25,
+                                      ),
+                                      onTap: () {
+                                        Navigator.pushNamed(
+                                            context, Routes.vaccine);
+                                      },
+                                    ),
+                                  ],
                                 ),
                               );
                             }

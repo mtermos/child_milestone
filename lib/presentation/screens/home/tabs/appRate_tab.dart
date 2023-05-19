@@ -59,12 +59,15 @@ class _AppRateState extends State<AppRateTab> {
       2: AppLocalizations.of(context)!.contentRating,
       3: AppLocalizations.of(context)!.educationalContentRating,
     };
+    bool _isDialogShowing = false;
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: BlocConsumer<RatingBloc, RatingState>(
           listener: (context, state) {
-            if (state is AddedRatingState) {
+            if (state is AddedRatingsState && !_isDialogShowing) {
+              _isDialogShowing = true;
               showDialog(
                   context: context,
                   builder: (BuildContext context) {
@@ -74,6 +77,7 @@ class _AppRateState extends State<AppRateTab> {
                           AppLocalizations.of(context)!.ratingSuccessDesc,
                       text: AppLocalizations.of(context)!.goBack,
                       img: Image.asset("assets/images/success.png"),
+                      onButtonPress: () {},
                     );
                   });
             }
@@ -159,6 +163,7 @@ class _AppRateState extends State<AppRateTab> {
                                 ),
                                 onRatingUpdate: (rating) {
                                   e.rating = rating;
+                                  e.uploaded = false;
                                   e.takenAt = DateTime.now();
                                 },
                               ),
@@ -179,10 +184,9 @@ class _AppRateState extends State<AppRateTab> {
                         padding: EdgeInsets.symmetric(
                             vertical: isMOBILE ? 18 : textScale * 24),
                         onPressed: () {
-                          for (var rating in ratingsList) {
+                          _isDialogShowing = false;
                             BlocProvider.of<RatingBloc>(context)
-                                .add(AddRatingEvent(rating: rating));
-                          }
+                                .add(AddRatingsEvent(ratings: ratingsList));
                         },
                       ),
                     ),

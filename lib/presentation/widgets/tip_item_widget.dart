@@ -21,6 +21,7 @@ class _TipItemWidgetState extends State<TipItemWidget> {
   final String youtubeLogo = "assets/icons/youtube.png";
   final String videoSVG = "assets/images/video.svg";
   final String documentSVG = "assets/images/document.svg";
+  final String webSVG = "assets/images/web.svg";
 
   @override
   Widget build(BuildContext context) {
@@ -152,6 +153,25 @@ class _TipItemWidgetState extends State<TipItemWidget> {
             },
           )
         },
+      );
+    } else if (widget.item.webURL != null) {
+      body = InkWell(
+        child: Column(
+          children: [
+            SvgPicture.asset(
+              webSVG,
+              width: size.width * 0.25,
+              alignment: Alignment.center,
+            ),
+            SizedBox(height: size.height * 0.01),
+            AppText(
+              text: AppLocalizations.of(context)!.clickToOpenURL,
+              color: Colors.black,
+              fontSize: textScale * 16,
+            ),
+          ],
+        ),
+        onTap: () => launchUrl(Uri.parse(widget.item.webURL!)),
       );
     } else {
       body = AppText(

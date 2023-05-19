@@ -1,5 +1,6 @@
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
+import 'package:child_milestone/data/models/vaccine.dart';
 import 'package:child_milestone/presentation/screens/add_child/add_child_main.dart';
 import 'package:child_milestone/presentation/screens/child_summary/child_summary_main.dart';
 import 'package:child_milestone/presentation/screens/edit_child/edit_child_main.dart';
@@ -7,6 +8,7 @@ import 'package:child_milestone/presentation/screens/login/login_main.dart';
 import 'package:child_milestone/presentation/screens/home/home_main.dart';
 import 'package:child_milestone/presentation/screens/milestone/milestone_main.dart';
 import 'package:child_milestone/presentation/screens/settings/settings_main.dart';
+import 'package:child_milestone/presentation/screens/vaccines/vaccine_main.dart';
 import 'package:child_milestone/presentation/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/screens/splash_screen.dart';
@@ -52,6 +54,11 @@ class AppRouter {
       case Routes.editChild:
         return MaterialPageRoute(
           builder: (_) => EditChildScreen(childId: key as int),
+        );
+      case Routes.vaccine:
+        return MaterialPageRoute(
+          builder: (_) =>
+              VaccineScreen(periodId: key != null ? key as int : null),
         );
       default:
         return null;

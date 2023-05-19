@@ -8,11 +8,11 @@ abstract class RatingEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AddRatingEvent extends RatingEvent {
-  final RatingModel rating;
+class AddRatingsEvent extends RatingEvent {
+  final List<RatingModel> ratings;
 
-  const AddRatingEvent({
-    required this.rating,
+  const AddRatingsEvent({
+    required this.ratings,
   });
 }
 
@@ -23,4 +23,8 @@ class DeleteAllRatingsEvent extends RatingEvent {}
 class GetRatingEvent extends RatingEvent {
   final int ratingId;
   const GetRatingEvent({required this.ratingId});
+}
+
+class UploadRatingsEvent extends RatingEvent {
+  const UploadRatingsEvent();
 }

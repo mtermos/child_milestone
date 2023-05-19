@@ -5,6 +5,7 @@ class DecisionModel {
   int? id;
   int childId;
   int milestoneId;
+  int vaccineId;
   int decision;
   bool uploaded;
   DateTime takenAt;
@@ -12,6 +13,7 @@ class DecisionModel {
     this.id,
     required this.childId,
     required this.milestoneId,
+    required this.vaccineId,
     required this.decision,
     required this.takenAt,
     this.uploaded = false,
@@ -21,6 +23,7 @@ class DecisionModel {
     int? id,
     int? childId,
     int? milestoneId,
+    int? vaccineId,
     int? decision,
     bool? uploaded,
     DateTime? takenAt,
@@ -29,6 +32,7 @@ class DecisionModel {
       id: id ?? this.id,
       childId: childId ?? this.childId,
       milestoneId: milestoneId ?? this.milestoneId,
+      vaccineId: vaccineId ?? this.vaccineId,
       decision: decision ?? this.decision,
       uploaded: uploaded ?? this.uploaded,
       takenAt: takenAt ?? this.takenAt,
@@ -40,6 +44,7 @@ class DecisionModel {
       'id': id,
       'childId': childId,
       'milestoneId': milestoneId,
+      'vaccineId': vaccineId,
       'decision': decision,
       'uploaded': uploaded ? 1 : 0,
       'takenAt': takenAt.millisecondsSinceEpoch,
@@ -51,6 +56,7 @@ class DecisionModel {
       id: map['id'] != null ? map['id'] as int : null,
       childId: map['childId'] as int,
       milestoneId: map['milestoneId'] as int,
+      vaccineId: map['vaccineId'] as int,
       decision: map['decision'] as int,
       uploaded: map['uploaded'] == 1,
       takenAt: DateTime.fromMillisecondsSinceEpoch(map['takenAt'] as int),
@@ -64,7 +70,7 @@ class DecisionModel {
 
   @override
   String toString() {
-    return 'DecisionModel(id: $id, childId: $childId, milestoneId: $milestoneId, decision: $decision, uploaded: $uploaded, takenAt: $takenAt)';
+    return 'DecisionModel(id: $id, childId: $childId, milestoneId: $milestoneId, vaccineId: $vaccineId, decision: $decision, uploaded: $uploaded, takenAt: $takenAt)';
   }
 
   @override
@@ -74,6 +80,7 @@ class DecisionModel {
     return other.id == id &&
         other.childId == childId &&
         other.milestoneId == milestoneId &&
+        other.vaccineId == vaccineId &&
         other.decision == decision &&
         other.uploaded == uploaded &&
         other.takenAt == takenAt;
@@ -84,6 +91,7 @@ class DecisionModel {
     return id.hashCode ^
         childId.hashCode ^
         milestoneId.hashCode ^
+        vaccineId.hashCode ^
         decision.hashCode ^
         uploaded.hashCode ^
         takenAt.hashCode;

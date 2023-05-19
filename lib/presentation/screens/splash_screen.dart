@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/data_providers/tips_items_list.dart';
 import 'package:child_milestone/data/data_providers/notifications_items_list.dart';
+import 'package:child_milestone/data/data_providers/vaccine_items_list.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
@@ -11,6 +12,7 @@ import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
+import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -51,6 +53,9 @@ class _SplashScreenState extends State<SplashScreen> {
   void checkUserIsLogged() async {
     final prefs = await SharedPreferences.getInstance();
     // await prefs.setInt(SharedPrefKeys.selectedChildId, 1);
+    // await prefs.setBool(SharedPrefKeys.isLogged, true);
+    // await prefs.clear();
+
     if ((prefs.getBool(SharedPrefKeys.isLogged) != null) &&
         prefs.getBool(SharedPrefKeys.isLogged)!) {
       BlocProvider.of<CurrentChildCubit>(context).changeCurrentChildById(
@@ -60,8 +65,9 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       await addTempMilestones();
       await addTempTips();
+      await addTempVaccines();
       // remove the next line when adding login service
-      await prefs.setBool(SharedPrefKeys.isLogged, true);
+      // await prefs.setBool(SharedPrefKeys.isLogged, true);
       Navigator.popAndPushNamed(context, Routes.welcome);
     }
   }
@@ -80,10 +86,13 @@ class _SplashScreenState extends State<SplashScreen> {
     NotificationService _notificationService = NotificationService();
     await _notificationService.cancelAllNotifications();
     BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
-    await addTempChild();
+    // await addTempChild();
     await addTempMilestones();
+    await addTempVaccines();
     await addTempTips();
-    await addTempNotifications();
+    // await addTempNotifications();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.clear();
   }
 
   addTempChild() async {
@@ -165,6 +174,13 @@ class _SplashScreenState extends State<SplashScreen> {
     for (var milestone in milestoneItemsList) {
       BlocProvider.of<MilestoneBloc>(context)
           .add(AddMilestoneEvent(milestone: milestone));
+    }
+  }
+
+  addTempVaccines() {
+    for (var vaccine in vaccinesList) {
+      BlocProvider.of<VaccineBloc>(context)
+          .add(AddVaccineEvent(vaccine: vaccine));
     }
   }
 
