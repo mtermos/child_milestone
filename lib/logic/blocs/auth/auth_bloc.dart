@@ -71,23 +71,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           String? response = await getChildFromBackend(childID, event.context);
         }
 
-        List<dynamic> ratings = responseBody["data"]["user"]["rating"];
-        for (var rating in ratings) {
-          double ratingValue = 0.0;
-          if (rating["rating"] is String) {
-            ratingValue = double.parse(rating["rating"]);
-          } else {
-            ratingValue = rating["rating"].toDouble();
+        if (responseBody["data"]["user"]["rating"] != null) {
+          List<dynamic> ratings = responseBody["data"]["user"]["rating"];
+          for (var rating in ratings) {
+            double ratingValue = 0.0;
+            if (rating["rating"] is String) {
+              ratingValue = double.parse(rating["rating"]);
+            } else {
+              ratingValue = rating["rating"].toDouble();
+            }
+            await ratingRepository.insertRating(
+              RatingModel(
+                ratingId: rating["ratingId"] as int,
+                rating: ratingValue,
+                uploaded: true,
+                takenAt: DateTime.fromMillisecondsSinceEpoch(
+                    rating["takenAt"] as int),
+              ),
+            );
           }
-          await ratingRepository.insertRating(
-            RatingModel(
-              ratingId: rating["ratingId"] as int,
-              rating: ratingValue,
-              uploaded: true,
-              takenAt:
-                  DateTime.fromMillisecondsSinceEpoch(rating["takenAt"] as int),
-            ),
-          );
         }
 
         print('LogedState: ${LogedState}');
@@ -146,7 +148,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             },
           ),
         );
-        print('response: ${response.data}');
         if (response.statusCode == 201) {
           DateTime dateOfBirth =
               DateTime.parse(response.data["data"]["child"]["dateOfBirth"]);
@@ -159,13 +160,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
 
           if (response.data["data"]["child"]["data"] != null) {
+            // print(
+            //     'getChildFromBackend.response: ${response.data["data"]["child"]["data"].runtimeType}');
             // Map data = response.data["data"]["child"]["data"];
-            Map data = json.decode(response.data["data"]["child"]["data"]);
+            Map data = {};
+            if (response.data["data"]["child"]["data"].runtimeType == String) {
+              data = json.decode(response.data["data"]["child"]["data"]);
+            } else {
+              data = response.data["data"]["child"]["data"];
+            }
             if (data["milestones"] != null) {
               milestonesDecisions = data["milestones"];
             }
             if (data["childID"] != null) {
-              int frontendID = data["childID"];
+              frontendID = data["childID"];
             }
             if (data["vaccines"] != null) {
               vaccinesDecisions = data["vaccines"];
@@ -192,7 +200,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           return "response not 200";
         }
       } catch (e) {
-        print('e: ${e}');
+        print('getChildFromBackend error: ${e}');
         return "connection failed";
       }
     }

@@ -43,7 +43,7 @@ class _BottomBarViewState extends State<BottomBarView>
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
     final Size size = MediaQuery.of(context).size;
-    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
     final textScale = isMOBILE
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;
@@ -240,7 +240,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     localizeTitle(widget.tabIconData);
     final Size size = MediaQuery.of(context).size;
-    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
     final textScale = isMOBILE
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;

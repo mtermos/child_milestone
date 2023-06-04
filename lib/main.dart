@@ -200,12 +200,12 @@ class Application extends StatelessWidget {
                 }
               },
               child: MaterialApp(
-                builder: (context, child) => ResponsiveWrapper.builder(
-                  ClampingScrollWrapper.builder(context, child!),
+                builder: (context, child) => ResponsiveBreakpoints.builder(
+                  child: ClampingScrollWrapper.builder(context, child!),
                   breakpoints: const [
-                    ResponsiveBreakpoint.resize(350, name: MOBILE),
-                    ResponsiveBreakpoint.resize(600, name: TABLET),
-                    ResponsiveBreakpoint.resize(1000, name: DESKTOP),
+                    Breakpoint(start: 0, end: 450, name: MOBILE),
+                    Breakpoint(start: 451, end: 800, name: TABLET),
+                    Breakpoint(start: 801, end: double.infinity, name: DESKTOP),
                   ],
                 ),
                 debugShowCheckedModeBanner: false,

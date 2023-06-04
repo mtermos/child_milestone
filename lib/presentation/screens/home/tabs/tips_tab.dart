@@ -36,7 +36,7 @@ class _TipsState extends State<TipsTab> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
     final textScale = isMOBILE
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0015;

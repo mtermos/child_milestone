@@ -29,7 +29,7 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
   Widget build(BuildContext context) {
     const String xIcon = "assets/icons/x-icon.png";
     Size size = MediaQuery.of(context).size;
-    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
     final textScale = isMOBILE
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;

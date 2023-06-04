@@ -22,7 +22,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
+  // final _formKey = GlobalKey<FormState>();
   final usernameController = TextEditingController();
   final passController = TextEditingController();
   var size;
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
     final textScale = isMOBILE
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;

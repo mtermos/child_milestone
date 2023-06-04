@@ -50,7 +50,7 @@ class _HomeTabState extends State<HomeTab> {
     String tips = "assets/images/tips.png";
     String arrowsDown = "assets/icons/arrows-down.svg";
     Size size = MediaQuery.of(context).size;
-    final isMOBILE = ResponsiveWrapper.of(context).isSmallerThan(TABLET);
+    final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
     final textScale = isMOBILE
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;
