@@ -1,7 +1,10 @@
+import 'package:child_milestone/data/models/log.dart';
 import 'package:child_milestone/data/models/tip.dart';
+import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -98,7 +101,18 @@ class _TipItemWidgetState extends State<TipItemWidget> {
               //   color: Colors.black,
               //   fontSize: textScale * 16,
               // ),
-              onTap: () => launchUrl(Uri.parse(widget.item.videoURL!)),
+              onTap: () {
+                BlocProvider.of<LogBloc>(context).add(
+                  AddLogEvent(
+                    log: LogModel(
+                      type: 2,
+                      name: "open video: " + widget.item.videoURL!,
+                      takenAt: DateTime.now(),
+                    ),
+                  ),
+                );
+                launchUrl(Uri.parse(widget.item.videoURL!));
+              },
             )
           ],
         );
@@ -121,7 +135,16 @@ class _TipItemWidgetState extends State<TipItemWidget> {
           ],
         ),
         // onTap: () => launchUrl(Uri.parse(widget.item.documentURL!)),
-        onTap: () => {
+        onTap: () {
+          BlocProvider.of<LogBloc>(context).add(
+            AddLogEvent(
+              log: LogModel(
+                type: 2,
+                name: "open pdf: " + widget.item.documentURL!,
+                takenAt: DateTime.now(),
+              ),
+            ),
+          );
           showDialog(
             context: context,
             builder: (_) {
@@ -151,7 +174,7 @@ class _TipItemWidgetState extends State<TipItemWidget> {
                 body: SfPdfViewer.network(widget.item.documentURL!),
               );
             },
-          )
+          );
         },
       );
     } else if (widget.item.webURL != null) {

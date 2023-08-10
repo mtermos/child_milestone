@@ -1,5 +1,4 @@
 import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/vaccine.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 
@@ -33,6 +32,7 @@ class VaccineRepository {
       Vaccine vaccine = Vaccine.fromMap(result);
       return vaccine;
     }
+    return null;
   }
 
   Future<List<Vaccine>?> getVaccinesByAge(ChildModel child) async {

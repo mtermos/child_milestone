@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 abstract class AuthEvent {}
 
 class LoginEvent extends AuthEvent {
-  final BuildContext context;
+  final AppLocalizations appLocalizations;
   final String username;
   final String password;
 
   Function onSuccess;
 
-  LoginEvent(this.context, this.username, this.password, this.onSuccess);
+  LoginEvent(
+      this.appLocalizations, this.username, this.password, this.onSuccess);
 }
 
 class ForceLoginEvent extends AuthEvent {}

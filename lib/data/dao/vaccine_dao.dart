@@ -29,6 +29,7 @@ class VaccineDao {
         await db.query(vaccinesTABLE, where: 'id = ?', whereArgs: [vaccineId]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   Future<List<Map<String, dynamic>>?> getVaccinesByAge(int period) async {

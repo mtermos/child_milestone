@@ -37,6 +37,7 @@ class ChildDao {
     result = await db.query(childrenTABLE, where: 'id = ?', whereArgs: [id]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   //Update Child record

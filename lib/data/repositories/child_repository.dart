@@ -31,5 +31,6 @@ class ChildRepository {
       ChildModel child = ChildModel.fromMap(result);
       return child;
     }
+    return null;
   }
 }

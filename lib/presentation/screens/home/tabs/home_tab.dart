@@ -5,9 +5,11 @@ import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
+import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
+import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,7 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:timezone/timezone.dart' as tz;
 
 class HomeTab extends StatefulWidget {
   Function changeIndex;
@@ -33,6 +36,7 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   void initState() {
+    // BlocProvider.of<ChildBloc>(context).add(CompleteChildEvent());
     BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
     super.initState();
   }
@@ -44,6 +48,16 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<LogBloc>(context).add(GetAllLogsEvent());
+
+    final NotificationService _notificationService = NotificationService();
+    _notificationService.scheduleNotifications(
+      id: 1,
+      title: "title2",
+      body: "body2",
+      scheduledDate: tz.TZDateTime.from(
+          DateTime.now().add(Duration(seconds: 5)), tz.local),
+    );
     const String profilePicBg = "assets/images/profile_pic_bg.svg";
     String summary = "assets/images/summary.png";
     String vaccinesIcon = "assets/images/vaccines_ar.png";

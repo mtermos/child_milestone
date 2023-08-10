@@ -61,6 +61,7 @@ class RatingDao {
         await db.query(ratingsTABLE, where: 'id = ?', whereArgs: [ratingId]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   //Update Rating record

@@ -1,9 +1,11 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
+import 'package:child_milestone/data/dao/decision_dao.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/notification.dart';
@@ -18,6 +20,7 @@ import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,6 +50,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       required this.ratingRepository})
       : super(InitialChildState()) {
     on<AddChildEvent>(addChild);
+    on<CompleteChildEvent>(completeChild);
     on<EditChildEvent>(editChild);
     on<GetAllChildrenEvent>(getAllChildren);
     on<DeleteAllChildrenEvent>(deleteAllChildren);
@@ -68,7 +72,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         //     await childRepository.updateChild(event.child);
         // if (updateResult.item1) {
         if (event.addNotifications) {
-          await addPeriodsNotifications(event.context, event.child);
+          await addPeriodsNotifications(event.appLocalizations, event.child);
         }
         event.whenDone();
         emit(AddedChildState(event.child));
@@ -84,6 +88,47 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     }
   }
 
+  void completeChild(CompleteChildEvent event, Emitter<ChildState> emit) async {
+    decisionRepository.deleteAllDecisions();
+    List<ChildModel> children = await childRepository.getAllChildren();
+    ChildModel child = children.first;
+    print('completeChild: ${child}');
+    List<DecisionModel> decisionsList = [];
+
+    List<MilestoneItem> milestones =
+        await milestoneRepository.getAllMilestones();
+
+    for (var milestone in milestones) {
+      decisionsList.add(
+        DecisionModel(
+          childId: child.id,
+          milestoneId: milestone.id,
+          vaccineId: 0,
+          decision: 1,
+          takenAt: DateTime.now(),
+        ),
+      );
+    }
+
+    List<MilestoneItem> vaccines = await milestoneRepository.getAllMilestones();
+
+    for (var vaccine in vaccines) {
+      decisionsList.add(
+        DecisionModel(
+          childId: child.id,
+          milestoneId: 0,
+          vaccineId: vaccine.id,
+          decision: 1,
+          takenAt: DateTime.now(),
+        ),
+      );
+    }
+
+    DaoResponse resultMilestones =
+        await decisionRepository.insertDecisionsList(decisionsList);
+    print('resultMilestones: ${resultMilestones.item1}');
+  }
+
   void editChild(EditChildEvent event, Emitter<ChildState> emit) async {
     emit(EditingChildState());
     String? errorUploading = await updateChildOnBackend(event.child);
@@ -92,7 +137,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       if (result.item1) {
         if (event.addNotifications) {
           await _deleteAllNotifications(event.child.id);
-          await addPeriodsNotifications(event.context, event.child);
+          await addPeriodsNotifications(event.appLocalizations, event.child);
         }
         event.whenDone();
         emit(EditedChildState(event.child));
@@ -160,7 +205,8 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     }
   }
 
-  Future addPeriodsNotifications(BuildContext context, ChildModel child) async {
+  Future addPeriodsNotifications(
+      AppLocalizations appLocalizations, ChildModel child) async {
     int correctingWeeks = 37 - child.pregnancyDuration;
     if (correctingWeeks < 0) correctingWeeks = 0;
     DateTime temp;
@@ -180,17 +226,16 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       }
 
       if (temp.isAfter(DateTime.now())) {
-        String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+        String title = appLocalizations.newPeriodNotificationTitle;
         String body = "";
         if (child.gender == "Male") {
-          body = AppLocalizations.of(context)!.newPeriodNotificationBody1male +
+          body = appLocalizations.newPeriodNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2male;
+              appLocalizations.newPeriodNotificationBody2male;
         } else {
-          body = AppLocalizations.of(context)!
-                  .newPeriodNotificationBody1female +
+          body = appLocalizations.newPeriodNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2female;
+              appLocalizations.newPeriodNotificationBody2female;
         }
 
         NotificationModel notification = NotificationModel(
@@ -206,7 +251,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         DaoResponse<bool, int> response =
             await notificationRepository.insertNotification(notification);
         notification.id = response.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response.item2,
           title: title,
           body: body,
@@ -214,20 +259,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         );
 
         //adding doctor appointment notification
-        String title2 =
-            AppLocalizations.of(context)!.newDoctorAppNotificationTitle;
+        String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
         String body2 = "";
         if (child.gender == "Male") {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1male +
+          body2 = appLocalizations.newDoctorAppNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2male;
+              appLocalizations.newDoctorAppNotificationBody2male;
         } else {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1female +
+          body2 = appLocalizations.newDoctorAppNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2female;
+              appLocalizations.newDoctorAppNotificationBody2female;
         }
 
         NotificationModel notification2 = NotificationModel(
@@ -243,7 +285,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         DaoResponse<bool, int> response2 =
             await notificationRepository.insertNotification(notification2);
         notification2.id = response2.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response2.item2,
           title: title2,
           body: body2,
@@ -252,8 +294,8 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       }
 
       for (var i = 1; i <= period.numWeeks; i++) {
-        _addWeeklyNotifications(
-            temp.add(Duration(days: 7 * i)), period.id, context, child);
+        _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
+            appLocalizations, child);
       }
     }
 
@@ -271,18 +313,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
             DateTime(temp.year + period.startingYear, temp.month, temp.day, 10);
       }
       if (temp.isAfter(DateTime.now())) {
-        String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+        String title = appLocalizations.newPeriodNotificationTitle;
 
         String body = "";
         if (child.gender == "Male") {
-          body = AppLocalizations.of(context)!.newPeriodNotificationBody1male +
+          body = appLocalizations.newPeriodNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2male;
+              appLocalizations.newPeriodNotificationBody2male;
         } else {
-          body = AppLocalizations.of(context)!
-                  .newPeriodNotificationBody1female +
+          body = appLocalizations.newPeriodNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2female;
+              appLocalizations.newPeriodNotificationBody2female;
         }
 
         NotificationModel notification = NotificationModel(
@@ -298,7 +339,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         DaoResponse<bool, int> response =
             await notificationRepository.insertNotification(notification);
         notification.id = response.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response.item2,
           title: title,
           body: body,
@@ -306,20 +347,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         );
 
         //adding doctor appointment notification
-        String title2 =
-            AppLocalizations.of(context)!.newDoctorAppNotificationTitle;
+        String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
         String body2 = "";
         if (child.gender == "Male") {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1male +
+          body2 = appLocalizations.newDoctorAppNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2male;
+              appLocalizations.newDoctorAppNotificationBody2male;
         } else {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1female +
+          body2 = appLocalizations.newDoctorAppNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2female;
+              appLocalizations.newDoctorAppNotificationBody2female;
         }
 
         NotificationModel notification2 = NotificationModel(
@@ -335,7 +373,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         DaoResponse<bool, int> response2 =
             await notificationRepository.insertNotification(notification2);
         notification2.id = response2.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response2.item2,
           title: title2,
           body: body2,
@@ -343,14 +381,14 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         );
       }
       for (var i = 1; i <= period.numWeeks; i++) {
-        _addWeeklyNotifications(
-            temp.add(Duration(days: 7 * i)), period.id, context, child);
+        _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
+            appLocalizations, child);
       }
     }
   }
 
   Future _addWeeklyNotifications(DateTime dateTime, int period,
-      BuildContext context, ChildModel child) async {
+      AppLocalizations appLocalizations, ChildModel child) async {
     if (dateTime.isBefore(DateTime.now())) return;
     // const AndroidNotificationDetails androidPlatformChannelSpecifics =
     //     AndroidNotificationDetails(
@@ -364,17 +402,17 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     //     'repeating body', RepeatInterval.weekly, platformChannelSpecifics,
     //     androidAllowWhileIdle: true);
 
-    String title = AppLocalizations.of(context)!.weeklyNotificationTitle;
+    String title = appLocalizations.weeklyNotificationTitle;
     String body = "";
 
     if (child.gender == "Male") {
-      body = AppLocalizations.of(context)!.weeklyNotificationBody1male +
+      body = appLocalizations.weeklyNotificationBody1male +
           child.name +
-          AppLocalizations.of(context)!.weeklyNotificationBody2;
+          appLocalizations.weeklyNotificationBody2;
     } else {
-      body = AppLocalizations.of(context)!.weeklyNotificationBody1female +
+      body = appLocalizations.weeklyNotificationBody1female +
           child.name +
-          AppLocalizations.of(context)!.weeklyNotificationBody2;
+          appLocalizations.weeklyNotificationBody2;
     }
 
     NotificationModel notification = NotificationModel(
@@ -390,7 +428,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     DaoResponse<bool, int> response =
         await notificationRepository.insertNotification(notification);
     notification.id = response.item2;
-    await _notificationService.scheduleNotifications(
+    _notificationService.scheduleNotifications(
       id: response.item2,
       title: title,
       body: body,
@@ -436,6 +474,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       String? error = await updateChildOnBackend(child);
       if (error != null) {
         noErrorsUpdating = false;
+        print('ErrorUploadingChildrenState: ${error}');
         emit(ErrorUploadingChildrenState(error: error));
       }
     }
@@ -446,7 +485,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
     bool noErrorsRatings = true;
     if (newRatings.isNotEmpty) {
-      String? error = await updateRatingOnBackend(event.context);
+      String? error = await updateRatingOnBackend(event.appLocalizations);
       if (error == null) {
         for (var rating in newRatings) {
           rating.uploaded = true;
@@ -454,12 +493,14 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         }
       } else {
         noErrorsRatings = false;
+        print('ErrorUploadingChildrenState');
         emit(ErrorUploadingChildrenState(error: error));
       }
     }
 
-    if (noErrorsUploading && noErrorsUpdating && noErrorsRatings)
+    if (noErrorsUploading && noErrorsUpdating && noErrorsRatings) {
       emit(UploadedChildrenState());
+    }
   }
 
   Future<String?> uploadChild(ChildModel childModel) async {
@@ -504,6 +545,12 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     // data["milestones"] = await decisionsToJSON(childModel.id);
     // decisionsFromJSON(json.encode(data), childModel.id);
 
+    // final directory = await getApplicationDocumentsDirectory();
+    // final _localPath = directory.path;
+    // print('_localPath: ${_localPath}');
+    // final path = await "$_localPath/test";
+    // final file = await File(path);
+
     if (token != null) {
       try {
         data["childID"] = childModel.id;
@@ -521,6 +568,8 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
             "data": json.encode(data),
           }
         };
+
+        // file.writeAsString(json.encode(body));
         final response = await http.patch(
           Uri.parse(Urls.backendUrl + Urls.updateChildUrl),
           headers: {
@@ -529,6 +578,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
           },
           body: json.encode(body),
         );
+        // print('response: ${response.body}');
         if (response.statusCode == 200 || response.statusCode == 201) {
           return null;
         } else {
@@ -605,14 +655,15 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     // List decisions = decisionRepository.
   }
 
-  Future<String?> updateRatingOnBackend(BuildContext context) async {
+  Future<String?> updateRatingOnBackend(
+      AppLocalizations appLocalizations) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(SharedPrefKeys.accessToken);
     String? userID = prefs.getString(SharedPrefKeys.userID);
     if (token != null && userID != null) {
       try {
         Map<String, dynamic> data = {};
-        data["rating"] = await ratingsToJSON(context);
+        data["rating"] = await ratingsToJSON(appLocalizations);
         Object body = {
           "id": userID,
           "data": json.encode(data),
@@ -640,15 +691,15 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     return "token not available";
   }
 
-  Future<List> ratingsToJSON(BuildContext context) async {
+  Future<List> ratingsToJSON(AppLocalizations appLocalizations) async {
     List<RatingModel> ratings = await ratingRepository.getAllRatings();
 
     List data = [];
 
     Map<int, String> ratingsTexts = {
-      1: AppLocalizations.of(context)!.appInterfaceRating,
-      2: AppLocalizations.of(context)!.contentRating,
-      3: AppLocalizations.of(context)!.educationalContentRating,
+      1: appLocalizations.appInterfaceRating,
+      2: appLocalizations.contentRating,
+      3: appLocalizations.educationalContentRating,
     };
     for (var rating in ratings) {
       data.add({

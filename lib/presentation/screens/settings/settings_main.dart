@@ -2,15 +2,12 @@ import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
-import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
-import 'package:child_milestone/logic/shared/upload_data.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
 import 'package:flutter/material.dart';
 import 'package:child_milestone/presentation/screens/settings/settings_background.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
@@ -95,8 +92,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     SVGLink: uploadSVG,
                     onPressed: () {
                       // ignore: avoid_print
-                      BlocProvider.of<ChildBloc>(context)
-                          .add(UploadChildrenEvent(context: context));
+                      BlocProvider.of<ChildBloc>(context).add(
+                          UploadChildrenEvent(
+                              appLocalizations: AppLocalizations.of(context)!));
                       // uploadData(context);
                     },
                   ),

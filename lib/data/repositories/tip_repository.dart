@@ -29,6 +29,7 @@ class TipRepository {
       TipModel tip = TipModel.fromMap(result);
       return tip;
     }
+    return null;
   }
 
   Future<List<TipModel>?> getTipsByAge(ChildModel child) async {

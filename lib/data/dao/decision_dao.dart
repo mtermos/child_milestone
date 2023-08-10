@@ -141,6 +141,7 @@ class DecisionDao {
         .query(decisionsTABLE, where: 'id = ?', whereArgs: [decisionId]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   //Update Decision record

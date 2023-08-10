@@ -210,7 +210,8 @@ class _LoginScreenState extends State<LoginScreen> {
       padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
       onPressed: () {
         BlocProvider.of<AuthBloc>(context).add(
-          LoginEvent(context, usernameController.text, passController.text, () {
+          LoginEvent(AppLocalizations.of(context)!, usernameController.text,
+              passController.text, () {
             BlocProvider.of<CurrentChildCubit>(context).setFirstChildCurrent(
               () {
                 // Navigator.popUntil(context, (route) => false)

@@ -36,6 +36,7 @@ class DecisionRepository {
       DecisionModel decision = DecisionModel.fromMap(result);
       return decision;
     }
+    return null;
   }
 
   Future<List<DecisionModel>> getDecisionsByChild(int childId) async {

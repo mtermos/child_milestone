@@ -315,7 +315,7 @@ class _AddChildFormState extends State<AddChildForm> {
                               replaceArabicNumber(durationController.text)),
                         );
                         BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
-                            context: context,
+                            appLocalizations: AppLocalizations.of(context)!,
                             child: newChild,
                             addNotifications: true,
                             whenDone: () {

@@ -9,13 +9,13 @@ abstract class ChildEvent extends Equatable {
 }
 
 class AddChildEvent extends ChildEvent {
-  final BuildContext context;
+  final AppLocalizations appLocalizations;
   final ChildModel child;
   final bool addNotifications;
   final Function whenDone;
 
   const AddChildEvent({
-    required this.context,
+    required this.appLocalizations,
     required this.child,
     required this.addNotifications,
     required this.whenDone,
@@ -23,13 +23,13 @@ class AddChildEvent extends ChildEvent {
 }
 
 class EditChildEvent extends ChildEvent {
-  final BuildContext context;
+  final AppLocalizations appLocalizations;
   final ChildModel child;
   final bool addNotifications;
   final Function whenDone;
 
   const EditChildEvent({
-    required this.context,
+    required this.appLocalizations,
     required this.child,
     required this.addNotifications,
     required this.whenDone,
@@ -37,6 +37,8 @@ class EditChildEvent extends ChildEvent {
 }
 
 class GetAllChildrenEvent extends ChildEvent {}
+
+class CompleteChildEvent extends ChildEvent {}
 
 class DeleteAllChildrenEvent extends ChildEvent {}
 
@@ -57,8 +59,8 @@ class DeleteChildEvent extends ChildEvent {
 }
 
 class UploadChildrenEvent extends ChildEvent {
-  final BuildContext context;
+  final AppLocalizations appLocalizations;
   const UploadChildrenEvent({
-    required this.context,
+    required this.appLocalizations,
   });
 }

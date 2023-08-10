@@ -68,7 +68,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         List<dynamic> childrenIDs =
             responseBody["data"]["user"]["children"] ?? [];
         for (String childID in childrenIDs) {
-          String? response = await getChildFromBackend(childID, event.context);
+          String? response =
+              await getChildFromBackend(childID, event.appLocalizations);
         }
 
         if (responseBody["data"]["user"]["rating"] != null) {
@@ -92,7 +93,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           }
         }
 
-        print('LogedState: ${LogedState}');
         emit(LogedState());
         event.onSuccess();
       } else {
@@ -131,7 +131,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   Future<String?> getChildFromBackend(
-      String childId, BuildContext context) async {
+      String childId, AppLocalizations appLocalizations) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(SharedPrefKeys.accessToken);
     String? parentID = prefs.getString(SharedPrefKeys.userID);
@@ -191,7 +191,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               uploaded: true,
               pregnancyDuration:
                   response.data["data"]["child"]["pregnancyDuration"] as int);
-          await createChild(child, context);
+          await createChild(child, appLocalizations);
           await createMilestonesDecisions(milestonesDecisions, frontendID);
           await createVaccinesDecisions(vaccinesDecisions, frontendID);
           prefs.setInt(SharedPrefKeys.selectedChildId, child.id);
@@ -207,12 +207,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     return "token not available";
   }
 
-  Future<bool> createChild(ChildModel child, BuildContext context) async {
+  Future<bool> createChild(
+      ChildModel child, AppLocalizations appLocalizations) async {
     DaoResponse result = await childRepository.insertChild(child);
     if (result.item1) {
-      await addPeriodsNotifications(context, child);
+      addPeriodsNotifications(appLocalizations, child);
       // if (addNotifications) {
-      //   await _addPeriodsNotifications(event.context, child);
+      //   await _addPeriodsNotifications(appLocalizations, child);
       // }
       // whenDone();
     }
@@ -274,7 +275,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   //   return decisions;
   // }
 
-  Future addPeriodsNotifications(BuildContext context, ChildModel child) async {
+  Future addPeriodsNotifications(
+      AppLocalizations appLocalizations, ChildModel child) async {
     int correctingWeeks = 37 - child.pregnancyDuration;
     if (correctingWeeks < 0) correctingWeeks = 0;
     DateTime temp;
@@ -294,17 +296,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       if (temp.isAfter(DateTime.now())) {
-        String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+        String title = appLocalizations.newPeriodNotificationTitle;
         String body = "";
         if (child.gender == "Male") {
-          body = AppLocalizations.of(context)!.newPeriodNotificationBody1male +
+          body = appLocalizations.newPeriodNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2male;
+              appLocalizations.newPeriodNotificationBody2male;
         } else {
-          body = AppLocalizations.of(context)!
-                  .newPeriodNotificationBody1female +
+          body = appLocalizations.newPeriodNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2female;
+              appLocalizations.newPeriodNotificationBody2female;
         }
 
         NotificationModel notification = NotificationModel(
@@ -320,7 +321,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         DaoResponse<bool, int> response =
             await notificationRepository.insertNotification(notification);
         notification.id = response.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response.item2,
           title: title,
           body: body,
@@ -328,20 +329,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         //adding doctor appointment notification
-        String title2 =
-            AppLocalizations.of(context)!.newDoctorAppNotificationTitle;
+        String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
         String body2 = "";
         if (child.gender == "Male") {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1male +
+          body2 = appLocalizations.newDoctorAppNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2male;
+              appLocalizations.newDoctorAppNotificationBody2male;
         } else {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1female +
+          body2 = appLocalizations.newDoctorAppNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2female;
+              appLocalizations.newDoctorAppNotificationBody2female;
         }
 
         NotificationModel notification2 = NotificationModel(
@@ -357,7 +355,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         DaoResponse<bool, int> response2 =
             await notificationRepository.insertNotification(notification2);
         notification2.id = response2.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response2.item2,
           title: title2,
           body: body2,
@@ -366,8 +364,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
       for (var i = 1; i <= period.numWeeks; i++) {
-        await _addWeeklyNotifications(
-            temp.add(Duration(days: 7 * i)), period.id, context, child);
+        _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
+            appLocalizations, child);
       }
     }
 
@@ -385,18 +383,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             DateTime(temp.year + period.startingYear, temp.month, temp.day, 10);
       }
       if (temp.isAfter(DateTime.now())) {
-        String title = AppLocalizations.of(context)!.newPeriodNotificationTitle;
+        String title = appLocalizations.newPeriodNotificationTitle;
 
         String body = "";
         if (child.gender == "Male") {
-          body = AppLocalizations.of(context)!.newPeriodNotificationBody1male +
+          body = appLocalizations.newPeriodNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2male;
+              appLocalizations.newPeriodNotificationBody2male;
         } else {
-          body = AppLocalizations.of(context)!
-                  .newPeriodNotificationBody1female +
+          body = appLocalizations.newPeriodNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newPeriodNotificationBody2female;
+              appLocalizations.newPeriodNotificationBody2female;
         }
 
         NotificationModel notification = NotificationModel(
@@ -412,7 +409,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         DaoResponse<bool, int> response =
             await notificationRepository.insertNotification(notification);
         notification.id = response.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response.item2,
           title: title,
           body: body,
@@ -420,20 +417,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         //adding doctor appointment notification
-        String title2 =
-            AppLocalizations.of(context)!.newDoctorAppNotificationTitle;
+        String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
         String body2 = "";
         if (child.gender == "Male") {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1male +
+          body2 = appLocalizations.newDoctorAppNotificationBody1male +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2male;
+              appLocalizations.newDoctorAppNotificationBody2male;
         } else {
-          body2 = AppLocalizations.of(context)!
-                  .newDoctorAppNotificationBody1female +
+          body2 = appLocalizations.newDoctorAppNotificationBody1female +
               child.name +
-              AppLocalizations.of(context)!.newDoctorAppNotificationBody2female;
+              appLocalizations.newDoctorAppNotificationBody2female;
         }
 
         NotificationModel notification2 = NotificationModel(
@@ -449,7 +443,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         DaoResponse<bool, int> response2 =
             await notificationRepository.insertNotification(notification2);
         notification2.id = response2.item2;
-        await _notificationService.scheduleNotifications(
+        _notificationService.scheduleNotifications(
           id: response2.item2,
           title: title2,
           body: body2,
@@ -457,14 +451,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
       }
       for (var i = 1; i <= period.numWeeks; i++) {
-        await _addWeeklyNotifications(
-            temp.add(Duration(days: 7 * i)), period.id, context, child);
+        _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
+            appLocalizations, child);
       }
     }
   }
 
   Future _addWeeklyNotifications(DateTime dateTime, int period,
-      BuildContext context, ChildModel child) async {
+      AppLocalizations appLocalizations, ChildModel child) async {
     if (dateTime.isBefore(DateTime.now())) return;
     // const AndroidNotificationDetails androidPlatformChannelSpecifics =
     //     AndroidNotificationDetails(
@@ -478,17 +472,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     //     'repeating body', RepeatInterval.weekly, platformChannelSpecifics,
     //     androidAllowWhileIdle: true);
 
-    String title = AppLocalizations.of(context)!.weeklyNotificationTitle;
+    String title = appLocalizations.weeklyNotificationTitle;
     String body = "";
 
     if (child.gender == "Male") {
-      body = AppLocalizations.of(context)!.weeklyNotificationBody1male +
+      body = appLocalizations.weeklyNotificationBody1male +
           child.name +
-          AppLocalizations.of(context)!.weeklyNotificationBody2;
+          appLocalizations.weeklyNotificationBody2;
     } else {
-      body = AppLocalizations.of(context)!.weeklyNotificationBody1female +
+      body = appLocalizations.weeklyNotificationBody1female +
           child.name +
-          AppLocalizations.of(context)!.weeklyNotificationBody2;
+          appLocalizations.weeklyNotificationBody2;
     }
 
     NotificationModel notification = NotificationModel(
@@ -504,7 +498,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     DaoResponse<bool, int> response =
         await notificationRepository.insertNotification(notification);
     notification.id = response.item2;
-    await _notificationService.scheduleNotifications(
+    _notificationService.scheduleNotifications(
       id: response.item2,
       title: title,
       body: body,

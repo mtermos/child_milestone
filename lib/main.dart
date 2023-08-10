@@ -1,6 +1,7 @@
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/dao/decision_dao.dart';
+import 'package:child_milestone/data/dao/log_dao.dart';
 import 'package:child_milestone/data/dao/milestone_dao.dart';
 import 'package:child_milestone/data/dao/notification_dao.dart';
 import 'package:child_milestone/data/dao/rating_dao.dart';
@@ -8,7 +9,9 @@ import 'package:child_milestone/data/dao/tip_dao.dart';
 import 'package:child_milestone/data/dao/vaccine_dao.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/data/models/log.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
+import 'package:child_milestone/data/repositories/log_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/data/repositories/rating_repository.dart';
@@ -17,6 +20,7 @@ import 'package:child_milestone/data/repositories/vaccine_repository.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
+import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/blocs/rating/rating_bloc.dart';
@@ -91,6 +95,8 @@ class Application extends StatelessWidget {
             create: (context) => RatingRepository(RatingDao())),
         RepositoryProvider<VaccineRepository>(
             create: (context) => VaccineRepository(VaccineDao())),
+        RepositoryProvider<LogRepository>(
+            create: (context) => LogRepository(LogDao())),
       ],
       child: MultiBlocProvider(
         providers: [
@@ -162,6 +168,11 @@ class Application extends StatelessWidget {
                   RepositoryProvider.of<NotificationRepository>(context),
             ),
           ),
+          BlocProvider<LogBloc>(
+            create: (context) => LogBloc(
+              logRepository: RepositoryProvider.of<LogRepository>(context),
+            ),
+          ),
           BlocProvider<RatingBloc>(
             create: (context) => RatingBloc(
               ratingRepository:
@@ -189,6 +200,15 @@ class Application extends StatelessWidget {
         ],
         child: BlocBuilder<LanguageCubit, Locale>(
           builder: (context, lang) {
+            BlocProvider.of<LogBloc>(context).add(
+              AddLogEvent(
+                log: LogModel(
+                  type: 1,
+                  name: "open app",
+                  takenAt: DateTime.now(),
+                ),
+              ),
+            );
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {

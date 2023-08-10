@@ -108,6 +108,7 @@ class NotificationRepository {
       NotificationModel notification = NotificationModel.fromMap(result);
       return notification;
     }
+    return null;
   }
 
   Future<DaoResponse<bool, int>> dismissNotification(

@@ -11,6 +11,7 @@ const vaccinesTABLE = 'vaccines';
 const tipsTABLE = 'Tips';
 const decisionsTABLE = 'Decisions';
 const ratingsTABLE = 'Ratings';
+const logsTABLE = 'Logs';
 
 class DatabaseProvider {
   static final DatabaseProvider dbProvider = DatabaseProvider();
@@ -28,7 +29,7 @@ class DatabaseProvider {
     WidgetsFlutterBinding.ensureInitialized();
 
     var database = await openDatabase(path,
-        version: 6, onCreate: initDB, onUpgrade: onUpgrade);
+        version: 7, onCreate: initDB, onUpgrade: onUpgrade);
     return database;
   }
 
@@ -37,6 +38,7 @@ class DatabaseProvider {
     if (_database != null) {
       var batch = _database!.batch();
       if (oldVersion == 3) _updateTableTipsV3toV4(batch);
+      if (oldVersion < 7) _addLogsTable(batch);
       if (newVersion > oldVersion) {}
     }
   }
@@ -137,9 +139,27 @@ class DatabaseProvider {
         "takenAt INTEGER, "
         "uploaded INTEGER "
         ")");
+
+    await database.execute("CREATE TABLE $logsTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "type INTEGER, "
+        "name TEXT, "
+        "takenAt INTEGER, "
+        "uploaded INTEGER "
+        ")");
   }
 
   void _updateTableTipsV3toV4(Batch batch) {
-    batch.execute('ALTER TABLE Tips ADD webURL TEXT');
+    batch.execute('ALTER TABLE $tipsTABLE ADD webURL TEXT');
+  }
+
+  void _addLogsTable(Batch batch) {
+    batch.execute("CREATE TABLE $logsTABLE ("
+        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+        "type INTEGER, "
+        "name TEXT, "
+        "takenAt INTEGER, "
+        "uploaded INTEGER "
+        ")");
   }
 }

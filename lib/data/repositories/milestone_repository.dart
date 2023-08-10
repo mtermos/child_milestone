@@ -32,6 +32,7 @@ class MilestoneRepository {
       MilestoneItem milestone = MilestoneItem.fromMap(result);
       return milestone;
     }
+    return null;
   }
 
   Future<List<MilestoneItem>?> getMilestonesByAge(ChildModel child) async {

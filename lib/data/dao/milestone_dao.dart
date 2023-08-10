@@ -29,6 +29,7 @@ class MilestoneDao {
         .query(milestonesTABLE, where: 'id = ?', whereArgs: [milestoneId]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   Future<List<Map<String, dynamic>>?> getMilestonesByAge(int period) async {

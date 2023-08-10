@@ -39,6 +39,7 @@ class TipDao {
     result = await db.query(tipsTABLE, where: 'id = ?', whereArgs: [tipId]);
 
     if (result.isNotEmpty) return result[0];
+    return null;
   }
 
   //Update Tip record

@@ -22,6 +22,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path/path.dart' as path;
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -74,15 +75,17 @@ class _SplashScreenState extends State<SplashScreen> {
 
   resetData() async {
     final dbProvider = DatabaseProvider.dbProvider;
-    await dbProvider.deleteDatabase();
+    // await dbProvider.deleteDatabase();
     await dbProvider.createDatabase();
     final db = await dbProvider.database;
     await db.delete(childrenTABLE);
     await db.delete(milestonesTABLE);
+    await db.delete(vaccinesTABLE);
     await db.delete(tipsTABLE);
     await db.delete(notificationsTABLE);
     await db.delete(decisionsTABLE);
     await db.delete(ratingsTABLE);
+    await db.delete(logsTABLE);
     NotificationService _notificationService = NotificationService();
     await _notificationService.cancelAllNotifications();
     BlocProvider.of<ChildBloc>(context).add(DeleteAllChildrenEvent());
@@ -90,6 +93,7 @@ class _SplashScreenState extends State<SplashScreen> {
     await addTempMilestones();
     await addTempVaccines();
     await addTempTips();
+
     // await addTempNotifications();
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
@@ -116,11 +120,14 @@ class _SplashScreenState extends State<SplashScreen> {
         imagePath: imagePath,
         gender: "Male",
         pregnancyDuration: 37);
-    BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
-        context: context,
+    BlocProvider.of<ChildBloc>(context).add(
+      AddChildEvent(
+        appLocalizations: AppLocalizations.of(context)!,
         child: newChild,
         addNotifications: false,
-        whenDone: () {}));
+        whenDone: () {},
+      ),
+    );
 
     fileName = path.basename(imagePath2);
     imagePath = '${appDir.path}/$fileName';
@@ -138,7 +145,7 @@ class _SplashScreenState extends State<SplashScreen> {
         gender: "Female",
         pregnancyDuration: 10);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
-        context: context,
+        appLocalizations: AppLocalizations.of(context)!,
         child: newChild2,
         addNotifications: false,
         whenDone: () {}));
@@ -151,7 +158,7 @@ class _SplashScreenState extends State<SplashScreen> {
         gender: "Male",
         pregnancyDuration: 27);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
-        context: context,
+        appLocalizations: AppLocalizations.of(context)!,
         child: newChild3,
         addNotifications: false,
         whenDone: () {}));
@@ -164,7 +171,7 @@ class _SplashScreenState extends State<SplashScreen> {
         gender: "Male",
         pregnancyDuration: 27);
     BlocProvider.of<ChildBloc>(context).add(AddChildEvent(
-        context: context,
+        appLocalizations: AppLocalizations.of(context)!,
         child: newChild4,
         addNotifications: false,
         whenDone: () {}));

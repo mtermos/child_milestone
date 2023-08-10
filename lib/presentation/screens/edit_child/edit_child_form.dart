@@ -308,7 +308,8 @@ class _EditChildFormState extends State<EditChildForm> {
                           );
                           BlocProvider.of<ChildBloc>(context).add(
                               EditChildEvent(
-                                  context: context,
+                                  appLocalizations:
+                                      AppLocalizations.of(context)!,
                                   child: newChild,
                                   addNotifications:
                                       widget.child.dateOfBirth != _selectedDate,
