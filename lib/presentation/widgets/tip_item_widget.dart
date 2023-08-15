@@ -1,8 +1,12 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:child_milestone/data/models/log.dart';
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
@@ -10,6 +14,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:pdfx/pdfx.dart';
+// import 'package:pdf_render/pdf_render.dart';
 
 class TipItemWidget extends StatefulWidget {
   final TipModel item;
@@ -25,6 +31,16 @@ class _TipItemWidgetState extends State<TipItemWidget> {
   final String videoSVG = "assets/images/video.svg";
   final String documentSVG = "assets/images/document.svg";
   final String webSVG = "assets/images/web.svg";
+
+  late Future<Uint8List?> pdfImage;
+
+  @override
+  void initState() {
+    if (widget.item.documentURL != null) {
+      pdfImage = imageFromPdfFile(widget.item.documentURL!);
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,8 +121,9 @@ class _TipItemWidgetState extends State<TipItemWidget> {
                 BlocProvider.of<LogBloc>(context).add(
                   AddLogEvent(
                     log: LogModel(
-                      type: 2,
-                      name: "open video: " + widget.item.videoURL!,
+                      action: "open video",
+                      description:
+                          "The user clicked on the tip with id: ${widget.item.id}, period: id: ${widget.item.period}, and link of video: ${widget.item.videoURL!}",
                       takenAt: DateTime.now(),
                     ),
                   ),
@@ -121,11 +138,25 @@ class _TipItemWidgetState extends State<TipItemWidget> {
       body = InkWell(
         child: Column(
           children: [
-            SvgPicture.asset(
-              documentSVG,
-              width: size.width * 0.25,
-              alignment: Alignment.center,
-            ),
+            FutureBuilder<Uint8List?>(
+                future: pdfImage,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    final image = snapshot.data!;
+                    return Image.memory(image);
+                  } else {
+                    return SvgPicture.asset(
+                      documentSVG,
+                      width: size.width * 0.25,
+                      alignment: Alignment.center,
+                    );
+                  }
+                }),
+            // SvgPicture.asset(
+            //   documentSVG,
+            //   width: size.width * 0.25,
+            //   alignment: Alignment.center,
+            // ),
             SizedBox(height: size.height * 0.01),
             AppText(
               text: AppLocalizations.of(context)!.clickToOpenDocument,
@@ -139,8 +170,9 @@ class _TipItemWidgetState extends State<TipItemWidget> {
           BlocProvider.of<LogBloc>(context).add(
             AddLogEvent(
               log: LogModel(
-                type: 2,
-                name: "open pdf: " + widget.item.documentURL!,
+                action: "open pdf",
+                description:
+                    "The user clicked on the tip with id: ${widget.item.id}, period: id: ${widget.item.period}, and link of pdf: ${widget.item.documentURL!}",
                 takenAt: DateTime.now(),
               ),
             ),
@@ -238,5 +270,20 @@ class _TipItemWidgetState extends State<TipItemWidget> {
       //   ),
       // ),
     );
+  }
+
+  // send pdfFile as params
+  Future<Uint8List?> imageFromPdfFile(String url) async {
+    final Response<List<int>> response = await Dio().get<List<int>>(
+      url,
+      options: Options(responseType: ResponseType.bytes),
+    );
+    if (response.data == null) return null;
+    Uint8List data = Uint8List.fromList(response.data!);
+    final document = await PdfDocument.openData(data);
+    final page = await document.getPage(1);
+    final pageImage = await page.render(width: page.width, height: page.height);
+    await page.close();
+    return pageImage!.bytes;
   }
 }

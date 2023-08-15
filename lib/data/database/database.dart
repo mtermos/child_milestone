@@ -142,8 +142,8 @@ class DatabaseProvider {
 
     await database.execute("CREATE TABLE $logsTABLE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-        "type INTEGER, "
-        "name TEXT, "
+        "action TEXT, "
+        "description TEXT, "
         "takenAt INTEGER, "
         "uploaded INTEGER "
         ")");
@@ -156,8 +156,8 @@ class DatabaseProvider {
   void _addLogsTable(Batch batch) {
     batch.execute("CREATE TABLE $logsTABLE ("
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-        "type INTEGER, "
-        "name TEXT, "
+        "action TEXT, "
+        "description TEXT, "
         "takenAt INTEGER, "
         "uploaded INTEGER "
         ")");

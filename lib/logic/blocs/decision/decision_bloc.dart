@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
@@ -15,6 +17,7 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:child_milestone/constants/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 
 part 'decision_event.dart';
 part 'decision_state.dart';
@@ -24,12 +27,15 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   final NotificationRepository notificationRepository;
   final ChildRepository childRepository;
   final MilestoneRepository milestoneRepository;
+  final ChildBloc childBloc;
+  late final StreamSubscription childBlocSubscription;
 
   DecisionBloc({
     required this.decisionRepository,
     required this.notificationRepository,
     required this.childRepository,
     required this.milestoneRepository,
+    required this.childBloc,
   }) : super(InitialDecisionState()) {
     on<AddDecisionEvent>(addDecision);
     on<GetAllDecisionsEvent>(getAllDecisions);
@@ -44,6 +50,12 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     // on<UploadDecisionsEvent>(updateDecisionsOnBackend);
   }
 
+  @override
+  Future<void> close() {
+    childBlocSubscription.cancel();
+    return super.close();
+  }
+
   void addDecision(AddDecisionEvent event, Emitter<DecisionState> emit) async {
     emit(AddingDecisionState());
     DaoResponse<bool, int> daoResponse =
@@ -54,6 +66,10 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
       await stopWeeklyNotifications(event.decision.childId);
     }
     if (daoResponse.item1) {
+      ChildModel? childModel =
+          await childRepository.getChildByID(event.decision.childId);
+      if (childModel == null) emit(DecisionErrorState("child not found"));
+      childBloc.updateChildOnBackend(childModel!);
       emit(AddedDecisionState(event.decision));
       event.onSuccess();
     }

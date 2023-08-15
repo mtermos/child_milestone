@@ -50,14 +50,14 @@ class _HomeTabState extends State<HomeTab> {
   Widget build(BuildContext context) {
     BlocProvider.of<LogBloc>(context).add(GetAllLogsEvent());
 
-    final NotificationService _notificationService = NotificationService();
-    _notificationService.scheduleNotifications(
-      id: 1,
-      title: "title2",
-      body: "body2",
-      scheduledDate: tz.TZDateTime.from(
-          DateTime.now().add(Duration(seconds: 5)), tz.local),
-    );
+    // final NotificationService _notificationService = NotificationService();
+    // _notificationService.scheduleNotifications(
+    //   id: 1,
+    //   title: "title2",
+    //   body: "body2",
+    //   scheduledDate: tz.TZDateTime.from(
+    //       DateTime.now().add(Duration(seconds: 5)), tz.local),
+    // );
     const String profilePicBg = "assets/images/profile_pic_bg.svg";
     String summary = "assets/images/summary.png";
     String vaccinesIcon = "assets/images/vaccines_ar.png";

@@ -24,6 +24,7 @@ class Urls {
   static const String createChildUrl = "child/add";
   static const String updateChildUrl = "child/update";
   static const String getChildUrl = "child/get";
+  static const String addLogUrl = "log/add";
 }
 
 class StorageKeys {

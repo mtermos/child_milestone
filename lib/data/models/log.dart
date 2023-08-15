@@ -3,29 +3,29 @@ import 'dart:convert';
 
 class LogModel {
   int? id;
-  int type; // 1: open app 2: open document 3: open notification
-  String name;
+  String action; // 1: open app 2: open document 3: open notification
+  String description;
   DateTime takenAt;
   bool uploaded;
   LogModel({
     this.id,
-    required this.type,
-    required this.name,
+    required this.action,
+    required this.description,
     required this.takenAt,
     this.uploaded = false,
   });
 
   LogModel copyWith({
     int? id,
-    int? type,
-    String? name,
+    String? action,
+    String? description,
     DateTime? takenAt,
     bool? uploaded,
   }) {
     return LogModel(
       id: id ?? this.id,
-      type: type ?? this.type,
-      name: name ?? this.name,
+      action: action ?? this.action,
+      description: description ?? this.description,
       takenAt: takenAt ?? this.takenAt,
       uploaded: uploaded ?? this.uploaded,
     );
@@ -34,8 +34,8 @@ class LogModel {
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
       'id': id,
-      'type': type,
-      'name': name,
+      'action': action,
+      'description': description,
       'takenAt': takenAt.millisecondsSinceEpoch,
       'uploaded': uploaded ? 1 : 0,
     };
@@ -44,8 +44,8 @@ class LogModel {
   factory LogModel.fromMap(Map<String, dynamic> map) {
     return LogModel(
       id: map['id'] != null ? map['id'] as int : null,
-      type: map['type'] as int,
-      name: map['name'] as String,
+      action: map['action'] as String,
+      description: map['description'] as String,
       takenAt: DateTime.fromMillisecondsSinceEpoch(map['takenAt'] as int),
       uploaded: map['uploaded'] == 1,
     );
@@ -58,7 +58,7 @@ class LogModel {
 
   @override
   String toString() {
-    return 'LogModel(id: $id, type: $type, name: $name, takenAt: $takenAt, uploaded: $uploaded)';
+    return 'LogModel(id: $id, action: $action, description: $description, takenAt: $takenAt, uploaded: $uploaded)';
   }
 
   @override
@@ -66,8 +66,8 @@ class LogModel {
     if (identical(this, other)) return true;
 
     return other.id == id &&
-        other.type == type &&
-        other.name == name &&
+        other.action == action &&
+        other.description == description &&
         other.takenAt == takenAt &&
         other.uploaded == uploaded;
   }
@@ -75,8 +75,8 @@ class LogModel {
   @override
   int get hashCode {
     return id.hashCode ^
-        type.hashCode ^
-        name.hashCode ^
+        action.hashCode ^
+        description.hashCode ^
         takenAt.hashCode ^
         uploaded.hashCode;
   }

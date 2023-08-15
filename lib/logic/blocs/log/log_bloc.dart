@@ -25,7 +25,11 @@ class LogBloc extends Bloc<LogEvent, LogState> {
     emit(AddingLogState());
     DaoResponse<bool, int> daoResponse =
         await logRepository.insertLog(event.log);
+    print('daoResponse: ${daoResponse.item1}');
     if (daoResponse.item1) {
+      print("updateLogOnBackend");
+      String? response = await updateLogOnBackend(event.log);
+      print('response: ${response}');
       emit(AddedLogState(event.log));
     }
   }
@@ -80,30 +84,33 @@ class LogBloc extends Bloc<LogEvent, LogState> {
   }
 
   Future<String?> updateLogOnBackend(LogModel logModel) async {
+    print('logModel: ${logModel}');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(SharedPrefKeys.accessToken);
     String? userID = prefs.getString(SharedPrefKeys.userID);
     if (token != null) {
       try {
-        final response = await http.put(
-          Uri.parse(Urls.backendUrl + Urls.userUpdateUrl),
+        print("uploading logs");
+        final response = await http.post(
+          Uri.parse(Urls.backendUrl + Urls.addLogUrl),
           headers: {
             "Authorization": "Bearer " + token,
           },
           body: {
-            "id": logModel.id,
-            "log": logModel.name,
-            "takenAt": logModel.takenAt,
-            "parent_id": userID,
+            "user_id": userID,
+            "action": logModel.action,
+            "description": logModel.description,
+            "takenAt": logModel.takenAt.toString(),
           },
         );
-        // print('response.body: ${response.body}');
+        print('response.body: ${response.body}');
         if (response.statusCode == 200) {
           return null;
         } else {
           return "response not 200";
         }
       } catch (e) {
+        print('e: ${e}');
         return "connection failed";
       }
     }

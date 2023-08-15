@@ -96,7 +96,10 @@ void selectNotification(NotificationResponse details) async {
   print('details: ${details}');
   final dbProvider = DatabaseProvider.dbProvider;
   final db = await dbProvider.database;
-  LogModel logModel =
-      LogModel(type: 3, name: "open notification", takenAt: DateTime.now());
+  DateTime dateTime = DateTime.now();
+  LogModel logModel = LogModel(
+      action: "open notification",
+      description: "The user pressed on a notification on: $dateTime",
+      takenAt: dateTime);
   await db.insert(logsTABLE, logModel.toMap());
 }

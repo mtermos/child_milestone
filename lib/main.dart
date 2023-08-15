@@ -1,3 +1,4 @@
+import 'package:background_fetch/background_fetch.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/dao/decision_dao.dart';
@@ -41,6 +42,30 @@ import 'package:child_milestone/presentation/router/app_router.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:convert';
+
+const EVENTS_KEY = "fetch_events";
+
+void backgroundFetchHeadlessTask() async {
+  print('[BackgroundFetch] Headless event received.');
+  print("Hey Pawan Background headless fetch is successful");
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  // Read fetch_events from SharedPreferences
+  List<String> events = [];
+  String? json = prefs.getString(EVENTS_KEY);
+  if (json != null) {
+    events = jsonDecode(json).cast<String>();
+  }
+  // Add new event.
+  events.insert(0, new DateTime.now().toString() + ' [Headless]');
+  // Persist fetch events in SharedPreferences
+  prefs.setString(EVENTS_KEY, jsonEncode(events));
+
+  BackgroundFetch.finish("com.transistorsoft.uploadData");
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,11 +82,12 @@ void main() async {
         startLang: Locale(startLang),
       )));
 
-  runApp(Application(
-    appRouter: AppRouter(),
-    connectivity: Connectivity(),
-    startLang: Locale(startLang),
-  ));
+  // runApp(Application(
+  //   appRouter: AppRouter(),
+  //   connectivity: Connectivity(),
+  //   startLang: Locale(startLang),
+  // ));
+  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }
 
 class Application extends StatelessWidget {
@@ -75,6 +101,34 @@ class Application extends StatelessWidget {
     required this.connectivity,
     required this.startLang,
   }) : super(key: key);
+
+  // Platform messages are asynchronous, so we initialize in an async method.
+  Future<void> initPlatformState() async {
+    // Configure BackgroundFetch.
+    int status = await BackgroundFetch.configure(
+        BackgroundFetchConfig(
+            minimumFetchInterval: 15,
+            stopOnTerminate: false,
+            enableHeadless: true,
+            requiresBatteryNotLow: false,
+            requiresCharging: false,
+            requiresStorageNotLow: false,
+            requiresDeviceIdle: false,
+            requiredNetworkType: NetworkType.NONE), (String taskId) async {
+      // <-- Event handler
+      // This is the fetch-event callback.
+      print("[BackgroundFetch] Event received $taskId");
+      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
+      // for taking too long in the background.
+      BackgroundFetch.finish(taskId);
+    }, (String taskId) async {
+      // <-- Task timeout handler.
+      // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
+      print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
+      BackgroundFetch.finish(taskId);
+    });
+    print('[BackgroundFetch] configure success: $status');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +214,7 @@ class Application extends StatelessWidget {
               childRepository: RepositoryProvider.of<ChildRepository>(context),
               milestoneRepository:
                   RepositoryProvider.of<MilestoneRepository>(context),
+              childBloc: BlocProvider.of<ChildBloc>(context),
             ),
           ),
           BlocProvider<NotificationBloc>(
@@ -203,8 +258,8 @@ class Application extends StatelessWidget {
             BlocProvider.of<LogBloc>(context).add(
               AddLogEvent(
                 log: LogModel(
-                  type: 1,
-                  name: "open app",
+                  action: "open app",
+                  description: "The user opened the application",
                   takenAt: DateTime.now(),
                 ),
               ),

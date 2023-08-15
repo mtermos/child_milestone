@@ -54,12 +54,14 @@ dependencies:
   loading_indicator: ^3.1.0
   path: null
   path_provider: ^2.0.15
+  pdf_render: ^1.4.0
+  pdfx: ^2.4.0
   percent_indicator: ^4.2.3
   rename: ^2.0.1
   responsive_framework: ^1.0.0
   shared_preferences: ^2.0.15
   sqflite: ^2.0.2+1
-  syncfusion_flutter_pdfviewer: ^21.2.6
+  syncfusion_flutter_pdfviewer: ^20.4.54
   test: null
   url_launcher: ^6.1.5
   youtube_player_flutter: ^8.1.0
