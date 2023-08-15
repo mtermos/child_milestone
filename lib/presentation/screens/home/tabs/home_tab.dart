@@ -48,7 +48,6 @@ class _HomeTabState extends State<HomeTab> {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<LogBloc>(context).add(GetAllLogsEvent());
 
     // final NotificationService _notificationService = NotificationService();
     // _notificationService.scheduleNotifications(

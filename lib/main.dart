@@ -264,6 +264,11 @@ class Application extends StatelessWidget {
                 ),
               ),
             );
+
+            BlocProvider.of<ChildBloc>(context).add(UploadChildrenEvent(
+                appLocalizations: AppLocalizations.of(context)!));
+            BlocProvider.of<LogBloc>(context).add(const UploadLogsEvent());
+
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
