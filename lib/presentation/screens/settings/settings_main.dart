@@ -3,6 +3,7 @@ import 'package:child_milestone/logic/blocs/auth/auth_bloc.dart';
 import 'package:child_milestone/logic/blocs/auth/auth_event.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
+import 'package:child_milestone/logic/blocs/rating/rating_bloc.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_button.dart';
@@ -100,6 +101,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
                       BlocProvider.of<LogBloc>(context)
                           .add(const UploadLogsEvent());
+
+                      BlocProvider.of<RatingBloc>(context).add(
+                          UploadRatingsEvent(
+                              appLocalizations: AppLocalizations.of(context)!));
                     },
                   ),
                 ),

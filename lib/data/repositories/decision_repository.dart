@@ -48,10 +48,10 @@ class DecisionRepository {
   }
 
   Future<DaoResponse<List<DecisionModel>, int>> getDecisionsByAge(
-      ChildModel child, int childId) async {
+      ChildModel child) async {
     int period = periodCalculator(child).id;
     DaoResponse<List, int> daoResponse =
-        await decisionDao.getDecisionsByAge(period, childId);
+        await decisionDao.getDecisionsByAge(period, child.id);
     return DaoResponse(
         daoResponse.item1.isNotEmpty
             ? daoResponse.item1

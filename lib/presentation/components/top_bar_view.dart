@@ -43,7 +43,6 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    BlocProvider.of<ChildBloc>(context).add(GetAllChildrenEvent());
     checkChild();
     super.initState();
   }
@@ -56,9 +55,12 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
         ? MediaQuery.of(context).size.height * 0.001
         : MediaQuery.of(context).size.height * 0.0011;
     bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
-    String chevronDuoLeft = "assets/icons/chevron_duo_left.svg";
+    // String chevronDuoLeft = "assets/icons/chevron_duo_left.svg";
+    String chevronDuoLeft = "assets/icons/chevron_duo_left_2.svg";
+    String chevronDuoRight = "assets/icons/chevron_duo_right.svg";
     if (isRTL) {
-      chevronDuoLeft = "assets/icons/home_page/double_arrows.svg";
+      // chevronDuoLeft = "assets/icons/home_page/double_arrows.svg";
+      chevronDuoLeft = "assets/icons/chevron_duo_left.svg";
     }
 
     return SizedBox(
@@ -71,7 +73,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
         ),
         child: Row(
           children: <Widget>[
-            Expanded(
+            const Expanded(
               flex: 2,
               child: Row(
                 children: [
@@ -79,47 +81,27 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                   // SizedBox(
                   //   width: size.width * 0.02,
                   // ),
-                  widget.hasBackBottun
-                      ? InkWell(
-                          child: SvgPicture.asset(
-                            chevronDuoLeft,
-                            color: widget.light
-                                ? Colors.white
-                                : AppColors.primaryColor,
-                            width: isMOBILE
-                                ? size.width * 0.07
-                                : size.width * 0.05,
-                          ),
-                          onTap: () {
-                            if (widget.backRoute != null) {
-                              Navigator.popAndPushNamed(
-                                  context, widget.backRoute!);
-                            } else {
-                              Navigator.pop(context);
-                            }
-                          },
-                        )
-                      : Container(),
                 ],
               ),
             ),
             widget.hasDropDown
                 ? Expanded(
                     flex: 6,
-                    child: BlocConsumer<ChildBloc, ChildState>(
+                    child: BlocConsumer<CurrentChildCubit, CurrentChildState>(
                       listener: (context, state) {
-                        if (state is ErrorDeletingChildState) {
-                          var snackBar = SnackBar(
-                            content: Text(AppLocalizations.of(context)!
-                                .checkInternetConnection),
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                        }
+                        // if (state is ErrorDeletingChildState) {
+                        //   var snackBar = SnackBar(
+                        //     content: Text(AppLocalizations.of(context)!
+                        //         .checkInternetConnection),
+                        //   );
+                        //   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        // }
                       },
                       builder: (context, state) {
-                        if (state is AllChildrenLoadedState) {
-                          childrenList = state.children;
-                        } else if (state is AllChildrenLoadingState) {
+                        if (state is CurrentChildChangedState) {
+                          childrenList = state.all_children;
+                          selectedChild = state.new_current_child;
+                        } else if (state is ChangingCurrentChildState) {
                           return Center(
                             child: SizedBox(
                               width: size.width * 0.3,
@@ -207,8 +189,9 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                                                   context, Routes.editChild,
                                                   arguments: value.id)
                                               .then((value) {
-                                            BlocProvider.of<ChildBloc>(context)
-                                                .add(GetAllChildrenEvent());
+                                            checkChild();
+                                            // BlocProvider.of<ChildBloc>(context)
+                                            //     .add(GetAllChildrenEvent());
 
                                             checkChild();
                                           });
@@ -274,19 +257,56 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                   )),
             Expanded(
               flex: 2,
-              child: Container(
-                child: InkWell(
-                  child: SvgPicture.asset(
-                    settingsIcon,
-                    color: widget.light ? Colors.white : AppColors.primaryColor,
-                    width: isMOBILE ? size.width * 0.07 : size.width * 0.05,
-                  ),
-                  onTap: () {
-                    Navigator.pushNamed(context, Routes.settings);
-                  },
-                ),
-                alignment: AlignmentDirectional.centerEnd,
-              ),
+              child: widget.hasBackBottun
+                  ? InkWell(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          AppText(
+                            text: AppLocalizations.of(context)!.goBack,
+                            fontSize: textScale * 24,
+                            color: widget.light
+                                ? Colors.white
+                                : AppColors.primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          SvgPicture.asset(
+                            // chevronDuoRight,
+                            chevronDuoLeft,
+                            color: widget.light
+                                ? Colors.white
+                                : AppColors.primaryColor,
+                            width: isMOBILE
+                                ? size.width * 0.11
+                                : size.width * 0.05,
+                            alignment: AlignmentDirectional.centerEnd,
+                          ),
+                        ],
+                      ),
+                      onTap: () {
+                        if (widget.backRoute != null) {
+                          Navigator.popAndPushNamed(context, widget.backRoute!);
+                        } else {
+                          Navigator.pop(context);
+                        }
+                      },
+                    )
+                  : Container(
+                      child: InkWell(
+                        child: SvgPicture.asset(
+                          settingsIcon,
+                          color: widget.light
+                              ? Colors.white
+                              : AppColors.primaryColor,
+                          width:
+                              isMOBILE ? size.width * 0.07 : size.width * 0.05,
+                        ),
+                        onTap: () {
+                          Navigator.pushNamed(context, Routes.settings);
+                        },
+                      ),
+                      alignment: AlignmentDirectional.centerEnd,
+                    ),
               // child: Text(""),
             ),
           ],
@@ -368,14 +388,16 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
                       DeleteChildEvent(
                         id: id,
                         onSuccess: () {
-                          BlocProvider.of<ChildBloc>(context)
-                              .add(GetAllChildrenEvent());
+                          checkChild();
+                          // BlocProvider.of<ChildBloc>(context)
+                          //     .add(GetAllChildrenEvent());
                           Navigator.pop(context);
                           Navigator.pop(dropDownKey.currentContext!);
                         },
                         onFail: () {
-                          BlocProvider.of<ChildBloc>(context)
-                              .add(GetAllChildrenEvent());
+                          checkChild();
+                          // BlocProvider.of<ChildBloc>(context)
+                          //     .add(GetAllChildrenEvent());
                           Navigator.pop(context);
                           Navigator.pop(dropDownKey.currentContext!);
                         },

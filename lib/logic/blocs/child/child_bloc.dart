@@ -17,6 +17,7 @@ import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/data/repositories/rating_repository.dart';
 import 'package:child_milestone/data/repositories/vaccine_repository.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
+import 'package:child_milestone/logic/shared/ratingToTextMap.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,8 +64,10 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
 
   void addChild(AddChildEvent event, Emitter<ChildState> emit) async {
     emit(AddingChildState());
-    String? errorUploading = await uploadChild(event.child);
-    if (errorUploading == null) {
+    String? childBackendId = await uploadChild(event.child);
+
+    if (childBackendId != null) {
+      event.child.idBackend = childBackendId;
       DaoResponse result = await childRepository.insertChild(event.child);
       if (result.item1) {
         event.child.uploaded = true;
@@ -78,12 +81,14 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         emit(AddedChildState(event.child));
         // }
       } else if (result.item2 == 2067) {
+        print('ErrorAddingChildState: result.item2');
         emit(ErrorAddingChildUniqueIDState());
       } else {
-        print('ErrorAddingChildState: ${ErrorAddingChildState}');
+        print('ErrorAddingChildState: not added');
         emit(ErrorAddingChildState());
       }
     } else {
+      print('ErrorAddingChildState: response error');
       emit(ErrorAddingChildState());
     }
   }
@@ -110,7 +115,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       );
     }
 
-    List<MilestoneItem> vaccines = await milestoneRepository.getAllMilestones();
+    List<Vaccine> vaccines = await vaccineRepository.getAllVaccines();
 
     for (var vaccine in vaccines) {
       decisionsList.add(
@@ -178,16 +183,30 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
   void deleteChild(DeleteChildEvent event, Emitter<ChildState> emit) async {
     emit(DeletingChildState());
     ChildModel? childModel = await childRepository.getChildByID(event.id);
-    if (childModel != null && childModel.idBackend != null) {
-      String? response = await deleteChildOnBackend(childModel.idBackend!);
-      if (response == null) {
-        _deleteAllNotifications(event.id);
-        await childRepository.deleteChildById(event.id);
+    if (childModel != null) {
+      _deleteAllNotifications(event.id);
+      await childRepository.deleteChildById(event.id);
+
+      if (childModel.idBackend == null) {
         emit(DeletedChildState());
         event.onSuccess();
       } else {
-        emit(ErrorDeletingChildState());
-        event.onFail();
+        String? response = await deleteChildOnBackend(childModel.idBackend!);
+        print('RESPONSE: ${response}');
+        if (response == null) {
+          emit(DeletedChildState());
+          event.onSuccess();
+        } else {
+          SharedPreferences prefs = await SharedPreferences.getInstance();
+          List<String> toDelete =
+              prefs.getStringList(SharedPrefKeys.childrenToDeleteOnBackend) ??
+                  [];
+          toDelete.add(childModel.idBackend!);
+          await prefs.setStringList(
+              SharedPrefKeys.childrenToDeleteOnBackend, toDelete);
+          emit(ErrorDeletingChildState());
+          event.onFail();
+        }
       }
     } else {
       emit(ErrorDeletingChildState());
@@ -259,38 +278,38 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         );
 
         //adding doctor appointment notification
-        String title2 = appLocalizations.newDoctorAppNotificationTitle;
+        // String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
-        String body2 = "";
-        if (child.gender == "Male") {
-          body2 = appLocalizations.newDoctorAppNotificationBody1male +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2male;
-        } else {
-          body2 = appLocalizations.newDoctorAppNotificationBody1female +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2female;
-        }
+        // String body2 = "";
+        // if (child.gender == "Male") {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1male +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2male;
+        // } else {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1female +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2female;
+        // }
 
-        NotificationModel notification2 = NotificationModel(
-          title: title2,
-          body: body2,
-          issuedAt: temp,
-          opened: false,
-          dismissed: false,
-          route: Routes.milestone,
-          period: period.id,
-          childId: child.id,
-        );
-        DaoResponse<bool, int> response2 =
-            await notificationRepository.insertNotification(notification2);
-        notification2.id = response2.item2;
-        _notificationService.scheduleNotifications(
-          id: response2.item2,
-          title: title2,
-          body: body2,
-          scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        );
+        // NotificationModel notification2 = NotificationModel(
+        //   title: title2,
+        //   body: body2,
+        //   issuedAt: temp,
+        //   opened: false,
+        //   dismissed: false,
+        //   route: Routes.milestone,
+        //   period: period.id,
+        //   childId: child.id,
+        // );
+        // DaoResponse<bool, int> response2 =
+        //     await notificationRepository.insertNotification(notification2);
+        // notification2.id = response2.item2;
+        // _notificationService.scheduleNotifications(
+        //   id: response2.item2,
+        //   title: title2,
+        //   body: body2,
+        //   scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        // );
       }
 
       for (var i = 1; i <= period.numWeeks; i++) {
@@ -347,38 +366,38 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         );
 
         //adding doctor appointment notification
-        String title2 = appLocalizations.newDoctorAppNotificationTitle;
+        // String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
-        String body2 = "";
-        if (child.gender == "Male") {
-          body2 = appLocalizations.newDoctorAppNotificationBody1male +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2male;
-        } else {
-          body2 = appLocalizations.newDoctorAppNotificationBody1female +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2female;
-        }
+        // String body2 = "";
+        // if (child.gender == "Male") {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1male +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2male;
+        // } else {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1female +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2female;
+        // }
 
-        NotificationModel notification2 = NotificationModel(
-          title: title2,
-          body: body2,
-          issuedAt: temp,
-          opened: false,
-          dismissed: false,
-          route: Routes.milestone,
-          period: period.id,
-          childId: child.id,
-        );
-        DaoResponse<bool, int> response2 =
-            await notificationRepository.insertNotification(notification2);
-        notification2.id = response2.item2;
-        _notificationService.scheduleNotifications(
-          id: response2.item2,
-          title: title2,
-          body: body2,
-          scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        );
+        // NotificationModel notification2 = NotificationModel(
+        //   title: title2,
+        //   body: body2,
+        //   issuedAt: temp,
+        //   opened: false,
+        //   dismissed: false,
+        //   route: Routes.milestone,
+        //   period: period.id,
+        //   childId: child.id,
+        // );
+        // DaoResponse<bool, int> response2 =
+        //     await notificationRepository.insertNotification(notification2);
+        // notification2.id = response2.item2;
+        // _notificationService.scheduleNotifications(
+        //   id: response2.item2,
+        //   title: title2,
+        //   body: body2,
+        //   scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        // );
       }
       for (var i = 1; i <= period.numWeeks; i++) {
         _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
@@ -484,21 +503,41 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         .toList();
 
     bool noErrorsRatings = true;
-    if (newRatings.isNotEmpty) {
-      String? error = await updateRatingOnBackend(event.appLocalizations);
-      if (error == null) {
-        for (var rating in newRatings) {
-          rating.uploaded = true;
-          await ratingRepository.updateRating(rating);
+    // if (newRatings.isNotEmpty) {
+    //   String? error = await updateRatingOnBackend(event.appLocalizations);
+    //   if (error == null) {
+    //     for (var rating in newRatings) {
+    //       rating.uploaded = true;
+    //       await ratingRepository.updateRating(rating);
+    //     }
+    //   } else {
+    //     noErrorsRatings = false;
+    //     print('ErrorUploadingChildrenState');
+    //     emit(ErrorUploadingChildrenState(error: error));
+    //   }
+    // }
+
+    bool noErrorsDeletes = true;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    List<String> toDelete =
+        prefs.getStringList(SharedPrefKeys.childrenToDeleteOnBackend) ?? [];
+    if (toDelete.isNotEmpty) {
+      for (var element in toDelete) {
+        String? response = await deleteChildOnBackend(element);
+        if (response != null) {
+          noErrorsDeletes = false;
+        } else {
+          toDelete.remove(element);
         }
-      } else {
-        noErrorsRatings = false;
-        print('ErrorUploadingChildrenState');
-        emit(ErrorUploadingChildrenState(error: error));
       }
+      await prefs.setStringList(
+          SharedPrefKeys.childrenToDeleteOnBackend, toDelete);
     }
 
-    if (noErrorsUploading && noErrorsUpdating && noErrorsRatings) {
+    if (noErrorsUploading &&
+        noErrorsUpdating &&
+        noErrorsRatings &&
+        noErrorsDeletes) {
       emit(UploadedChildrenState());
     }
   }
@@ -524,16 +563,19 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
           },
           body: body,
         );
+
         if (response.statusCode == 200 || response.statusCode == 201) {
-          return null;
+          var responseBody = json.decode(response.body);
+          String? childBackendId = responseBody["data"]["newChild"][0]["_id"];
+          return childBackendId;
         } else {
-          return "response not 200";
+          return null;
         }
       } catch (e) {
-        return "connection failed";
+        return null;
       }
     }
-    return "token not available";
+    return null;
   }
 
   Future<String?> updateChildOnBackend(ChildModel childModel) async {
@@ -655,79 +697,28 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     // List decisions = decisionRepository.
   }
 
-  Future<String?> updateRatingOnBackend(
-      AppLocalizations appLocalizations) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString(SharedPrefKeys.accessToken);
-    String? userID = prefs.getString(SharedPrefKeys.userID);
-    if (token != null && userID != null) {
-      try {
-        Map<String, dynamic> data = {};
-        data["rating"] = await ratingsToJSON(appLocalizations);
-        Object body = {
-          "id": userID,
-          "data": json.encode(data),
-        };
-        final response = await http.patch(
-          Uri.parse(Urls.backendUrl + Urls.userUpdateUrl),
-          headers: {
-            "Authorization": "Bearer " + token,
-          },
-          body: json.encode(body),
-        );
-        print('response.body: ${response.body}');
-        if (response.statusCode == 200) {
-          return null;
-        } else {
-          print('updateRatingOnBackend.response: response not 200');
-          return "response not 200";
-        }
-      } catch (e) {
-        print('updateRatingOnBackend.e: ${e}');
-        return "connection failed";
-      }
-    }
-    print('updateRatingOnBackend.error: token not available');
-    return "token not available";
-  }
-
-  Future<List> ratingsToJSON(AppLocalizations appLocalizations) async {
-    List<RatingModel> ratings = await ratingRepository.getAllRatings();
-
-    List data = [];
-
-    Map<int, String> ratingsTexts = {
-      1: appLocalizations.appInterfaceRating,
-      2: appLocalizations.contentRating,
-      3: appLocalizations.educationalContentRating,
-    };
-    for (var rating in ratings) {
-      data.add({
-        "ratingId": rating.ratingId,
-        "text": ratingsTexts[rating.ratingId],
-        "rating": rating.rating,
-        "takenAt": rating.takenAt.millisecondsSinceEpoch,
-      });
-    }
-    return data;
-  }
-
   Future<String?> deleteChildOnBackend(String backendID) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(SharedPrefKeys.accessToken);
     if (token != null) {
       try {
-        Object body = {
-          "id": backendID,
-        };
         final response = await http.post(
-          Uri.parse(Urls.backendUrl + Urls.createChildUrl),
+          Uri.parse(Urls.backendUrl + Urls.deleteChildUrl),
           headers: {
             "Authorization": "Bearer " + token,
+            "Content-Type": "application/json",
           },
-          body: body,
+          body: json.encode({
+            "id": backendID,
+            "data": {
+              "active": 0,
+            },
+          }),
         );
-        if (response.statusCode == 200 || response.statusCode == 201) {
+
+        if (response.statusCode == 200 ||
+            response.statusCode == 201 ||
+            response.statusCode == 204) {
           return null;
         } else {
           return "response not 200";

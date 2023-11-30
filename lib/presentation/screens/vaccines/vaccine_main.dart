@@ -88,6 +88,17 @@ class _VaccineScreenState extends State<VaccineScreen> {
                     children: [
                       SizedBox(height: size.height * 0.02),
                       // periodDropDownList(2, size, textScale),
+                      Container(
+                        alignment: AlignmentDirectional.center,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: size.width * 0.05),
+                        child: AppText(
+                          text: AppLocalizations.of(context)!.vaccineChecklist,
+                          fontSize: textScale * 28,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.02),
                       periodDropDownList(
                           currentPeriod!.id, size, textScale, isMOBILE),
                       SizedBox(height: size.height * 0.02),
@@ -96,12 +107,12 @@ class _VaccineScreenState extends State<VaccineScreen> {
                         padding:
                             EdgeInsets.symmetric(horizontal: size.width * 0.05),
                         child: AppText(
-                          text: AppLocalizations.of(context)!.vaccineChecklist,
-                          fontSize: textScale * 24,
+                          text: AppLocalizations.of(context)!.vaccinePageHeader,
+                          fontSize: textScale * 20,
                           textAlign: TextAlign.start,
                         ),
                       ),
-                      SizedBox(height: size.height * 0.02),
+                      SizedBox(height: size.height * 0.04),
                       BlocBuilder<VaccineBloc, VaccineState>(
                         builder: (context, state) {
                           if (state

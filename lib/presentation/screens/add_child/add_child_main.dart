@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/screens/add_child/add_child_form.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,8 @@ class _AddChildScreenState extends State<AddChildScreen> {
       alignment: Alignment.topLeft,
       child: InkWell(
         onTap: () {
-          Navigator.pop(context);
+          Navigator.popAndPushNamed(context, Routes.home);
+          // Navigator.pop(context);
         },
         child: AppText(
           text: AppLocalizations.of(context)!.cancel,

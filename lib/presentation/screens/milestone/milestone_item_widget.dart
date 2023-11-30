@@ -114,6 +114,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
+                      appLocalizations: AppLocalizations.of(context)!,
                     ));
                   }
                 },
@@ -165,6 +166,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
+                      appLocalizations: AppLocalizations.of(context)!,
                     ));
                     // BlocProvider.of<DecisionBloc>(context).add(
                     //     GetDecisionsByAgeEvent(
@@ -219,6 +221,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
+                      appLocalizations: AppLocalizations.of(context)!,
                     ));
                   }
                 },

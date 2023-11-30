@@ -37,7 +37,7 @@ class LogBloc extends Bloc<LogEvent, LogState> {
   void getAllLogs(GetAllLogsEvent event, Emitter<LogState> emit) async {
     emit(AllLogsLoadingState());
     List<LogModel>? logs = await logRepository.getAllLogs();
-    print('logs: ${logs}');
+    // print('logs: ${logs}');
     if (logs != null) {
       emit(AllLogsLoadedState(logs));
     } else {
@@ -84,13 +84,11 @@ class LogBloc extends Bloc<LogEvent, LogState> {
   }
 
   Future<String?> updateLogOnBackend(LogModel logModel) async {
-    print('logModel: ${logModel}');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(SharedPrefKeys.accessToken);
     String? userID = prefs.getString(SharedPrefKeys.userID);
     if (token != null) {
       try {
-        print("uploading logs");
         final response = await http.post(
           Uri.parse(Urls.backendUrl + Urls.addLogUrl),
           headers: {
@@ -103,7 +101,6 @@ class LogBloc extends Bloc<LogEvent, LogState> {
             "takenAt": logModel.takenAt.toString(),
           },
         );
-        print('response.body: ${response.body}');
         if (response.statusCode == 200) {
           return null;
         } else {

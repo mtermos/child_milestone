@@ -18,7 +18,8 @@ bool uploadData(BuildContext context) {
       UploadChildrenEvent(appLocalizations: AppLocalizations.of(context)!));
 
   // upload ratings
-  // BlocProvider.of<RatingBloc>(context).add(const UploadRatingsEvent());
+  BlocProvider.of<RatingBloc>(context)
+      .add(UploadRatingsEvent(appLocalizations: AppLocalizations.of(context)!));
 
   // upload logs
   BlocProvider.of<LogBloc>(context).add(const UploadLogsEvent());

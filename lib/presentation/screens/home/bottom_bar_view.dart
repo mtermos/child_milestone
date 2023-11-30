@@ -369,7 +369,7 @@ class _TabIconsState extends State<TabIcons> with TickerProviderStateMixin {
         tabIconData.title = AppLocalizations.of(context)!.tips;
         break;
       case "appRate":
-        tabIconData.title = AppLocalizations.of(context)!.appRate;
+        tabIconData.title = AppLocalizations.of(context)!.appRateOld;
         break;
     }
   }

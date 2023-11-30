@@ -92,7 +92,19 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
         await notificationRepository.dismissNotification(event.notification);
 
     if (response.item1) {
-      emit(DismissedNotificationsState(notificationId: event.notification.id!));
+      List<NotificationWithChildAndMilestone>? notifications =
+          await notificationRepository.getAllNotificationsWithChildren();
+
+      if (notifications != null) {
+        notifications = notifications
+            .where((element) =>
+                !element.notification.opened &&
+                !element.notification.dismissed &&
+                element.notification.issuedAt.isBefore(DateTime.now()))
+            .toList();
+        emit(AllUnopenedNotificationsLoadedState(notifications));
+      }
+      // emit(DismissedNotificationsState(notificationId: event.notification.id!));
     } else {
       emit(ErrorDismissingNotificationState());
     }

@@ -67,6 +67,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         List<dynamic> childrenIDs =
             responseBody["data"]["user"]["children"] ?? [];
+
         for (String childID in childrenIDs) {
           String? response =
               await getChildFromBackend(childID, event.appLocalizations);
@@ -74,20 +75,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         if (responseBody["data"]["user"]["rating"] != null) {
           List<dynamic> ratings = responseBody["data"]["user"]["rating"];
-          for (var rating in ratings) {
-            double ratingValue = 0.0;
-            if (rating["rating"] is String) {
-              ratingValue = double.parse(rating["rating"]);
-            } else {
-              ratingValue = rating["rating"].toDouble();
-            }
+          if (ratings.isNotEmpty) {
             await ratingRepository.insertRating(
               RatingModel(
-                ratingId: rating["ratingId"] as int,
-                rating: ratingValue,
+                ratingId: 0,
+                rating: 0,
+                multipleRatings: "",
+                additionalText: "already rated",
                 uploaded: true,
-                takenAt: DateTime.fromMillisecondsSinceEpoch(
-                    rating["takenAt"] as int),
+                takenAt: DateTime.now(),
               ),
             );
           }
@@ -191,10 +187,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
               uploaded: true,
               pregnancyDuration:
                   response.data["data"]["child"]["pregnancyDuration"] as int);
+
           await createChild(child, appLocalizations);
           await createMilestonesDecisions(milestonesDecisions, frontendID);
           await createVaccinesDecisions(vaccinesDecisions, frontendID);
           prefs.setInt(SharedPrefKeys.selectedChildId, child.id);
+          return null;
+        } else if (response.statusCode == 404) {
           return null;
         } else {
           return "response not 200";
@@ -329,38 +328,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         //adding doctor appointment notification
-        String title2 = appLocalizations.newDoctorAppNotificationTitle;
+        // String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
-        String body2 = "";
-        if (child.gender == "Male") {
-          body2 = appLocalizations.newDoctorAppNotificationBody1male +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2male;
-        } else {
-          body2 = appLocalizations.newDoctorAppNotificationBody1female +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2female;
-        }
+        // String body2 = "";
+        // if (child.gender == "Male") {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1male +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2male;
+        // } else {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1female +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2female;
+        // }
 
-        NotificationModel notification2 = NotificationModel(
-          title: title2,
-          body: body2,
-          issuedAt: temp,
-          opened: false,
-          dismissed: false,
-          route: Routes.milestone,
-          period: period.id,
-          childId: child.id,
-        );
-        DaoResponse<bool, int> response2 =
-            await notificationRepository.insertNotification(notification2);
-        notification2.id = response2.item2;
-        _notificationService.scheduleNotifications(
-          id: response2.item2,
-          title: title2,
-          body: body2,
-          scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        );
+        // NotificationModel notification2 = NotificationModel(
+        //   title: title2,
+        //   body: body2,
+        //   issuedAt: temp,
+        //   opened: false,
+        //   dismissed: false,
+        //   route: Routes.milestone,
+        //   period: period.id,
+        //   childId: child.id,
+        // );
+        // DaoResponse<bool, int> response2 =
+        //     await notificationRepository.insertNotification(notification2);
+        // notification2.id = response2.item2;
+        // _notificationService.scheduleNotifications(
+        //   id: response2.item2,
+        //   title: title2,
+        //   body: body2,
+        //   scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        // );
       }
 
       for (var i = 1; i <= period.numWeeks; i++) {
@@ -417,38 +416,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         //adding doctor appointment notification
-        String title2 = appLocalizations.newDoctorAppNotificationTitle;
+        // String title2 = appLocalizations.newDoctorAppNotificationTitle;
 
-        String body2 = "";
-        if (child.gender == "Male") {
-          body2 = appLocalizations.newDoctorAppNotificationBody1male +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2male;
-        } else {
-          body2 = appLocalizations.newDoctorAppNotificationBody1female +
-              child.name +
-              appLocalizations.newDoctorAppNotificationBody2female;
-        }
+        // String body2 = "";
+        // if (child.gender == "Male") {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1male +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2male;
+        // } else {
+        //   body2 = appLocalizations.newDoctorAppNotificationBody1female +
+        //       child.name +
+        //       appLocalizations.newDoctorAppNotificationBody2female;
+        // }
 
-        NotificationModel notification2 = NotificationModel(
-          title: title2,
-          body: body2,
-          issuedAt: temp,
-          opened: false,
-          dismissed: false,
-          route: Routes.milestone,
-          period: period.id,
-          childId: child.id,
-        );
-        DaoResponse<bool, int> response2 =
-            await notificationRepository.insertNotification(notification2);
-        notification2.id = response2.item2;
-        _notificationService.scheduleNotifications(
-          id: response2.item2,
-          title: title2,
-          body: body2,
-          scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        );
+        // NotificationModel notification2 = NotificationModel(
+        //   title: title2,
+        //   body: body2,
+        //   issuedAt: temp,
+        //   opened: false,
+        //   dismissed: false,
+        //   route: Routes.milestone,
+        //   period: period.id,
+        //   childId: child.id,
+        // );
+        // DaoResponse<bool, int> response2 =
+        //     await notificationRepository.insertNotification(notification2);
+        // notification2.id = response2.item2;
+        // _notificationService.scheduleNotifications(
+        //   id: response2.item2,
+        //   title: title2,
+        //   body: body2,
+        //   scheduledDate: tz.TZDateTime.from(temp, tz.local),
+        // );
       }
       for (var i = 1; i <= period.numWeeks; i++) {
         _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,

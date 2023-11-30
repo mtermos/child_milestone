@@ -1,3 +1,4 @@
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
@@ -84,7 +85,8 @@ class _EditChildScreenState extends State<EditChildScreen> {
       alignment: Alignment.topLeft,
       child: InkWell(
         onTap: () {
-          Navigator.pop(context);
+          // Navigator.pop(context);
+          Navigator.popAndPushNamed(context, Routes.home);
         },
         child: AppText(
           text: AppLocalizations.of(context)!.cancel,

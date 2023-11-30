@@ -1,4 +1,3 @@
-import 'package:background_fetch/background_fetch.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/data/dao/child_dao.dart';
 import 'package:child_milestone/data/dao/decision_dao.dart';
@@ -29,12 +28,11 @@ import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
-import 'package:child_milestone/logic/cubits/internet_connectivity/internet_cubit.dart';
 import 'package:child_milestone/logic/cubits/language/Language_cubit.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/logic/shared/upload_data.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
@@ -48,26 +46,8 @@ import 'dart:convert';
 
 const EVENTS_KEY = "fetch_events";
 
-void backgroundFetchHeadlessTask() async {
-  print('[BackgroundFetch] Headless event received.');
-  print("Hey Pawan Background headless fetch is successful");
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-
-  // Read fetch_events from SharedPreferences
-  List<String> events = [];
-  String? json = prefs.getString(EVENTS_KEY);
-  if (json != null) {
-    events = jsonDecode(json).cast<String>();
-  }
-  // Add new event.
-  events.insert(0, new DateTime.now().toString() + ' [Headless]');
-  // Persist fetch events in SharedPreferences
-  prefs.setString(EVENTS_KEY, jsonEncode(events));
-
-  BackgroundFetch.finish("com.transistorsoft.uploadData");
-}
-
 void main() async {
+  // debugPaintSizeEnabled = true;
   WidgetsFlutterBinding.ensureInitialized();
   await NotificationService().init(); //
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -78,7 +58,6 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]).then((value) => runApp(Application(
         appRouter: AppRouter(),
-        connectivity: Connectivity(),
         startLang: Locale(startLang),
       )));
 
@@ -87,48 +66,17 @@ void main() async {
   //   connectivity: Connectivity(),
   //   startLang: Locale(startLang),
   // ));
-  BackgroundFetch.registerHeadlessTask(backgroundFetchHeadlessTask);
 }
 
 class Application extends StatelessWidget {
   final AppRouter appRouter;
-  final Connectivity connectivity;
   final Locale startLang;
 
   const Application({
     Key? key,
     required this.appRouter,
-    required this.connectivity,
     required this.startLang,
   }) : super(key: key);
-
-  // Platform messages are asynchronous, so we initialize in an async method.
-  Future<void> initPlatformState() async {
-    // Configure BackgroundFetch.
-    int status = await BackgroundFetch.configure(
-        BackgroundFetchConfig(
-            minimumFetchInterval: 15,
-            stopOnTerminate: false,
-            enableHeadless: true,
-            requiresBatteryNotLow: false,
-            requiresCharging: false,
-            requiresStorageNotLow: false,
-            requiresDeviceIdle: false,
-            requiredNetworkType: NetworkType.NONE), (String taskId) async {
-      // <-- Event handler
-      // This is the fetch-event callback.
-      print("[BackgroundFetch] Event received $taskId");
-      // IMPORTANT:  You must signal completion of your task or the OS can punish your app
-      // for taking too long in the background.
-      BackgroundFetch.finish(taskId);
-    }, (String taskId) async {
-      // <-- Task timeout handler.
-      // This task has exceeded its allowed running-time.  You must stop what you're doing and immediately .finish(taskId)
-      print("[BackgroundFetch] TASK TIMEOUT taskId: $taskId");
-      BackgroundFetch.finish(taskId);
-    });
-    print('[BackgroundFetch] configure success: $status');
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +102,6 @@ class Application extends StatelessWidget {
       ],
       child: MultiBlocProvider(
         providers: [
-          BlocProvider<InternetCubit>(
-            create: (internetBlocContext) =>
-                InternetCubit(connectivity: connectivity),
-          ),
           BlocProvider<AuthBloc>(
             create: (context) => AuthBloc(
               childRepository: RepositoryProvider.of<ChildRepository>(context),
@@ -215,6 +159,8 @@ class Application extends StatelessWidget {
               milestoneRepository:
                   RepositoryProvider.of<MilestoneRepository>(context),
               childBloc: BlocProvider.of<ChildBloc>(context),
+              vaccineRepository:
+                  RepositoryProvider.of<VaccineRepository>(context),
             ),
           ),
           BlocProvider<NotificationBloc>(
@@ -255,20 +201,6 @@ class Application extends StatelessWidget {
         ],
         child: BlocBuilder<LanguageCubit, Locale>(
           builder: (context, lang) {
-            BlocProvider.of<LogBloc>(context).add(
-              AddLogEvent(
-                log: LogModel(
-                  action: "open app",
-                  description: "The user opened the application",
-                  takenAt: DateTime.now(),
-                ),
-              ),
-            );
-
-            BlocProvider.of<ChildBloc>(context).add(UploadChildrenEvent(
-                appLocalizations: AppLocalizations.of(context)!));
-            BlocProvider.of<LogBloc>(context).add(const UploadLogsEvent());
-
             return GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {

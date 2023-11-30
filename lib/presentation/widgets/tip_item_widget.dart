@@ -49,8 +49,8 @@ class _TipItemWidgetState extends State<TipItemWidget> {
     Widget body;
     YoutubePlayerController? _controller;
     if (widget.item.videoURL != null) {
-      if (widget.item.videoURL!.contains("/shorts/") ||
-          widget.item.videoURL!.contains("raisingchildren.net.au")) {
+      // widget.item.videoURL!.contains("/shorts/") ||
+      if (widget.item.videoURL!.contains("raisingchildren.net.au")) {
         body = InkWell(
           child: Column(
             children: [
@@ -144,6 +144,18 @@ class _TipItemWidgetState extends State<TipItemWidget> {
                   if (snapshot.hasData) {
                     final image = snapshot.data!;
                     return Image.memory(image);
+                    // return AspectRatio(
+                    //   aspectRatio: 1.5,
+                    //   child: Container(
+                    //     decoration: BoxDecoration(
+                    //       image: DecorationImage(
+                    //           fit: BoxFit.fitWidth,
+                    //           centerSlice: Rect.fromLTRB(0.3, 0, 0.3, 0.5),
+                    //           alignment: FractionalOffset.topCenter,
+                    //           image: Image.memory(image).image),
+                    //     ),
+                    //   ),
+                    // );
                   } else {
                     return SvgPicture.asset(
                       documentSVG,

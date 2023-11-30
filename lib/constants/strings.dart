@@ -24,6 +24,7 @@ class Urls {
   static const String createChildUrl = "child/add";
   static const String updateChildUrl = "child/update";
   static const String getChildUrl = "child/get";
+  static const String deleteChildUrl = "child/softDelete";
   static const String addLogUrl = "log/add";
 }
 
@@ -38,4 +39,5 @@ class SharedPrefKeys {
   static const String selectedChildId = "selectedChildId";
   static const String langCode = "lang";
   static const String userID = "user_id";
+  static const String childrenToDeleteOnBackend = "childrenToDeleteOnBackend";
 }

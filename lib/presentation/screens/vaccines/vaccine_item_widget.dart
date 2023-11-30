@@ -115,6 +115,7 @@ class _VaccineItemWidgetState extends State<VaccineItemWidget> {
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
+                      appLocalizations: AppLocalizations.of(context)!,
                     ));
                   }
                 },
@@ -166,6 +167,7 @@ class _VaccineItemWidgetState extends State<VaccineItemWidget> {
                                 child: selected_child!,
                                 periodId: widget.selectedPeriod.id));
                       },
+                      appLocalizations: AppLocalizations.of(context)!,
                     ));
                     // BlocProvider.of<DecisionBloc>(context).add(
                     //     GetDecisionsByAgeEvent(
@@ -199,57 +201,58 @@ class _VaccineItemWidgetState extends State<VaccineItemWidget> {
                   ),
                 ),
               ),
-              SizedBox(width: size.width * 0.01),
-              InkWell(
-                onTap: () {
-                  if (selected_child != null) {
-                    setState(() {
-                      decision = 3;
-                    });
-                    BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
-                      decision: DecisionModel(
-                        childId: selected_child!.id,
-                        vaccineId: widget.item.vaccine.id,
-                        milestoneId: 0,
-                        decision: 3,
-                        takenAt: DateTime.now(),
-                      ),
-                      onSuccess: () {
-                        BlocProvider.of<VaccineBloc>(context).add(
-                            GetVaccinesWithDecisionsByPeriodEvent(
-                                child: selected_child!,
-                                periodId: widget.selectedPeriod.id));
-                      },
-                    ));
-                  }
-                },
-                child: Container(
-                  width: size.width * 0.15,
-                  decoration: BoxDecoration(
-                    border: Border.all(),
-                    borderRadius: const BorderRadius.all(Radius.circular(6)),
-                    color: widget.item.decision.decision == 3
-                        ? Colors.yellow[200]
-                        : Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black54,
-                        offset: Offset(textScale * 2, textScale * 4),
-                        blurRadius: textScale * 8,
-                      ),
-                    ],
-                  ),
-                  alignment: Alignment.center,
-                  padding: EdgeInsets.symmetric(
-                    vertical: textScale * 15,
-                  ),
-                  child: AppText(
-                    text: AppLocalizations.of(context)!.maybe,
-                    textAlign: TextAlign.right,
-                    fontSize: isMOBILE ? textScale * 20 : textScale * 18,
-                  ),
-                ),
-              ),
+              // SizedBox(width: size.width * 0.01),
+              // InkWell(
+              //   onTap: () {
+              //     if (selected_child != null) {
+              //       setState(() {
+              //         decision = 3;
+              //       });
+              //       BlocProvider.of<DecisionBloc>(context).add(AddDecisionEvent(
+              //         decision: DecisionModel(
+              //           childId: selected_child!.id,
+              //           vaccineId: widget.item.vaccine.id,
+              //           milestoneId: 0,
+              //           decision: 3,
+              //           takenAt: DateTime.now(),
+              //         ),
+              //         onSuccess: () {
+              //           BlocProvider.of<VaccineBloc>(context).add(
+              //               GetVaccinesWithDecisionsByPeriodEvent(
+              //                   child: selected_child!,
+              //                   periodId: widget.selectedPeriod.id));
+              //         },
+              //         appLocalizations: AppLocalizations.of(context)!,
+              //       ));
+              //     }
+              //   },
+              //   child: Container(
+              //     width: size.width * 0.15,
+              //     decoration: BoxDecoration(
+              //       border: Border.all(),
+              //       borderRadius: const BorderRadius.all(Radius.circular(6)),
+              //       color: widget.item.decision.decision == 3
+              //           ? Colors.yellow[200]
+              //           : Colors.white,
+              //       boxShadow: [
+              //         BoxShadow(
+              //           color: Colors.black54,
+              //           offset: Offset(textScale * 2, textScale * 4),
+              //           blurRadius: textScale * 8,
+              //         ),
+              //       ],
+              //     ),
+              //     alignment: Alignment.center,
+              //     padding: EdgeInsets.symmetric(
+              //       vertical: textScale * 15,
+              //     ),
+              //     child: AppText(
+              //       text: AppLocalizations.of(context)!.maybe,
+              //       textAlign: TextAlign.right,
+              //       fontSize: isMOBILE ? textScale * 20 : textScale * 18,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

@@ -4,13 +4,17 @@ import 'dart:convert';
 class RatingModel {
   int? id;
   int ratingId;
-  double rating;
+  int rating;
+  String multipleRatings;
+  String additionalText;
   bool uploaded;
   DateTime takenAt;
   RatingModel({
     this.id,
     required this.ratingId,
     required this.rating,
+    required this.multipleRatings,
+    required this.additionalText,
     required this.uploaded,
     required this.takenAt,
   });
@@ -18,7 +22,9 @@ class RatingModel {
   RatingModel copyWith({
     int? id,
     int? ratingId,
-    double? rating,
+    int? rating,
+    String? multipleRatings,
+    String? additionalText,
     bool? uploaded,
     DateTime? takenAt,
   }) {
@@ -26,6 +32,8 @@ class RatingModel {
       id: id ?? this.id,
       ratingId: ratingId ?? this.ratingId,
       rating: rating ?? this.rating,
+      multipleRatings: multipleRatings ?? this.multipleRatings,
+      additionalText: additionalText ?? this.additionalText,
       uploaded: uploaded ?? this.uploaded,
       takenAt: takenAt ?? this.takenAt,
     );
@@ -36,16 +44,29 @@ class RatingModel {
       'id': id,
       'ratingId': ratingId,
       'rating': rating,
+      'multipleRatings': multipleRatings,
+      'additionalText': additionalText,
       'uploaded': uploaded ? 1 : 0,
       'takenAt': takenAt.millisecondsSinceEpoch,
     };
   }
 
   factory RatingModel.fromMap(Map<String, dynamic> map) {
+    double rate = map['rating'] as double;
+    String newAdditionalText = "";
+    String newMultipleRatings = "";
+    if (map.containsKey('additionalText') && map['additionalText'] != null) {
+      newAdditionalText = map['additionalText'] as String;
+    }
+    if (map.containsKey('multipleRatings') && map['multipleRatings'] != null) {
+      newMultipleRatings = map['multipleRatings'] as String;
+    }
     return RatingModel(
       id: map['id'] != null ? map['id'] as int : null,
       ratingId: map['ratingId'] as int,
-      rating: map['rating'] as double,
+      rating: rate.toInt(),
+      multipleRatings: newMultipleRatings,
+      additionalText: newAdditionalText,
       uploaded: map['uploaded'] == 1,
       takenAt: DateTime.fromMillisecondsSinceEpoch(map['takenAt'] as int),
     );
@@ -58,7 +79,7 @@ class RatingModel {
 
   @override
   String toString() {
-    return 'RatingModel(id: $id, ratingId: $ratingId, rating: $rating, uploaded: $uploaded, takenAt: $takenAt)';
+    return 'RatingModel(id: $id, ratingId: $ratingId, rating: $rating, multipleRatings: $multipleRatings, additionalText: $additionalText, uploaded: $uploaded, takenAt: $takenAt)';
   }
 
   @override
@@ -68,6 +89,8 @@ class RatingModel {
     return other.id == id &&
         other.ratingId == ratingId &&
         other.rating == rating &&
+        other.multipleRatings == multipleRatings &&
+        other.additionalText == additionalText &&
         other.uploaded == uploaded &&
         other.takenAt == takenAt;
   }
@@ -77,6 +100,8 @@ class RatingModel {
     return id.hashCode ^
         ratingId.hashCode ^
         rating.hashCode ^
+        multipleRatings.hashCode ^
+        additionalText.hashCode ^
         uploaded.hashCode ^
         takenAt.hashCode;
   }

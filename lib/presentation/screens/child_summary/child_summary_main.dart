@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/monthly_periods.dart';
+import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
@@ -354,8 +355,8 @@ class _ChildSummaryScreenState extends State<ChildSummaryScreen> {
                           padding:
                               EdgeInsets.symmetric(vertical: textScale * 24),
                           onPressed: () {
-                            Navigator.pop(context);
-                            // Navigator.popAndPushNamed(context, Routes.home);
+                            // Navigator.pop(context);
+                            Navigator.popAndPushNamed(context, Routes.home);
                           },
                         ),
                       ),

@@ -235,6 +235,8 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                                     .milestoneItem.period));
                                         Navigator.pop(context);
                                       },
+                                      appLocalizations:
+                                          AppLocalizations.of(context)!,
                                     ));
                                   },
                                   child: Container(
@@ -288,6 +290,8 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                                     .milestoneItem.period));
                                         Navigator.pop(context);
                                       },
+                                      appLocalizations:
+                                          AppLocalizations.of(context)!,
                                     ));
                                     // BlocProvider.of<DecisionBloc>(context).add(
                                     //     GetDecisionsByAgeEvent(
@@ -327,27 +331,28 @@ class _MilestoneSummaryItemState extends State<MilestoneSummaryItem> {
                                     setState(() {
                                       decision = 3;
                                     });
-                                    BlocProvider.of<DecisionBloc>(context)
-                                        .add(AddDecisionEvent(
-                                            decision: DecisionModel(
-                                              childId: widget.child.id,
-                                              milestoneId:
-                                                  widget.milestoneItem.id,
-                                              vaccineId: 0,
-                                              decision: 3,
-                                              takenAt: DateTime.now(),
-                                            ),
-                                            onSuccess: () {
-                                              BlocProvider.of<MilestoneBloc>(
-                                                      context)
-                                                  .add(
-                                                      GetMilestonesForSummaryEvent(
-                                                          child: widget.child,
-                                                          periodId: widget
-                                                              .milestoneItem
-                                                              .period));
-                                              Navigator.pop(context);
-                                            }));
+                                    BlocProvider.of<DecisionBloc>(context).add(
+                                      AddDecisionEvent(
+                                        decision: DecisionModel(
+                                          childId: widget.child.id,
+                                          milestoneId: widget.milestoneItem.id,
+                                          vaccineId: 0,
+                                          decision: 3,
+                                          takenAt: DateTime.now(),
+                                        ),
+                                        onSuccess: () {
+                                          BlocProvider.of<MilestoneBloc>(
+                                                  context)
+                                              .add(GetMilestonesForSummaryEvent(
+                                                  child: widget.child,
+                                                  periodId: widget
+                                                      .milestoneItem.period));
+                                          Navigator.pop(context);
+                                        },
+                                        appLocalizations:
+                                            AppLocalizations.of(context)!,
+                                      ),
+                                    );
                                   },
                                   child: Container(
                                     width: size.width * 0.15,

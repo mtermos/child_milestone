@@ -7,9 +7,12 @@ import 'package:child_milestone/data/data_providers/notifications_items_list.dar
 import 'package:child_milestone/data/data_providers/vaccine_items_list.dart';
 import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/models/child_model.dart';
+import 'package:child_milestone/data/models/log.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
+import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
 import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
+import 'package:child_milestone/logic/blocs/rating/rating_bloc.dart';
 import 'package:child_milestone/logic/blocs/tip/tip_bloc.dart';
 import 'package:child_milestone/data/data_providers/milestone_items_list.dart';
 import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
@@ -35,6 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
     // resetData();
     const delay = Duration(seconds: 1);
     Future.delayed(delay, () => checkUserIsLogged());
@@ -42,6 +46,20 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<LogBloc>(context).add(
+      AddLogEvent(
+        log: LogModel(
+          action: "open app",
+          description: "The user opened the application",
+          takenAt: DateTime.now(),
+        ),
+      ),
+    );
+    BlocProvider.of<ChildBloc>(context).add(
+        UploadChildrenEvent(appLocalizations: AppLocalizations.of(context)!));
+    BlocProvider.of<LogBloc>(context).add(const UploadLogsEvent());
+    BlocProvider.of<RatingBloc>(context).add(
+        UploadRatingsEvent(appLocalizations: AppLocalizations.of(context)!));
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: AppColors.primaryColor,

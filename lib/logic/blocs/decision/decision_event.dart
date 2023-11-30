@@ -11,10 +11,12 @@ abstract class DecisionEvent extends Equatable {
 class AddDecisionEvent extends DecisionEvent {
   final DecisionModel decision;
   final Function onSuccess;
+  final AppLocalizations appLocalizations;
 
   const AddDecisionEvent({
     required this.decision,
     required this.onSuccess,
+    required this.appLocalizations,
   });
 }
 
@@ -34,8 +36,7 @@ class GetDecisionsByChild extends DecisionEvent {
 
 class GetDecisionsByAgeEvent extends DecisionEvent {
   final ChildModel child;
-  const GetDecisionsByAgeEvent(
-      {required this.child});
+  const GetDecisionsByAgeEvent({required this.child});
 }
 
 class GetDecisionByChildAndMilestoneEvent extends DecisionEvent {
@@ -44,7 +45,6 @@ class GetDecisionByChildAndMilestoneEvent extends DecisionEvent {
   const GetDecisionByChildAndMilestoneEvent(
       {required this.childId, required this.milestoneId});
 }
-
 
 class GetDecisionByChildAndVaccineEvent extends DecisionEvent {
   final int childId;

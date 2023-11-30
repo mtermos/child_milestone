@@ -102,8 +102,6 @@ class _NotificationItemWidgetState extends State<NotificationItemWidget> {
                   BlocProvider.of<NotificationBloc>(context).add(
                       DismissNotificationEvent(
                           notification: widget.item.notification));
-                  BlocProvider.of<NotificationBloc>(context)
-                      .add(GetAllUnopenedNotificationsEvent());
                 },
               ),
             ],

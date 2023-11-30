@@ -93,7 +93,7 @@ class NotificationService {
 }
 
 void selectNotification(NotificationResponse details) async {
-  print('details: ${details}');
+  // print('details: ${details}');
   final dbProvider = DatabaseProvider.dbProvider;
   final db = await dbProvider.database;
   DateTime dateTime = DateTime.now();

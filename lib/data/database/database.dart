@@ -29,17 +29,46 @@ class DatabaseProvider {
     WidgetsFlutterBinding.ensureInitialized();
 
     var database = await openDatabase(path,
-        version: 7, onCreate: initDB, onUpgrade: onUpgrade);
+        version: 12, onCreate: initDB, onUpgrade: onUpgrade);
+    // print("printing tables");
+
+    _updateTableTipsV3toV4(database);
+    _addLogsTable(database);
+    _addMultipleRatingsToRatings(database);
+    _addAdditionalTextToRatings(database);
+
+    // var columns = await database.rawQuery('PRAGMA table_info($ratingsTABLE);');
+    // for (var element in columns) {
+    //   print('COLUMNS: ${element["name"]}');
+    // }
+    // (await database.query('sqlite_master', columns: ['type', 'name']))
+    //     .forEach((row) {
+    //   print(row.values);
+    // });
+    var tables = await database
+        .rawQuery('SELECT * FROM sqlite_master WHERE name="$logsTABLE";');
+    // print('VERSION: ${await database.getVersion()}');
+    if (tables.isEmpty) {
+      _addLogsTable(database);
+    }
     return database;
   }
 
   //This is optional, and only used for changing DB schema migrations
   void onUpgrade(Database database, int oldVersion, int newVersion) {
+    // print('OLDVERSION: ${oldVersion}');
     if (_database != null) {
-      var batch = _database!.batch();
-      if (oldVersion == 3) _updateTableTipsV3toV4(batch);
-      if (oldVersion < 7) _addLogsTable(batch);
-      if (newVersion > oldVersion) {}
+      // _updateTableTipsV3toV4(database);
+      // _addLogsTable(database);
+      // _addMultipleRatingsToRatings(database);
+      // _addAdditionalTextToRatings(database);
+      if (oldVersion == 3) _updateTableTipsV3toV4(database);
+      if (oldVersion < 9) _addLogsTable(database);
+      if (oldVersion < 13) {
+        _addMultipleRatingsToRatings(database);
+        _addAdditionalTextToRatings(database);
+      }
+      // if (newVersion > oldVersion) {}
     }
   }
 
@@ -136,6 +165,8 @@ class DatabaseProvider {
         "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
         "ratingId INTEGER, "
         "rating REAL, "
+        "multipleRatings TEXT, "
+        "additionalText TEXT, "
         "takenAt INTEGER, "
         "uploaded INTEGER "
         ")");
@@ -149,17 +180,43 @@ class DatabaseProvider {
         ")");
   }
 
-  void _updateTableTipsV3toV4(Batch batch) {
-    batch.execute('ALTER TABLE $tipsTABLE ADD webURL TEXT');
+  void _updateTableTipsV3toV4(Database database) async {
+    try {
+      await database.execute('ALTER TABLE $tipsTABLE ADD webURL TEXT');
+    } catch (e) {
+      // print('E_updateTableTipsV3toV4: ${e}');
+    }
   }
 
-  void _addLogsTable(Batch batch) {
-    batch.execute("CREATE TABLE $logsTABLE ("
-        "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-        "action TEXT, "
-        "description TEXT, "
-        "takenAt INTEGER, "
-        "uploaded INTEGER "
-        ")");
+  void _addLogsTable(Database database) async {
+    try {
+      await database.execute("CREATE TABLE $logsTABLE ("
+          "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+          "action TEXT, "
+          "description TEXT, "
+          "takenAt INTEGER, "
+          "uploaded INTEGER "
+          ")");
+    } catch (e) {
+      // print('E_addLogsTable: ${e}');
+    }
+  }
+
+  void _addMultipleRatingsToRatings(Database database) async {
+    try {
+      await database
+          .execute('ALTER TABLE $ratingsTABLE ADD multipleRatings TEXT;');
+    } catch (e) {
+      // print('E_addMultipleRatingsToRatings: ${e}');
+    }
+  }
+
+  void _addAdditionalTextToRatings(Database database) async {
+    try {
+      await database
+          .execute('ALTER TABLE $ratingsTABLE ADD additionalText TEXT;');
+    } catch (e) {
+      // print('E_addAdditionalTextToRatings: ${e}');
+    }
   }
 }

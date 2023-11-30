@@ -26,5 +26,8 @@ class GetRatingEvent extends RatingEvent {
 }
 
 class UploadRatingsEvent extends RatingEvent {
-  const UploadRatingsEvent();
+  final AppLocalizations appLocalizations;
+  const UploadRatingsEvent({
+    required this.appLocalizations,
+  });
 }
