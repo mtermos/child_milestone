@@ -124,6 +124,10 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
           body: body2,
           scheduledDate: tz.TZDateTime.from(date, tz.local),
         );
+
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setString(
+            'lastAlertDoctoreDate', DateTime.now().toIso8601String());
       }
     }
 
@@ -271,6 +275,25 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
   }
 
   Future<bool> checkIfAlertDoctor(ChildModel child) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // Get the saved action date
+    String? savedDate = prefs.getString('lastAlertDoctoreDate');
+
+    // If no date is saved, consider it as not within 5 days
+    if (savedDate != null) {
+      // Parse the saved date
+      DateTime actionDate = DateTime.parse(savedDate);
+
+      // Calculate the difference in days
+      int daysDifference = DateTime.now().difference(actionDate).inDays;
+
+      // Check if the action was initiated within the last 5 days
+      if (daysDifference < 5) {
+        return false;
+      }
+    }
+
     DaoResponse daoResponse = await decisionRepository.getDecisionsByAge(child);
     List<DecisionModel> listOfDecisions = daoResponse.item1;
     int i = 0;
