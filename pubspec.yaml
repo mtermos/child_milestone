@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.1.6+14
+version: 1.1.7+15
 
 environment:
   sdk: ">=2.17.0 <3.0.0"
@@ -37,36 +37,41 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^8.0.1
   flutter_launcher_icons: ^0.13.1
-  flutter_local_notifications: ^14.1.0
+  flutter_local_notifications: ^16.3.0
   flutter_localizations:
     sdk: flutter
   flutter_rating_bar: ^4.0.1
   flutter_screenutil: ^5.5.3+2
-  flutter_secure_storage: ^8.0.0
+  flutter_secure_storage: ^9.0.0
   flutter_svg: ^2.0.6
   flutter_youtube_view: ^2.0.4
   get_it: ^7.2.0
-  http: ^0.13.5
-  image_picker: ^0.8.5+3
+  http: ^1.1.2
+  image_picker: ^1.0.7
   intl: ^0.18.1
   loading_indicator: ^3.1.0
   path: null
   path_provider: ^2.0.15
   pdf_render: ^1.4.0
-  pdfx: ^2.4.0
+  # pdfx: ^2.4.0
+  pdfx: 
+    git:
+      url: 'https://github.com/ScerIO/packages.flutter' 
+      ref: '4be9de9ffed5398fd7d5f44bbb07dcd3d3f1711b'  
+      path: packages/pdfx
   percent_indicator: ^4.2.3
-  rename: ^2.0.1
+  rename: ^3.0.1
   responsive_framework: ^1.0.0
   shared_preferences: ^2.0.15
   sqflite: ^2.0.2+1
-  syncfusion_flutter_pdfviewer: ^20.4.54
+  syncfusion_flutter_pdfviewer: ^24.1.45
   test: null
   url_launcher: ^6.1.5
   youtube_player_flutter: ^8.1.2
   # image_editor_pro: ^1.1.8
 
 dev_dependencies:
-  flutter_lints: ^2.0.1
+  flutter_lints: ^3.0.1
   flutter_test:
     sdk: flutter
 
