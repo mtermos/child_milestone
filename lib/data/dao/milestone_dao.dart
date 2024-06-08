@@ -74,4 +74,11 @@ class MilestoneDao {
         .query(milestonesTABLE, where: 'period < ?', whereArgs: [period + 1]);
     return result;
   }
+
+  Future<List<Map<String, dynamic>>> getMilestonesUntilMonth(int month) async {
+    final db = await dbProvider.database;
+    List<Map<String, dynamic>> result = await db
+        .query(milestonesTABLE, where: 'endingAge < ?', whereArgs: [month]);
+    return result;
+  }
 }

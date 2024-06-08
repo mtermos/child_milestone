@@ -15,19 +15,16 @@ class VaccineRepository {
         : List<Vaccine>.empty();
   }
 
-  Future insertVaccine(Vaccine vaccine) =>
-      vaccineDao.createVaccine(vaccine);
+  Future insertVaccine(Vaccine vaccine) => vaccineDao.createVaccine(vaccine);
 
-  Future updateVaccine(Vaccine vaccine) =>
-      vaccineDao.updateVaccine(vaccine);
+  Future updateVaccine(Vaccine vaccine) => vaccineDao.updateVaccine(vaccine);
 
   Future deleteVaccineById(int id) => vaccineDao.deleteVaccine(id);
 
   Future deleteAllVaccines() => vaccineDao.deleteAllVaccines();
 
   Future<Vaccine?> getVaccineByID(int vaccine_id) async {
-    Map<String, dynamic>? result =
-        await vaccineDao.getVaccineByID(vaccine_id);
+    Map<String, dynamic>? result = await vaccineDao.getVaccineByID(vaccine_id);
     if (result != null) {
       Vaccine vaccine = Vaccine.fromMap(result);
       return vaccine;
@@ -54,10 +51,8 @@ class VaccineRepository {
         : List<Vaccine>.empty();
   }
 
-  Future<List<Vaccine>?> getVaccinesByChild(
-      DateTime dateOfBirth) async {
-    List<Map<String, dynamic>> result =
-        await vaccineDao.getVaccinesByChild();
+  Future<List<Vaccine>?> getVaccinesByChild(DateTime dateOfBirth) async {
+    List<Map<String, dynamic>> result = await vaccineDao.getVaccinesByChild();
 
     return result.isNotEmpty
         ? result.map((item) => Vaccine.fromMap(item)).toList()
@@ -67,6 +62,15 @@ class VaccineRepository {
   Future getVaccinesUntilPeriod(int period) async {
     List<Map<String, dynamic>> result =
         await vaccineDao.getVaccinesUntilPeriod(period);
+
+    return result.isNotEmpty
+        ? result.map((item) => Vaccine.fromMap(item)).toList()
+        : List<Vaccine>.empty();
+  }
+
+  Future getVaccinesUntilMonth(int months) async {
+    List<Map<String, dynamic>> result =
+        await vaccineDao.getVaccinesUntilMonth(months);
 
     return result.isNotEmpty
         ? result.map((item) => Vaccine.fromMap(item)).toList()

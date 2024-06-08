@@ -29,13 +29,15 @@ class DatabaseProvider {
     WidgetsFlutterBinding.ensureInitialized();
 
     var database = await openDatabase(path,
-        version: 12, onCreate: initDB, onUpgrade: onUpgrade);
+        version: 13, onCreate: initDB, onUpgrade: onUpgrade);
     // print("printing tables");
 
     _updateTableTipsV3toV4(database);
     _addLogsTable(database);
     _addMultipleRatingsToRatings(database);
     _addAdditionalTextToRatings(database);
+    _addAdditionalTextToRatings(database);
+    _addEndingAgeToNotificationsTable(database);
 
     // var columns = await database.rawQuery('PRAGMA table_info($ratingsTABLE);');
     // for (var element in columns) {
@@ -67,6 +69,9 @@ class DatabaseProvider {
       if (oldVersion < 13) {
         _addMultipleRatingsToRatings(database);
         _addAdditionalTextToRatings(database);
+      }
+      if (oldVersion < 14) {
+        _addEndingAgeToNotificationsTable(database);
       }
       // if (newVersion > oldVersion) {}
     }
@@ -133,6 +138,7 @@ class DatabaseProvider {
         "uploaded INTEGER, "
         "issuedAt INTEGER, "
         "period INTEGER, "
+        "endingAge INTEGER, "
         "FOREIGN KEY (childId) REFERENCES $childrenTABLE (id), "
         "FOREIGN KEY (milestoneId) REFERENCES $milestonesTABLE (id), "
         "FOREIGN KEY (vaccineId) REFERENCES $vaccinesTABLE (id) "
@@ -215,6 +221,15 @@ class DatabaseProvider {
     try {
       await database
           .execute('ALTER TABLE $ratingsTABLE ADD additionalText TEXT;');
+    } catch (e) {
+      // print('E_addAdditionalTextToRatings: ${e}');
+    }
+  }
+
+  void _addEndingAgeToNotificationsTable(Database database) async {
+    try {
+      await database
+          .execute('ALTER TABLE $notificationsTABLE ADD endingAge INTEGER;');
     } catch (e) {
       // print('E_addAdditionalTextToRatings: ${e}');
     }

@@ -75,7 +75,8 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         //     await childRepository.updateChild(event.child);
         // if (updateResult.item1) {
         if (event.addNotifications) {
-          await addPeriodsNotifications(event.appLocalizations, event.child);
+          await addPeriodsNotifications(
+              event.appLocalizations, event.child, notificationRepository);
         }
         event.whenDone();
         emit(AddedChildState(event.child));
@@ -137,12 +138,14 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
   void editChild(EditChildEvent event, Emitter<ChildState> emit) async {
     emit(EditingChildState());
     String? errorUploading = await updateChildOnBackend(event.child);
+
     if (errorUploading == null) {
       DaoResponse result = await childRepository.updateChild(event.child);
       if (result.item1) {
         if (event.addNotifications) {
           await _deleteAllNotifications(event.child.id);
-          await addPeriodsNotifications(event.appLocalizations, event.child);
+          await addPeriodsNotifications(
+              event.appLocalizations, event.child, notificationRepository);
         }
         event.whenDone();
         emit(EditedChildState(event.child));
@@ -192,7 +195,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
         event.onSuccess();
       } else {
         String? response = await deleteChildOnBackend(childModel.idBackend!);
-        print('RESPONSE: ${response}');
+        print('RESPONSE deleteChild: ${response}');
         if (response == null) {
           emit(DeletedChildState());
           event.onSuccess();
@@ -222,237 +225,6 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     } else {
       emit(ChildLoadingErrorState());
     }
-  }
-
-  Future addPeriodsNotifications(
-      AppLocalizations appLocalizations, ChildModel child) async {
-    int correctingWeeks = 37 - child.pregnancyDuration;
-    if (correctingWeeks < 0) correctingWeeks = 0;
-    DateTime temp;
-
-    // adding the monthly periods (10 periods)
-    for (var period in monthlyPeriods) {
-      temp = child.dateOfBirth
-          .toLocal()
-          .subtract(Duration(days: correctingWeeks * 7));
-
-      if (temp.hour >= 10) {
-        temp = DateTime(
-            temp.year, temp.month + period.startingMonth, temp.day + 1, 10);
-      } else {
-        temp = DateTime(
-            temp.year, temp.month + period.startingMonth, temp.day, 10);
-      }
-
-      if (temp.isAfter(DateTime.now())) {
-        String title = appLocalizations.newPeriodNotificationTitle;
-        String body = "";
-        if (child.gender == "Male") {
-          body = appLocalizations.newPeriodNotificationBody1male +
-              child.name +
-              appLocalizations.newPeriodNotificationBody2male;
-        } else {
-          body = appLocalizations.newPeriodNotificationBody1female +
-              child.name +
-              appLocalizations.newPeriodNotificationBody2female;
-        }
-
-        NotificationModel notification = NotificationModel(
-          title: title,
-          body: body,
-          issuedAt: temp,
-          opened: false,
-          dismissed: false,
-          route: Routes.milestone,
-          period: period.id,
-          childId: child.id,
-        );
-        DaoResponse<bool, int> response =
-            await notificationRepository.insertNotification(notification);
-        notification.id = response.item2;
-        _notificationService.scheduleNotifications(
-          id: response.item2,
-          title: title,
-          body: body,
-          scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        );
-
-        //adding doctor appointment notification
-        // String title2 = appLocalizations.newDoctorAppNotificationTitle;
-
-        // String body2 = "";
-        // if (child.gender == "Male") {
-        //   body2 = appLocalizations.newDoctorAppNotificationBody1male +
-        //       child.name +
-        //       appLocalizations.newDoctorAppNotificationBody2male;
-        // } else {
-        //   body2 = appLocalizations.newDoctorAppNotificationBody1female +
-        //       child.name +
-        //       appLocalizations.newDoctorAppNotificationBody2female;
-        // }
-
-        // NotificationModel notification2 = NotificationModel(
-        //   title: title2,
-        //   body: body2,
-        //   issuedAt: temp,
-        //   opened: false,
-        //   dismissed: false,
-        //   route: Routes.milestone,
-        //   period: period.id,
-        //   childId: child.id,
-        // );
-        // DaoResponse<bool, int> response2 =
-        //     await notificationRepository.insertNotification(notification2);
-        // notification2.id = response2.item2;
-        // _notificationService.scheduleNotifications(
-        //   id: response2.item2,
-        //   title: title2,
-        //   body: body2,
-        //   scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        // );
-      }
-
-      for (var i = 1; i <= period.numWeeks; i++) {
-        _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
-            appLocalizations, child);
-      }
-    }
-
-    // adding the yearly periods (2 periods)
-    for (var period in yearlyPeriods) {
-      temp = child.dateOfBirth
-          .toLocal()
-          .subtract(Duration(days: correctingWeeks * 7));
-
-      if (temp.hour >= 10) {
-        temp = DateTime(
-            temp.year + period.startingYear, temp.month, temp.day + 1, 10);
-      } else {
-        temp =
-            DateTime(temp.year + period.startingYear, temp.month, temp.day, 10);
-      }
-      if (temp.isAfter(DateTime.now())) {
-        String title = appLocalizations.newPeriodNotificationTitle;
-
-        String body = "";
-        if (child.gender == "Male") {
-          body = appLocalizations.newPeriodNotificationBody1male +
-              child.name +
-              appLocalizations.newPeriodNotificationBody2male;
-        } else {
-          body = appLocalizations.newPeriodNotificationBody1female +
-              child.name +
-              appLocalizations.newPeriodNotificationBody2female;
-        }
-
-        NotificationModel notification = NotificationModel(
-          title: title,
-          body: body,
-          issuedAt: temp,
-          opened: false,
-          dismissed: false,
-          route: Routes.milestone,
-          period: period.id,
-          childId: child.id,
-        );
-        DaoResponse<bool, int> response =
-            await notificationRepository.insertNotification(notification);
-        notification.id = response.item2;
-        _notificationService.scheduleNotifications(
-          id: response.item2,
-          title: title,
-          body: body,
-          scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        );
-
-        //adding doctor appointment notification
-        // String title2 = appLocalizations.newDoctorAppNotificationTitle;
-
-        // String body2 = "";
-        // if (child.gender == "Male") {
-        //   body2 = appLocalizations.newDoctorAppNotificationBody1male +
-        //       child.name +
-        //       appLocalizations.newDoctorAppNotificationBody2male;
-        // } else {
-        //   body2 = appLocalizations.newDoctorAppNotificationBody1female +
-        //       child.name +
-        //       appLocalizations.newDoctorAppNotificationBody2female;
-        // }
-
-        // NotificationModel notification2 = NotificationModel(
-        //   title: title2,
-        //   body: body2,
-        //   issuedAt: temp,
-        //   opened: false,
-        //   dismissed: false,
-        //   route: Routes.milestone,
-        //   period: period.id,
-        //   childId: child.id,
-        // );
-        // DaoResponse<bool, int> response2 =
-        //     await notificationRepository.insertNotification(notification2);
-        // notification2.id = response2.item2;
-        // _notificationService.scheduleNotifications(
-        //   id: response2.item2,
-        //   title: title2,
-        //   body: body2,
-        //   scheduledDate: tz.TZDateTime.from(temp, tz.local),
-        // );
-      }
-      for (var i = 1; i <= period.numWeeks; i++) {
-        _addWeeklyNotifications(temp.add(Duration(days: 7 * i)), period.id,
-            appLocalizations, child);
-      }
-    }
-  }
-
-  Future _addWeeklyNotifications(DateTime dateTime, int period,
-      AppLocalizations appLocalizations, ChildModel child) async {
-    if (dateTime.isBefore(DateTime.now())) return;
-    // const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    //     AndroidNotificationDetails(
-    //         'repeating channel id', 'repeating channel name',
-    //         channelDescription: 'repeating description');
-    // const NotificationDetails platformChannelSpecifics =
-    //     NotificationDetails(android: androidPlatformChannelSpecifics);
-    // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    //     FlutterLocalNotificationsPlugin();
-    // await flutterLocalNotificationsPlugin.periodicallyShow(0, 'repeating title',
-    //     'repeating body', RepeatInterval.weekly, platformChannelSpecifics,
-    //     androidAllowWhileIdle: true);
-
-    String title = appLocalizations.weeklyNotificationTitle;
-    String body = "";
-
-    if (child.gender == "Male") {
-      body = appLocalizations.weeklyNotificationBody1male +
-          child.name +
-          appLocalizations.weeklyNotificationBody2;
-    } else {
-      body = appLocalizations.weeklyNotificationBody1female +
-          child.name +
-          appLocalizations.weeklyNotificationBody2;
-    }
-
-    NotificationModel notification = NotificationModel(
-      title: title,
-      body: body,
-      issuedAt: dateTime,
-      opened: false,
-      dismissed: false,
-      route: Routes.milestone,
-      period: period,
-      childId: child.id,
-    );
-    DaoResponse<bool, int> response =
-        await notificationRepository.insertNotification(notification);
-    notification.id = response.item2;
-    _notificationService.scheduleNotifications(
-      id: response.item2,
-      title: title,
-      body: body,
-      scheduledDate: tz.TZDateTime.from(dateTime, tz.local),
-    );
   }
 
   _deleteAllNotifications(int childId) async {

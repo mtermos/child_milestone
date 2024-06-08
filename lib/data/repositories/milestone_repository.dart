@@ -72,4 +72,13 @@ class MilestoneRepository {
         ? result.map((item) => MilestoneItem.fromMap(item)).toList()
         : List<MilestoneItem>.empty();
   }
+
+  Future getMilestonesUntilMonth(int months) async {
+    List<Map<String, dynamic>> result =
+        await milestoneDao.getMilestonesUntilMonth(months);
+
+    return result.isNotEmpty
+        ? result.map((item) => MilestoneItem.fromMap(item)).toList()
+        : List<MilestoneItem>.empty();
+  }
 }

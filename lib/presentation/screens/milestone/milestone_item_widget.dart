@@ -27,6 +27,7 @@ class _MilestoneItemWidgetState extends State<MilestoneItemWidget> {
 
   @override
   void initState() {
+    // check months
     check_child();
     super.initState();
   }

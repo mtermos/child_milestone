@@ -11,6 +11,7 @@ class NotificationModel {
   bool dismissed;
   String route;
   int period;
+  int endingAge;
   int childId;
   int? milestoneId;
   int? vaccineId;
@@ -23,6 +24,7 @@ class NotificationModel {
     required this.dismissed,
     required this.route,
     required this.period,
+    required this.endingAge,
     required this.childId,
     this.milestoneId,
     this.vaccineId,
@@ -39,6 +41,7 @@ class NotificationModel {
     bool? uploaded,
     String? route,
     int? period,
+    int? endingAge,
     int? childId,
     int? milestoneId,
     int? vaccineId,
@@ -53,6 +56,7 @@ class NotificationModel {
       uploaded: uploaded ?? this.uploaded,
       route: route ?? this.route,
       period: period ?? this.period,
+      endingAge: endingAge ?? this.endingAge,
       childId: childId ?? this.childId,
       milestoneId: milestoneId ?? this.milestoneId,
       vaccineId: vaccineId ?? this.vaccineId,
@@ -70,6 +74,7 @@ class NotificationModel {
       'uploaded': uploaded ? 1 : 0,
       'route': route,
       'period': period,
+      'endingAge': endingAge,
       'childId': childId,
       'milestoneId': milestoneId,
       'vaccineId': vaccineId,
@@ -87,6 +92,7 @@ class NotificationModel {
       uploaded: map['uploaded'] == 1,
       route: map['route'] as String,
       period: map['period'] as int,
+      endingAge: map['endingAge'] as int,
       childId: map['childId'] as int,
       milestoneId:
           map['milestoneId'] != null ? map['milestoneId'] as int : null,
@@ -101,7 +107,7 @@ class NotificationModel {
 
   @override
   String toString() {
-    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, route: $route, period: $period, childId: $childId, milestoneId: $milestoneId)';
+    return 'NotificationModel(id: $id, title: $title, body: $body, issuedAt: $issuedAt, opened: $opened, dismissed: $dismissed, route: $route, period: $period, endingAge: $endingAge, childId: $childId, milestoneId: $milestoneId)';
   }
 
   @override
@@ -118,6 +124,7 @@ class NotificationModel {
         other.uploaded == uploaded &&
         other.route == route &&
         other.period == period &&
+        other.endingAge == endingAge &&
         other.childId == childId &&
         other.milestoneId == milestoneId &&
         other.vaccineId == vaccineId;
@@ -134,6 +141,7 @@ class NotificationModel {
         uploaded.hashCode ^
         route.hashCode ^
         period.hashCode ^
+        endingAge.hashCode ^
         childId.hashCode ^
         milestoneId.hashCode ^
         vaccineId.hashCode;

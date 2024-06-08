@@ -80,8 +80,14 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     if (childModel == null) emit(DecisionErrorState("child not found"));
 
     bool allTakenResponse = await checkIfAllTakenIncThisPeriod(childModel!);
+    bool allTakenResponseUntilToday =
+        await checkIfAllTakenUntilToday(childModel);
+
     if (allTakenResponse) {
       await stopWeeklyNotifications(event.decision.childId);
+    }
+    if (allTakenResponseUntilToday) {
+      await stopWeeklyNotificationsByMonth(event.decision.childId);
     }
 
     if (event.decision.decision != 1) {
@@ -109,6 +115,7 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
           dismissed: false,
           route: isMilestone ? Routes.milestone : Routes.vaccine,
           period: await getPeriod(event.decision),
+          endingAge: await getEndingAge(event.decision),
           childId: event.decision.childId,
         );
 
@@ -274,6 +281,37 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     return true;
   }
 
+  Future<bool> checkIfAllTakenUntilToday(ChildModel child) async {
+    int months = monthsFromBdCalculator(child);
+    if (months <= 1) return true;
+
+    List<MilestoneItem>? milestones =
+        await milestoneRepository.getMilestonesUntilMonth(months);
+
+    List<Vaccine>? vaccines =
+        await vaccineRepository.getVaccinesUntilMonth(months);
+
+    if (milestones != null) {
+      for (var milestone in milestones) {
+        DecisionModel? decision = await decisionRepository
+            .getDecisionByChildAndMilestone(child.id, milestone.id);
+        if (decision == null || decision.decision < 1) {
+          return false;
+        }
+      }
+    }
+    if (vaccines != null) {
+      for (var vaccine in vaccines) {
+        DecisionModel? decision = await decisionRepository
+            .getDecisionByChildAndVaccine(child.id, vaccine.id);
+        if (decision == null || decision.decision < 1) {
+          return false;
+        }
+      }
+    }
+    return true;
+  }
+
   Future<bool> checkIfAlertDoctor(ChildModel child) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
@@ -316,12 +354,44 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
     return 0;
   }
 
+  Future<int> getEndingAge(DecisionModel decision) async {
+    if (decision.milestoneId > 0) {
+      MilestoneItem? milestoneItem =
+          await milestoneRepository.getMilestoneByID(decision.milestoneId);
+      if (milestoneItem != null) return milestoneItem.endingAge;
+    } else {
+      Vaccine? vaccine =
+          await vaccineRepository.getVaccineByID(decision.vaccineId);
+      if (vaccine != null) return vaccine.endingAge;
+    }
+    return 0;
+  }
+
   Future stopWeeklyNotifications(int childId) async {
     ChildModel? child = await childRepository.getChildByID(childId);
     if (child != null) {
       int period = periodCalculator(child).id;
       List<NotificationModel> notifications = await notificationRepository
           .getNotificationsByChildIdAndPeriod(childId, period);
+      NotificationService _notificationService = NotificationService();
+
+      for (var notification in notifications) {
+        if (notification.id != null) {
+          notificationRepository.deleteNotificationById(notification.id!);
+          _notificationService.cancelNotifications(notification.id!);
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+
+  Future stopWeeklyNotificationsByMonth(int childId) async {
+    ChildModel? child = await childRepository.getChildByID(childId);
+    if (child != null) {
+      int months = monthsFromBdCalculator(child);
+      List<NotificationModel> notifications = await notificationRepository
+          .getNotificationsByChildIdAndMonth(childId, months);
       NotificationService _notificationService = NotificationService();
 
       for (var notification in notifications) {

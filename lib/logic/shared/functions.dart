@@ -36,6 +36,22 @@ Period periodCalculator(ChildModel child) {
   return Period(id: 0, arabicName: "null", arabicNameNumbers: "null");
 }
 
+int monthsFromBdCalculator(ChildModel child) {
+  DateTime nowDate = DateTime.now();
+  DateTime dateOfBirth;
+  if (child.pregnancyDuration.toInt() < 37) {
+    int daysCorrected = (37 - child.pregnancyDuration.toInt()) * 7;
+    dateOfBirth = child.dateOfBirth.add(Duration(days: daysCorrected));
+  } else {
+    dateOfBirth = child.dateOfBirth;
+  }
+
+  if (dateOfBirth.isAfter(nowDate)) return -1;
+
+  final diff = nowDate.difference(dateOfBirth);
+  return diff.inDays ~/ 30.44;
+}
+
 Period periodFromID(int id) {
   if (id > 0 && id < 10) {
     return monthlyPeriods.where((element) => element.id == id).first;

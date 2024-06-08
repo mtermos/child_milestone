@@ -40,6 +40,16 @@ class NotificationRepository {
         : List<NotificationModel>.empty();
   }
 
+  Future<List<NotificationModel>> getNotificationsByChildIdAndMonth(
+      int childId, int month) async {
+    List<Map<String, dynamic>> result =
+        await notificationDao.getNotificationsByChildIdAndMonth(childId, month);
+
+    return result.isNotEmpty
+        ? result.map((item) => NotificationModel.fromMap(item)).toList()
+        : List<NotificationModel>.empty();
+  }
+
   Future<List<NotificationModel>> getNotificationsByChildId(int childId) async {
     List<Map<String, dynamic>> result =
         await notificationDao.getNotificationsByChildId(childId);

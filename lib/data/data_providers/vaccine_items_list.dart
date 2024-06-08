@@ -14,7 +14,7 @@ List<Vaccine> vaccinesList = [
     name: "Engerix/GenHevac/other",
     description: """Hepatitis B (HepBV # 2)""",
     period: 1,
-    startingAge: 1,
+    startingAge: -6,
     endingAge: 2,
   ),
   Vaccine(
@@ -22,11 +22,11 @@ List<Vaccine> vaccinesList = [
     name: " Pentaxim/Infanrix IPV, HiB",
     description:
         """Diphtheria and tetanus toxoids and acellular pertussis (DTaP #1) 
-Inactivated poliovirus  (IPV #1) 
-Haemophilus influenzae type b conjugate (Hib#1)""",
+        Inactivated poliovirus  (IPV #1) 
+        Haemophilus influenzae type b conjugate (Hib#1)""",
     period: 1,
-    startingAge: 1,
-    endingAge: 2,
+    startingAge: -6,
+    endingAge: 3,
   ),
   Vaccine(
     id: 4,
@@ -37,8 +37,8 @@ Inactivated poliovirus  (IPV #1)
 Haemophilus influenzae type b conjugate  (Hib#1)
 Hepatitis B (HepBV # 1 or 2)""",
     period: 1,
-    startingAge: 1,
-    endingAge: 2,
+    startingAge: -6,
+    endingAge: 3,
   ),
   Vaccine(
     id: 5,
@@ -48,32 +48,32 @@ Hepatitis B (HepBV # 1 or 2)""",
 Haemophilus influenzae type b conjugate (Hib#1)
 Hepatitis B (HepBV # 1 or 2)""",
     period: 1,
-    startingAge: 1,
-    endingAge: 2,
+    startingAge: -6,
+    endingAge: 3,
   ),
   Vaccine(
     id: 6,
     name: "Injectable Polio",
     description: """Inactivated poliovirus  (IPV #1)""",
     period: 1,
-    startingAge: 1,
-    endingAge: 2,
+    startingAge: -6,
+    endingAge: 3,
   ),
   Vaccine(
     id: 7,
     name: "Prevnar 13 (or Synflorix)",
     description: """Pneumococcal conjugate (PCV 13 (or 10) # 1)""",
     period: 1,
-    startingAge: 1,
-    endingAge: 2,
+    startingAge: -6,
+    endingAge: 3,
   ),
   Vaccine(
     id: 8,
     name: "Rotarix (2 dose regimen) or Rotateq (3 dose regimen)",
     description: """Rotavirus # 1""",
     period: 1,
-    startingAge: 1,
-    endingAge: 2,
+    startingAge: -6,
+    endingAge: 3,
   ),
   Vaccine(
     id: 9,
@@ -323,8 +323,8 @@ Haemophilus influenzae type b conjugate (Hib#4)
     description:
         """Diphtheria and tetanus toxoids and acellular pertussis (DTaP #5) Inactivated poliovirus (IPV #5)""",
     period: 12,
-    startingAge: 4,
-    endingAge: 6,
+    startingAge: 48,
+    endingAge: 72,
   ),
   Vaccine(
     id: 37,
@@ -332,31 +332,31 @@ Haemophilus influenzae type b conjugate (Hib#4)
     description:
         """Diphtheria and tetanus toxoids and whole cellular pertussis (DTWP #4)""",
     period: 12,
-    startingAge: 4,
-    endingAge: 6,
+    startingAge: 48,
+    endingAge: 72,
   ),
   Vaccine(
     id: 38,
     name: "oral Polio",
     description: """Oral poliovirus (OPV # 5)""",
     period: 12,
-    startingAge: 4,
-    endingAge: 6,
+    startingAge: 48,
+    endingAge: 72,
   ),
   Vaccine(
     id: 39,
     name: "Priorix/ROR",
     description: """Measles, mumps, and rubella  (MMR # 2)""",
     period: 12,
-    startingAge: 4,
-    endingAge: 6,
+    startingAge: 48,
+    endingAge: 72,
   ),
   Vaccine(
     id: 40,
     name: "Varilrix / Okavax/Varivax",
     description: """Varicella VZV # 2""",
     period: 12,
-    startingAge: 4,
-    endingAge: 6,
+    startingAge: 48,
+    endingAge: 72,
   ),
 ];

@@ -57,6 +57,27 @@ class NotificationDao {
     return result;
   }
 
+  Future<List<Map<String, dynamic>>> getNotificationsByChildIdAndMonth(
+      int childId, int month) async {
+    final db = await dbProvider.database;
+
+    List<Map<String, dynamic>> result = [];
+
+    List<Map<String, dynamic>> result2 =
+        await db.rawQuery('PRAGMA table_info($notificationsTABLE);');
+
+    // Check if the column exists in the result
+    for (var column in result2) {
+      if (column['name'] == "endingAge") {
+        result = await db.query(notificationsTABLE,
+            where: 'childId = ? AND endingAge <= ?',
+            whereArgs: [childId, month]);
+      }
+    }
+
+    return result;
+  }
+
   Future<List<Map<String, dynamic>>> getNotificationsByChildId(
       int childId) async {
     final db = await dbProvider.database;
