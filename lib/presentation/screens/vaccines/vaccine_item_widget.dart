@@ -2,7 +2,6 @@ import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/logic/blocs/decision/decision_bloc.dart';
-import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
@@ -13,8 +12,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 
 class VaccineItemWidget extends StatefulWidget {
   const VaccineItemWidget(
-      {Key? key, required this.item, required this.selectedPeriod})
-      : super(key: key);
+      {super.key, required this.item, required this.selectedPeriod});
   final VaccineWithDecision item;
   final Period selectedPeriod;
 

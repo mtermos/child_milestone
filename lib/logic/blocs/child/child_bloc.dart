@@ -1,15 +1,9 @@
 import 'dart:convert';
-import 'dart:io';
-
-import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/constants/tuples.dart';
-import 'package:child_milestone/constants/yearly_periods.dart';
-import 'package:child_milestone/data/dao/decision_dao.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/notification.dart';
-import 'package:child_milestone/data/models/rating.dart';
 import 'package:child_milestone/data/models/vaccine.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/milestone_repository.dart';
@@ -17,13 +11,10 @@ import 'package:child_milestone/data/repositories/notification_repository.dart';
 import 'package:child_milestone/data/repositories/rating_repository.dart';
 import 'package:child_milestone/data/repositories/vaccine_repository.dart';
 import 'package:child_milestone/logic/shared/notification_service.dart';
-import 'package:child_milestone/logic/shared/ratingToTextMap.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:timezone/timezone.dart' as tz;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
 
@@ -40,7 +31,6 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
   final MilestoneRepository milestoneRepository;
   final VaccineRepository vaccineRepository;
   final RatingRepository ratingRepository;
-  final NotificationService _notificationService = NotificationService();
 
   ChildBloc(
       {required this.childRepository,
@@ -174,7 +164,7 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
     List<ChildModel>? childrenModels = await childRepository.getAllChildren();
     if (childrenModels != null && childrenModels.isNotEmpty) {
       for (ChildModel childModel in childrenModels) {
-        if (childModel != null && childModel.idBackend != null) {
+        if (childModel.idBackend != null) {
           await deleteChildOnBackend(childModel.idBackend!);
         }
       }
@@ -243,9 +233,9 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       UploadChildrenEvent event, Emitter<ChildState> emit) async {
     emit(UploadingChildrenState());
     print("uploading... ");
-    List<ChildModel> newChildren = (await childRepository.getAllChildren())
-        .where((element) => !element.uploaded)
-        .toList();
+    // List<ChildModel> newChildren = (await childRepository.getAllChildren())
+    //     .where((element) => !element.uploaded)
+    //     .toList();
     bool noErrorsUploading = true;
     // for (var child in newChildren) {
     //   String? error = await uploadChild(child);
@@ -270,9 +260,9 @@ class ChildBloc extends Bloc<ChildEvent, ChildState> {
       }
     }
 
-    List<RatingModel> newRatings = (await ratingRepository.getAllRatings())
-        .where((element) => !element.uploaded)
-        .toList();
+    // List<RatingModel> newRatings = (await ratingRepository.getAllRatings())
+    //     .where((element) => !element.uploaded)
+    //     .toList();
 
     bool noErrorsRatings = true;
     // if (newRatings.isNotEmpty) {

@@ -44,9 +44,7 @@ class _BottomBarViewState extends State<BottomBarView>
     // Size size = MediaQuery.of(context).size;
     final Size size = MediaQuery.of(context).size;
     final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
-    final textScale = isMOBILE
-        ? MediaQuery.of(context).size.height * 0.001
-        : MediaQuery.of(context).size.height * 0.0011;
+
     final int v = isMOBILE ? 38 : 58;
     return Stack(
       alignment: AlignmentDirectional.bottomCenter,

@@ -57,7 +57,7 @@ class _TopBarViewState extends State<TopBarView> with TickerProviderStateMixin {
     bool isRTL = AppLocalizations.of(context)!.localeName == "ar";
     // String chevronDuoLeft = "assets/icons/chevron_duo_left.svg";
     String chevronDuoLeft = "assets/icons/chevron_duo_left_2.svg";
-    String chevronDuoRight = "assets/icons/chevron_duo_right.svg";
+    // String chevronDuoRight = "assets/icons/chevron_duo_right.svg";
     if (isRTL) {
       // chevronDuoLeft = "assets/icons/home_page/double_arrows.svg";
       chevronDuoLeft = "assets/icons/chevron_duo_left.svg";

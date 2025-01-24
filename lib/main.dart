@@ -39,6 +39,7 @@ class Application extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
+      // providers are in seperate folder to ensure that the main file remains clean and readable
       providers: RepositoryProviders.getProviders(context),
       child: MultiBlocProvider(
         providers: BlocProviders.getProviders(context, startLang),

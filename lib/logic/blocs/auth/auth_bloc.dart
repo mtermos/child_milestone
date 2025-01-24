@@ -1,7 +1,5 @@
 import 'dart:convert';
-import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/tuples.dart';
-import 'package:child_milestone/constants/yearly_periods.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
 import 'package:child_milestone/data/models/notification.dart';
@@ -16,12 +14,10 @@ import 'package:child_milestone/data/database/database.dart';
 import 'package:child_milestone/data/repositories/child_repository.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
 import 'package:child_milestone/data/repositories/rating_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:http/http.dart' as http;
-import 'package:timezone/timezone.dart' as tz;
 
 import 'auth_state.dart';
 import 'auth_event.dart';
@@ -32,7 +28,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final DecisionRepository decisionRepository;
   final RatingRepository ratingRepository;
   final NotificationRepository notificationRepository;
-  final NotificationService _notificationService = NotificationService();
 
   AuthBloc({
     required this.childRepository,
@@ -69,8 +64,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             responseBody["data"]["user"]["children"] ?? [];
 
         for (String childID in childrenIDs) {
-          String? response =
-              await getChildFromBackend(childID, event.appLocalizations);
+          await getChildFromBackend(childID, event.appLocalizations);
         }
 
         if (responseBody["data"]["user"]["rating"] != null) {
@@ -130,7 +124,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       String childId, AppLocalizations appLocalizations) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(SharedPrefKeys.accessToken);
-    String? parentID = prefs.getString(SharedPrefKeys.userID);
+    // String? parentID = prefs.getString(SharedPrefKeys.userID);
 
     if (token != null) {
       try {
@@ -232,8 +226,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     }
 
-    DaoResponse resultMilestones =
-        await decisionRepository.insertDecisionsList(decisionsList);
+    await decisionRepository.insertDecisionsList(decisionsList);
   }
 
   createVaccinesDecisions(List decisionsJSON, int childID) async {
@@ -250,8 +243,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     }
 
-    DaoResponse resultMilestones =
-        await decisionRepository.insertDecisionsList(decisionsList);
+    await decisionRepository.insertDecisionsList(decisionsList);
   }
 
   // List<DecisionModel> decisionsFromJSON(

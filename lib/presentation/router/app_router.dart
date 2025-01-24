@@ -1,6 +1,4 @@
 import 'package:child_milestone/constants/strings.dart';
-import 'package:child_milestone/data/models/milestone_item.dart';
-import 'package:child_milestone/data/models/vaccine.dart';
 import 'package:child_milestone/presentation/screens/add_child/add_child_main.dart';
 import 'package:child_milestone/presentation/screens/child_summary/child_summary_main.dart';
 import 'package:child_milestone/presentation/screens/edit_child/edit_child_main.dart';

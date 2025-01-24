@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/constants/tuples.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
@@ -17,7 +16,6 @@ import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:http/http.dart' as http;
 import 'package:child_milestone/constants/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:child_milestone/logic/blocs/child/child_bloc.dart';
@@ -152,12 +150,8 @@ class DecisionBloc extends Bloc<DecisionEvent, DecisionState> {
       GetAllDecisionsEvent event, Emitter<DecisionState> emit) async {
     emit(AllDecisionsLoadingState());
     // await decisionRepository.deleteAllDecisions();
-    List<DecisionModel>? decisions = await decisionRepository.getAllDecisions();
-    if (decisions != null) {
-      emit(AllDecisionsLoadedState(decisions));
-    } else {
-      emit(AllDecisionsLoadingErrorState());
-    }
+    List<DecisionModel> decisions = await decisionRepository.getAllDecisions();
+    emit(AllDecisionsLoadedState(decisions));
   }
 
   void deleteAllDecisions(

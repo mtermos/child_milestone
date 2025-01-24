@@ -1,8 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:child_milestone/constants/monthly_periods.dart';
 import 'package:child_milestone/constants/yearly_periods.dart';
-import 'package:child_milestone/data/data_providers/milestone_categories_list.dart';
-import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/logic/blocs/vaccine/vaccine_bloc.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:child_milestone/presentation/screens/vaccines/vaccine_item_widget.dart';
@@ -12,16 +10,13 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
-import 'package:child_milestone/logic/blocs/milestone/milestone_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/components/top_bar_view.dart';
-import 'package:child_milestone/presentation/screens/milestone/milestone_item_widget.dart';
-import 'package:child_milestone/presentation/widgets/category_box_widget.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class VaccineScreen extends StatefulWidget {
-  int? periodId;
+  final int? periodId;
   VaccineScreen({
     Key? key,
     this.periodId,

@@ -60,6 +60,7 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
 
   Future<ChildModel?> resetCurrentChild() async {
     emit(NoCurrentChildState());
+    return null;
   }
 
   Future<ChildModel?> setFirstChildCurrent(Function onSuccess) async {
@@ -76,5 +77,6 @@ class CurrentChildCubit extends Cubit<CurrentChildState> {
       onSuccess();
       emit(NoCurrentChildState());
     }
+    return null;
   }
 }

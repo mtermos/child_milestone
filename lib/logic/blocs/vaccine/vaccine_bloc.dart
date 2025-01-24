@@ -1,10 +1,8 @@
 import 'package:child_milestone/constants/classes.dart';
 import 'package:child_milestone/data/models/child_model.dart';
 import 'package:child_milestone/data/models/decision.dart';
-import 'package:child_milestone/data/models/milestone_item.dart';
 import 'package:child_milestone/data/models/vaccine.dart';
 import 'package:child_milestone/data/repositories/decision_repository.dart';
-import 'package:child_milestone/data/repositories/milestone_repository.dart';
 import 'package:child_milestone/data/repositories/vaccine_repository.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
 import 'package:equatable/equatable.dart';

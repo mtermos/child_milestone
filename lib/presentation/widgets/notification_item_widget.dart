@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
-import 'package:child_milestone/constants/strings.dart';
 import 'package:child_milestone/logic/blocs/notification/notification_bloc.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
@@ -11,11 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class NotificationItemWidget extends StatefulWidget {
-  const NotificationItemWidget({Key? key, required this.item})
-      : super(key: key);
+  const NotificationItemWidget({super.key, required this.item});
   final NotificationWithChildAndMilestone item;
 
   @override

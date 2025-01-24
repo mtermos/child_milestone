@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:child_milestone/data/models/log.dart';
@@ -19,7 +18,7 @@ import 'package:pdfx/pdfx.dart';
 
 class TipItemWidget extends StatefulWidget {
   final TipModel item;
-  const TipItemWidget({Key? key, required this.item}) : super(key: key);
+  const TipItemWidget({super.key, required this.item});
 
   @override
   _TipItemWidgetState createState() => _TipItemWidgetState();

@@ -18,9 +18,6 @@ class LoginBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     final isMOBILE = ResponsiveBreakpoints.of(context).smallerThan(TABLET);
-    final textScale = isMOBILE
-        ? MediaQuery.of(context).size.height * 0.001
-        : MediaQuery.of(context).size.height * 0.0011;
 
     return Container(
       color: Colors.white,

@@ -3,7 +3,6 @@ import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:child_milestone/data/data_providers/ratings_items_list.dart';
 import 'package:child_milestone/data/models/rating.dart';
 import 'package:child_milestone/data/models/rating_questions.dart';
 

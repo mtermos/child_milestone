@@ -1,4 +1,4 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_third
+// ignore_for_file: public_member_api_docs, sort_constructors_third, unused_field
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/rating_questions/question5.dart';
 import 'package:child_milestone/presentation/screens/home/tabs/rating_questions/question6.dart';
@@ -7,7 +7,6 @@ import 'package:child_milestone/presentation/screens/home/tabs/rating_questions/
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:child_milestone/data/data_providers/ratings_items_list.dart';
 import 'package:child_milestone/data/models/rating.dart';
 import 'package:child_milestone/data/models/rating_questions.dart';
 import 'package:responsive_framework/responsive_framework.dart';

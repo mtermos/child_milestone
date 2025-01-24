@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field, no_leading_underscores_for_local_identifiers, unused_local_variable
+
 import 'package:child_milestone/data/models/tip.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:flutter/material.dart';

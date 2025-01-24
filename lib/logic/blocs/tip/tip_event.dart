@@ -26,6 +26,6 @@ class GetTipEvent extends TipEvent {
 }
 
 class GetTipsByAgeEvent extends TipEvent {
-  ChildModel child;
+  final ChildModel child;
   GetTipsByAgeEvent({required this.child});
 }

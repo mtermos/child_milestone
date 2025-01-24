@@ -11,8 +11,8 @@ class NoCurrentChildState extends CurrentChildState {}
 class ChangingCurrentChildState extends CurrentChildState {}
 
 class CurrentChildChangedState extends CurrentChildState {
-  ChildModel new_current_child;
-  List<ChildModel> all_children;
+  final ChildModel new_current_child;
+  final List<ChildModel> all_children;
 
   CurrentChildChangedState({
     required this.new_current_child,

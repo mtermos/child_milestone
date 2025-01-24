@@ -1,3 +1,5 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:io';
 
 import 'package:child_milestone/constants/classes.dart';
@@ -10,7 +12,6 @@ import 'package:child_milestone/logic/blocs/log/log_bloc.dart';
 import 'package:child_milestone/logic/cubits/all_previous_decision_taken/all_previous_decision_taken_cubit.dart';
 import 'package:child_milestone/logic/cubits/current_child/current_child_cubit.dart';
 import 'package:child_milestone/logic/shared/functions.dart';
-import 'package:child_milestone/logic/shared/notification_service.dart';
 import 'package:child_milestone/presentation/common_widgets/app_text.dart';
 import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -20,11 +21,10 @@ import 'package:loading_indicator/loading_indicator.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:responsive_framework/responsive_framework.dart';
-import 'package:timezone/timezone.dart' as tz;
 
 class HomeTab extends StatefulWidget {
-  Function changeIndex;
-  HomeTab({Key? key, required this.changeIndex}) : super(key: key);
+  final Function changeIndex;
+  HomeTab({super.key, required this.changeIndex});
 
   @override
   _HomeTabState createState() => _HomeTabState();

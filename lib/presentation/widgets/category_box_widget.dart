@@ -4,10 +4,10 @@ import 'package:child_milestone/presentation/styles/colors.dart';
 import 'package:flutter/material.dart';
 
 class CategoryBoxWidget extends StatefulWidget {
-  CategoryBoxWidget({Key? key, required this.item, required this.selected})
-      : super(key: key);
+  const CategoryBoxWidget(
+      {super.key, required this.item, required this.selected});
   final MilestoneCategoryModel item;
-  int selected;
+  final int selected;
 
   @override
   _CategoryBoxWidgetState createState() => _CategoryBoxWidgetState();
