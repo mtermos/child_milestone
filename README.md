@@ -80,6 +80,57 @@ The core logic and UI of the application reside here. Below is a detailed breakd
 The `assets/` directory contains resources like images and icons
 
 ---
+
+## Screens and Routes
+
+### **Splash Screen**
+The app begins with a splash screen, which determines the next screen based on user status:
+1. **Existing User**: If a user is already logged in, the app navigates directly to the home screen.
+2. **New User**: If no user is logged in:
+   - The app displays a welcome screen with a button to proceed to the login screen.
+   - In this version, the app only supports login using credentials provided by the university (no sign-up or "forgot password" functionality).
+   - Upon successful login, the app navigates to the home screen.
+
+
+### **Home Screen**
+The home screen is the central hub of the application, featuring four primary tabs and additional functionalities:
+
+#### **Tabs:**
+1. **Home Tab**:
+   - Displays progress (e.g., the percentage of milestones completed for the current age group).
+   - Provides access to:
+     - Milestones
+     - Vaccines
+     - Progress reports
+2. **Notifications Tab**: Shows reminders and alerts related to milestones, vaccinations, or if it is the time for the parents to check the doctor.
+3. **Tips Tab**: Offers helpful parenting tips and guidance for child development.
+4. **Rates Tab**: Allows users to review and provide feedback on app features (the rating process is a little bit complex as requested by client).
+
+#### **Additional Features:**
+- **Add a Child**: A dedicated button to add child profiles to the app.
+- **Top Bar**:
+  - Access the settings menu.
+  - Switch between children (if the parent has added multiple profiles).
+
+---
+
+### Notes
+
+- **Notifications**: 
+  - Since the required notifications do not rely on a backend, push notifications were not implemented. Instead, a dynamic solution was created to handle user-specific progress:
+    - All notifications are pre-scheduled.
+    - Irrelevant notifications are dynamically removed as the user progresses.
+  
+- **Multi-Language Support**: 
+  - The application was prepared for a multi-language setup. However, the current version focuses solely on the Arabic language.
+
+- **DAO and Repository Separation**: 
+  - DAOs were separated from repositories to support potential integration with multiple data sources. However, this flexibility was not heavily utilized in this version.
+
+- **State Management**: 
+  - The app uses the **Bloc** (Business Logic Component) pattern to efficiently manage states and events across the application, ensuring a reactive and predictable architecture.
+
+---
 ## Contact
 
 For questions or suggestions, reach out:
